@@ -10,4 +10,6 @@ Gabrielle Lommel (https://github.com/granolagabrielle) :seedling:
 
 ## Mentors
 
+- [Danielle Heberling](https://github.com/deeheber) 🧐
+
 ## Code of Conduct Contacts
