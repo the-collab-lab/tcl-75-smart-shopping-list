@@ -11,5 +11,6 @@ Gabrielle Lommel (https://github.com/granolagabrielle) :seedling:
 ## Mentors
 
 - [Danielle Heberling](https://github.com/deeheber) 🧐
+- [Ahsan Hassan](https://github.com/ahsanatzapier) 🚀
 
 ## Code of Conduct Contacts
