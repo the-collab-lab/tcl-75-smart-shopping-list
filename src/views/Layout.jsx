@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { Outlet } from 'react-router-dom';
+import { useAuth, SignInButton, SignOutButton } from '../api/useAuth';
 
 import './Layout.css';
 
@@ -12,12 +13,15 @@ import './Layout.css';
  */
 
 export function Layout() {
+	const { user } = useAuth();
+
 	return (
 		<>
 			<div className="Layout">
 				<header className="Layout-header">
 					<h1>Smart shopping list</h1>
 				</header>
+				<a>{user ? <SignOutButton /> : <SignInButton />}</a>
 				<main className="Layout-main">
 					<Outlet />
 				</main>
