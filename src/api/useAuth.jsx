@@ -5,8 +5,8 @@ import { addUserToDatabase } from './firebase.js';
 
 /**
  * A button that signs the user in using Google OAuth. When clicked,
- * the button redirects the user to the Google OAuth sign-in page.
- * After the user signs in, they are redirected back to the app.
+ * the button opens a popup for the Google OAuth sign-in page.
+ * After the user signs in through the popup, it closes and the user becomes signed in.
  */
 export const SignInButton = () => (
 	<button
