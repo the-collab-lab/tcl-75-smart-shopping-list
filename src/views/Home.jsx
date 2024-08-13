@@ -1,11 +1,7 @@
 import './Home.css';
 import { SingleList } from '../components';
-import { useLocation } from 'react-router-dom';
 
 export function Home({ data, setListPath }) {
-	let location = useLocation();
-	let path = location.pathname;
-
 	return (
 		<div className="Home">
 			<p>
@@ -18,7 +14,7 @@ export function Home({ data, setListPath }) {
 						<SingleList
 							key={item + index}
 							name="First List"
-							path={path}
+							path={item.path}
 							setListPath={setListPath}
 						/>
 					);
