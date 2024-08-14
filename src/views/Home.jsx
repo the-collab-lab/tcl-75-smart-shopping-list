@@ -12,7 +12,7 @@ export function Home({ data, setListPath }) {
 				{data.map((item, index) => {
 					return (
 						<SingleList
-							key={item + index}
+							key={item.name + index}
 							name="First List"
 							path={item.path}
 							setListPath={setListPath}
