@@ -1,0 +1,35 @@
+# CODEOWNERS file for TCL-75 Smart Shopping List
+#
+# What is this file?
+# This file helps automate the code review process by automatically assigning reviewers
+# to pull requests (PRs) and setting rules for PR approvals.
+#
+# How does it work?
+# 1. Automatic Reviewer Assignment:
+#    - When a PR is opened, GitHub automatically assigns the mentors listed below as reviewers.
+#
+# 2. Review Requirements (set in GitHub branch protection rules, not in this file):
+#    - Each PR needs at least 3 approvals to be merged:
+#      a) 2 approvals from peer developers
+#      b) 1 approval from a mentor (automatically assigned by this file)
+#
+# 3. Mentor Approval:
+#    - At least one of the mentors listed below MUST approve the PR before it can be merged.
+#    - This ensures experienced oversight on all code changes.
+#
+# How to request reviews:
+# 1. In GitHub:
+#    - When opening a PR, manually request reviews from 2 peer developers.
+#    - Mentors will be automatically assigned as reviewers.
+#
+# 2. In Slack:
+#    - Use the following Slack reacji to notify team members:
+#      a) :todo-tcl75-devs: - This will ping developers for a review
+#      b) :todo-tcl75-mentors: - This will ping mentors for a review
+#    - Using these reacji helps communicate review needs efficiently to the team
+#
+# Best Practice:
+# - Use both GitHub assignment and Slack notifications to ensure visibility and prompt reviews.
+#
+# Mentors for TCL-75 (automatically assigned and required for PR approval):
+* @ahsanatzapier @jendevelops @deeheber
