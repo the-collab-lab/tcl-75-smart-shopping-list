@@ -13,7 +13,7 @@ export function Home({ data, setListPath }) {
 					return (
 						<SingleList
 							key={item.name + index}
-							name="First List"
+							name={item.name}
 							path={item.path}
 							setListPath={setListPath}
 						/>
