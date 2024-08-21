@@ -1,9 +1,12 @@
 import './Home.css';
 import { SingleList } from '../components';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { createList } from '../api';
 
-export function Home({ data, setListPath }) {
+export function Home({ data, setListPath, userId, userEmail }) {
 	const [listName, setListName] = useState('');
+	const navigate = useNavigate();
 
 	const handleChange = (event) => {
 		setListName(event.target.value);
@@ -11,6 +14,26 @@ export function Home({ data, setListPath }) {
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
+		const currentLists = data.map((list) => {
+			return list.name.toLowerCase();
+		});
+
+		if (currentLists.includes(listName.toLowerCase())) {
+			alert('The list already exists. Please enter a different name.');
+			setListName('');
+			return;
+		}
+
+		try {
+			const response = await createList(userId, userEmail, listName);
+			setListPath(response);
+			setListName('');
+			alert('List added');
+			navigate('/list');
+		} catch (err) {
+			console.error(err);
+			alert('List not created');
+		}
 	};
 
 	return (
