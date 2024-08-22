@@ -9,12 +9,10 @@ const notSoonDate = 30;
 export function ManageList() {
 	const [selectedOption, setSelectedOption] = useState(null);
 	const [inputValue, setInputValue] = useState('');
-	// const [listPath, setListPath] = useStateWithStorage(
-	// 	'tcl-shopping-list-path',
-	// 	null,
-	// );
-
-	const listPath = 't4XIww03JAXm1QWr6UPEebbLRl13/first list';
+	const [listPath, setListPath] = useStateWithStorage(
+		'tcl-shopping-list-path',
+		null,
+	);
 
 	const handleTextChange = (event) => {
 		console.log(event.target.value);
