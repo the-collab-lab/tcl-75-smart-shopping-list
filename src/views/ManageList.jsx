@@ -7,23 +7,18 @@ const kindOfSoonDate = 14;
 const notSoonDate = 30;
 
 export function ManageList() {
-	const [selectedOption, setSelectedOption] = useState(null);
-	const [inputValue, setInputValue] = useState('');
-	const [listPath, setListPath] = useStateWithStorage(
-		'tcl-shopping-list-path',
-		null,
-	);
+	const [daysUntilNextPurchase, setDaysUntilNextPurchase] = useState(null);
+	const [itemName, setItemName] = useState('');
+
+	const listPath = 't4XIww03JAXm1QWr6UPEebbLRl13/first list';
 
 	const handleTextChange = (event) => {
-		console.log(event.target.value);
-		setInputValue(event.target.value);
+		setItemName(event.target.value);
 	};
 
 	const handleChange = (event) => {
-		console.log(event.target.value);
 		const numberOfDays = parseInt(event.target.value);
-		console.log(typeof event.target.value);
-		setSelectedOption(numberOfDays);
+		setDaysUntilNextPurchase(numberOfDays);
 	};
 
 	const handleSubmit = useCallback(
@@ -31,19 +26,22 @@ export function ManageList() {
 			event.preventDefault();
 
 			try {
-				alert(`Form submitted with selected option: ${selectedOption}`);
+				alert(`Form submitted with selected option: ${daysUntilNextPurchase}`);
 
 				await addItem(listPath, {
-					itemName: inputValue,
-					daysUntilNextPurchase: selectedOption,
+					itemName,
+					daysUntilNextPurchase,
 				});
-				alert('Item was added to the database!', inputValue, selectedOption);
-				console.log;
+				alert(
+					'Item was added to the database!',
+					itemName,
+					daysUntilNextPurchase,
+				);
 			} catch (error) {
 				alert(`Item was not added to the database, Error: ${error.message}`);
 			}
 		},
-		[inputValue, selectedOption, listPath],
+		[itemName, daysUntilNextPurchase, listPath],
 	);
 
 	return (
@@ -57,7 +55,7 @@ export function ManageList() {
 						defaultValue=""
 						id="item-name"
 						onChange={handleTextChange}
-						value={inputValue}
+						value={itemName}
 					/>
 				</label>
 
@@ -66,7 +64,7 @@ export function ManageList() {
 					<input
 						type="radio"
 						value={soonDate}
-						checked={selectedOption === soonDate}
+						checked={daysUntilNextPurchase === soonDate}
 						onChange={handleChange}
 					/>
 					Soon
@@ -76,7 +74,7 @@ export function ManageList() {
 					<input
 						type="radio"
 						value={kindOfSoonDate}
-						checked={selectedOption === kindOfSoonDate}
+						checked={daysUntilNextPurchase === kindOfSoonDate}
 						onChange={handleChange}
 					/>
 					Kind of soon
@@ -86,7 +84,7 @@ export function ManageList() {
 					<input
 						type="radio"
 						value={notSoonDate}
-						checked={selectedOption === notSoonDate}
+						checked={daysUntilNextPurchase === notSoonDate}
 						onChange={handleChange}
 					/>
 					Not soon
