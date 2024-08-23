@@ -10,7 +10,12 @@ export function ManageList() {
 	const [daysUntilNextPurchase, setDaysUntilNextPurchase] = useState(null);
 	const [itemName, setItemName] = useState('');
 
-	const listPath = 't4XIww03JAXm1QWr6UPEebbLRl13/first list';
+	const [listPath, setListPath] = useStateWithStorage(
+		'tcl-shopping-list-path',
+		null,
+	);
+
+	// const listPath = 't4XIww03JAXm1QWr6UPEebbLRl13/first list';
 
 	const handleTextChange = (event) => {
 		setItemName(event.target.value);
