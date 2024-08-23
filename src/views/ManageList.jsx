@@ -24,10 +24,11 @@ export function ManageList() {
 	const handleSubmit = useCallback(
 		async (event) => {
 			event.preventDefault();
-
+			if (itemName === '') {
+				alert('Please add an item name.');
+				return;
+			}
 			try {
-				alert(`Form submitted with selected option: ${daysUntilNextPurchase}`);
-
 				await addItem(listPath, {
 					itemName,
 					daysUntilNextPurchase,
