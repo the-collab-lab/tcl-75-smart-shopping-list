@@ -25,9 +25,8 @@ export function Home({ data, setListPath, userId, userEmail }) {
 		}
 
 		try {
-			const response = await createList(userId, userEmail, listName);
-			// console.log('check response', response);
-			setListPath(response);
+			const listPath = await createList(userId, userEmail, listName);
+			setListPath(listPath);
 			setListName('');
 			alert('List added');
 			navigate('/list');
