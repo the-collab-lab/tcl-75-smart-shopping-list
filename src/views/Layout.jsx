@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { Outlet } from 'react-router-dom';
+import { Outlet, NavLink } from 'react-router-dom';
 import { useAuth, SignInButton, SignOutButton } from '../api/useAuth';
-import { NavLink } from 'react-router-dom';
 // import { Home, List, ManageList } from '../views';
 
 import './Layout.css';
