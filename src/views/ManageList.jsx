@@ -63,7 +63,6 @@ export function ManageList() {
 					<br />
 					<input
 						type="text"
-						defaultValue=""
 						id="item-name"
 						onChange={handleTextChange}
 						value={itemName}
