@@ -1,12 +1,12 @@
 import { useCallback, useState } from 'react';
 import { useStateWithStorage } from '../utils';
-import { addItem } from '../api';
+import { addItem, shareList } from '../api';
 
 const soonDate = 7;
 const kindOfSoonDate = 14;
 const notSoonDate = 30;
 
-export function ManageList() {
+export function ManageList({ userId }) {
 	const [daysUntilNextPurchase, setDaysUntilNextPurchase] = useState(null);
 	const [itemName, setItemName] = useState('');
 	const [emailData, setEmailData] = useState('');
@@ -15,8 +15,6 @@ export function ManageList() {
 		'tcl-shopping-list-path',
 		null,
 	);
-
-	// const listPath = 't4XIww03JAXm1QWr6UPEebbLRl13/first list';
 
 	const handleTextChange = (event) => {
 		console.log(event.target.value, 'value');
@@ -27,7 +25,6 @@ export function ManageList() {
 			case 'email-input':
 				return setEmailData(event.target.value);
 		}
-		// setItemName(event.target.value);
 	};
 
 	const handleChange = (event) => {
@@ -64,9 +61,16 @@ export function ManageList() {
 		[itemName, daysUntilNextPurchase, listPath],
 	);
 
-	const handleEmailInputSubmit = (event) => {
+	const handleEmailInputSubmit = async (event) => {
 		event.preventDefault();
-		console.log('attempting submit with following email:', emailData);
+		const listAdded = await shareList(listPath, userId, emailData);
+		if (listAdded === true) {
+			alert('List was shared with recipient.');
+		} else {
+			alert(
+				"The list was not shared because the recipient's email address does not exist in the system.",
+			);
+		}
 	};
 
 	return (
@@ -77,7 +81,6 @@ export function ManageList() {
 					<br />
 					<input
 						type="text"
-						// defaultValue=""
 						id="item-name"
 						onChange={setItemName}
 						value={itemName}
