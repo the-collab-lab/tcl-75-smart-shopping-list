@@ -9,6 +9,7 @@ const notSoonDate = 30;
 export function ManageList() {
 	const [daysUntilNextPurchase, setDaysUntilNextPurchase] = useState(null);
 	const [itemName, setItemName] = useState('');
+	const [emailData, setEmailData] = useState('');
 
 	const [listPath, setListPath] = useStateWithStorage(
 		'tcl-shopping-list-path',
@@ -18,7 +19,15 @@ export function ManageList() {
 	// const listPath = 't4XIww03JAXm1QWr6UPEebbLRl13/first list';
 
 	const handleTextChange = (event) => {
-		setItemName(event.target.value);
+		console.log(event.target.value, 'value');
+		console.log(event.target.id, 'event id');
+		switch (event.target.id) {
+			case 'item-name':
+				return setItemName(event.target.value);
+			case 'email-input':
+				return setEmailData(event.target.value);
+		}
+		// setItemName(event.target.value);
 	};
 
 	const handleChange = (event) => {
@@ -55,6 +64,11 @@ export function ManageList() {
 		[itemName, daysUntilNextPurchase, listPath],
 	);
 
+	const handleEmailInputSubmit = (event) => {
+		event.preventDefault();
+		console.log('attempting submit with following email:', emailData);
+	};
+
 	return (
 		<div>
 			<form onSubmit={handleSubmit}>
@@ -63,9 +77,9 @@ export function ManageList() {
 					<br />
 					<input
 						type="text"
-						defaultValue=""
+						// defaultValue=""
 						id="item-name"
-						onChange={handleTextChange}
+						onChange={setItemName}
 						value={itemName}
 					/>
 				</label>
@@ -102,6 +116,21 @@ export function ManageList() {
 				</label>
 				<br />
 				<button type="submit">Submit</button>
+			</form>
+
+			{/* invite a user to share list form */}
+			<form onSubmit={handleEmailInputSubmit}>
+				<label htmlFor="email-input">Enter Email:</label>
+				<input
+					type="text"
+					id="email-input"
+					value={emailData}
+					placeholder="Enter email"
+					required
+					onChange={handleTextChange}
+				/>
+				<br />
+				<button type="submit">Invite User</button>
 			</form>
 		</div>
 	);
