@@ -17,8 +17,6 @@ export function ManageList({ userId }) {
 	);
 
 	const handleTextChange = (event) => {
-		console.log(event.target.value, 'value');
-		console.log(event.target.id, 'event id');
 		switch (event.target.id) {
 			case 'item-name':
 				return setItemName(event.target.value);
