@@ -62,7 +62,9 @@ export function ManageList({ userId }) {
 	const handleEmailInputSubmit = async (event) => {
 		event.preventDefault();
 		const listAdded = await shareList(listPath, userId, emailData);
-		if (listAdded === true) {
+		if (listAdded === 'match') {
+			alert('You cannot share the list with yourself.');
+		} else if (listAdded === true) {
 			alert('List was shared with recipient.');
 		} else {
 			alert(
