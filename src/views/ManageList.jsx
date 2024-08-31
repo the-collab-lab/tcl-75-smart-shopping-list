@@ -82,7 +82,7 @@ export function ManageList({ userId }) {
 					<input
 						type="text"
 						id="item-name"
-						onChange={setItemName}
+						onChange={handleTextChange}
 						value={itemName}
 					/>
 				</label>
