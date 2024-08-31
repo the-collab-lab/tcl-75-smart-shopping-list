@@ -11,10 +11,7 @@ export function ManageList() {
 	const [itemName, setItemName] = useState('');
 	const [emailData, setEmailData] = useState('');
 
-	const [listPath, setListPath] = useStateWithStorage(
-		'tcl-shopping-list-path',
-		null,
-	);
+	const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
 
 	const { user } = useAuth();
 	const userId = user?.uid;
@@ -74,6 +71,7 @@ export function ManageList() {
 				"The list was not shared because the recipient's email address does not exist in the system.",
 			);
 		}
+		setEmailData('');
 	};
 
 	return (
