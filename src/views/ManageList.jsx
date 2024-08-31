@@ -6,7 +6,7 @@ const soonDate = 7;
 const kindOfSoonDate = 14;
 const notSoonDate = 30;
 
-export function ManageList({ userId }) {
+export function ManageList() {
 	const [daysUntilNextPurchase, setDaysUntilNextPurchase] = useState(null);
 	const [itemName, setItemName] = useState('');
 	const [emailData, setEmailData] = useState('');
@@ -15,6 +15,9 @@ export function ManageList({ userId }) {
 		'tcl-shopping-list-path',
 		null,
 	);
+
+	const { user } = useAuth();
+	const userId = user?.uid;
 
 	const handleTextChange = (event) => {
 		switch (event.target.id) {
