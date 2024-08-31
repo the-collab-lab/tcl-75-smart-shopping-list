@@ -126,7 +126,7 @@ export function ManageList() {
 			<form onSubmit={handleEmailInputSubmit}>
 				<label htmlFor="email-input">Enter Email:</label>
 				<input
-					type="text"
+					type="email"
 					id="email-input"
 					value={emailData}
 					placeholder="Enter email"
