@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { useStateWithStorage } from '../utils';
-import { addItem, shareList } from '../api';
+import { addItem, shareList, useAuth } from '../api';
 
 const soonDate = 7;
 const kindOfSoonDate = 14;
