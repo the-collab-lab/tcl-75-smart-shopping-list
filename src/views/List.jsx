@@ -4,7 +4,7 @@ import { useState } from 'react';
 export function List({ data }) {
 	const [searchItem, setSearchItem] = useState('');
 
-	const handleChange = (event) => {
+	const handleTextChange = (event) => {
 		setSearchItem(event.target.value);
 	};
 
@@ -15,12 +15,13 @@ export function List({ data }) {
 	return (
 		<>
 			<form onSubmit={(event) => event.preventDefault()}>
-				<label htmlFor="search-item">Search Item:</label>
+				<label htmlFor="search-item">Search Item: </label>
+
 				<input
 					id="search=item"
 					type="text"
 					placeholder="Search Item..."
-					onChange={handleChange}
+					onChange={handleTextChange}
 					value={searchItem}
 				/>
 
@@ -31,7 +32,7 @@ export function List({ data }) {
 							setSearchItem('');
 						}}
 					>
-						x
+						X
 					</button>
 				)}
 			</form>
@@ -40,8 +41,6 @@ export function List({ data }) {
 					return <ListItem key={item.id} name={item.name} />;
 				})}
 			</ul>
-
-			{data.length && !filteredItems.length && <p>No results</p>}
 		</>
 	);
 }
