@@ -1,15 +1,45 @@
 import { ListItem } from '../components';
+import { useState } from 'react';
 
 export function List({ data }) {
+	const [searchItem, setSearchItem] = useState('');
+
+	const handleTextChange = (event) => {
+		setSearchItem(event.target.value);
+	};
+
+	const filteredItems = data.filter((item) =>
+		item.name.toLowerCase().includes(searchItem.toLowerCase()),
+	);
+
 	return (
 		<>
-			<p>
-				Hello from the <code>/list</code> page!
-			</p>
+			<form onSubmit={(event) => event.preventDefault()}>
+				<label htmlFor="search-item">Search Item: </label>
+
+				<input
+					id="search-item"
+					type="search"
+					placeholder="Search Item..."
+					onChange={handleTextChange}
+					value={searchItem}
+				/>
+
+				{searchItem && (
+					<button
+						type="button"
+						onClick={() => {
+							setSearchItem('');
+						}}
+					>
+						X
+					</button>
+				)}
+			</form>
 			<ul>
-				{Object.values(data).map((item) => (
-					<ListItem key={item.id} name={item.name} />
-				))}
+				{filteredItems.map((item) => {
+					return <ListItem key={item.id} name={item.name} />;
+				})}
 			</ul>
 		</>
 	);
