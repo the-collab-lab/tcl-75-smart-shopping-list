@@ -8,9 +8,9 @@ export function List({ data }) {
 		setSearchItem(event.target.value);
 	};
 
-	const filteredItems = data.filter((item) => {
-		return item.name.toLowerCase().includes(searchItem.toLowerCase());
-	});
+	const filteredItems = data.filter((item) =>
+		item.name.toLowerCase().includes(searchItem.toLowerCase()),
+	);
 
 	return (
 		<>
@@ -18,8 +18,8 @@ export function List({ data }) {
 				<label htmlFor="search-item">Search Item: </label>
 
 				<input
-					id="search=item"
-					type="text"
+					id="search-item"
+					type="search"
 					placeholder="Search Item..."
 					onChange={handleTextChange}
 					value={searchItem}
