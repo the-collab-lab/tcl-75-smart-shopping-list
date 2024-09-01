@@ -61,16 +61,14 @@ export function ManageList() {
 
 	const handleEmailInputSubmit = async (event) => {
 		event.preventDefault();
-		const listAdded = await shareList(listPath, userId, emailData);
-		if (listAdded === 'match') {
-			alert('You cannot share the list with yourself.');
-		} else if (listAdded === true) {
+
+		try {
+			await shareList(listPath, emailData);
 			alert('List was shared with recipient.');
-		} else {
-			alert(
-				"The list was not shared because the recipient's email address does not exist in the system.",
-			);
+		} catch (err) {
+			alert(err.message);
 		}
+
 		setEmailData('');
 	};
 
