@@ -15,6 +15,7 @@ export function ManageList() {
 
 	const { user } = useAuth();
 	const userId = user?.uid;
+	const userEmail = user?.email;
 
 	const handleTextChange = (event) => {
 		switch (event.target.id) {
@@ -59,18 +60,29 @@ export function ManageList() {
 		[itemName, daysUntilNextPurchase, listPath],
 	);
 
-	const handleEmailInputSubmit = async (event) => {
-		event.preventDefault();
-		const listAdded = await shareList(listPath, userId, emailData);
-		if (listAdded === 'match') {
-			alert('You cannot share the list with yourself.');
-		} else if (listAdded === true) {
+	const shareCurrentList = async () => {
+		const listShared = await shareList(listPath, userId, emailData);
+
+		if (listShared === '!owner') {
+			alert('You cannot share the list you do not own.');
+		} else if (listShared === 'shared') {
 			alert('List was shared with recipient.');
 		} else {
 			alert(
 				"The list was not shared because the recipient's email address does not exist in the system.",
 			);
 		}
+	};
+
+	const handleEmailInputSubmit = (event) => {
+		event.preventDefault();
+
+		if (userEmail === emailData) {
+			alert('You cannot share the list with yourself.');
+		} else {
+			shareCurrentList();
+		}
+
 		setEmailData('');
 	};
 
