@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { useStateWithStorage } from '../utils';
-import { addItem } from '../api';
+import { addItem, shareList, useAuth } from '../api';
 
 const soonDate = 7;
 const kindOfSoonDate = 14;
@@ -9,16 +9,21 @@ const notSoonDate = 30;
 export function ManageList() {
 	const [daysUntilNextPurchase, setDaysUntilNextPurchase] = useState(null);
 	const [itemName, setItemName] = useState('');
+	const [emailData, setEmailData] = useState('');
 
-	const [listPath, setListPath] = useStateWithStorage(
-		'tcl-shopping-list-path',
-		null,
-	);
+	const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
 
-	// const listPath = 't4XIww03JAXm1QWr6UPEebbLRl13/first list';
+	const { user } = useAuth();
+	const userId = user?.uid;
+	const userEmail = user?.email;
 
 	const handleTextChange = (event) => {
-		setItemName(event.target.value);
+		switch (event.target.id) {
+			case 'item-name':
+				return setItemName(event.target.value);
+			case 'email-input':
+				return setEmailData(event.target.value);
+		}
 	};
 
 	const handleChange = (event) => {
@@ -54,6 +59,32 @@ export function ManageList() {
 		},
 		[itemName, daysUntilNextPurchase, listPath],
 	);
+
+	const shareCurrentList = async () => {
+		const listShared = await shareList(listPath, userId, emailData);
+
+		if (listShared === '!owner') {
+			alert('You cannot share the list you do not own.');
+		} else if (listShared === 'shared') {
+			alert('List was shared with recipient.');
+		} else {
+			alert(
+				"The list was not shared because the recipient's email address does not exist in the system.",
+			);
+		}
+	};
+
+	const handleEmailInputSubmit = (event) => {
+		event.preventDefault();
+
+		if (userEmail === emailData) {
+			alert('You cannot share the list with yourself.');
+		} else {
+			shareCurrentList();
+		}
+
+		setEmailData('');
+	};
 
 	return (
 		<div>
@@ -101,6 +132,21 @@ export function ManageList() {
 				</label>
 				<br />
 				<button type="submit">Submit</button>
+			</form>
+
+			{/* invite a user to share list form */}
+			<form onSubmit={handleEmailInputSubmit}>
+				<label htmlFor="email-input">Enter Email:</label>
+				<input
+					type="email"
+					id="email-input"
+					value={emailData}
+					placeholder="Enter email"
+					required
+					onChange={handleTextChange}
+				/>
+				<br />
+				<button type="submit">Invite User</button>
 			</form>
 		</div>
 	);

@@ -139,7 +139,7 @@ export async function createList(userId, userEmail, listName) {
 export async function shareList(listPath, currentUserId, recipientEmail) {
 	// Check if current user is owner.
 	if (!listPath.includes(currentUserId)) {
-		return;
+		return '!owner';
 	}
 	// Get the document for the recipient user.
 	const usersCollectionRef = collection(db, 'users');
@@ -151,9 +151,14 @@ export async function shareList(listPath, currentUserId, recipientEmail) {
 	// Add the list to the recipient user's sharedLists array.
 	const listDocumentRef = doc(db, listPath);
 	const userDocumentRef = doc(db, 'users', recipientEmail);
-	updateDoc(userDocumentRef, {
-		sharedLists: arrayUnion(listDocumentRef),
-	});
+	try {
+		updateDoc(userDocumentRef, {
+			sharedLists: arrayUnion(listDocumentRef),
+		});
+		return 'shared';
+	} catch {
+		return;
+	}
 }
 
 /**
