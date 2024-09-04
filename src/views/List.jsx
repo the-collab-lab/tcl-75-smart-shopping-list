@@ -1,11 +1,9 @@
 import { ListItem } from '../components';
 import { useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
 import { AddItems } from '../components/AddItems';
 
 export function List({ data, listPath }) {
 	const [searchItem, setSearchItem] = useState('');
-	// const navigate = useNavigate();
 
 	const handleTextChange = (event) => {
 		setSearchItem(event.target.value);
