@@ -1,10 +1,11 @@
 import { ListItem } from '../components';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
+import { AddItems } from '../components/AddItems';
 
-export function List({ data }) {
+export function List({ data, listPath }) {
 	const [searchItem, setSearchItem] = useState('');
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
 
 	const handleTextChange = (event) => {
 		setSearchItem(event.target.value);
@@ -13,17 +14,15 @@ export function List({ data }) {
 	const filteredItems = data.filter((item) =>
 		item.name.toLowerCase().includes(searchItem.toLowerCase()),
 	);
-
 	return (
 		<>
+			<p>Welcome to the {listPath.slice(29)} list!</p>
+
 			{data.length === 0 ? (
 				<>
-					{/* TODO Add a list name to make it more clear which list we are on */}
-					<p>
-						Hey! Ready to add your first item? Click button below to start your
-						list!
-					</p>
-					<button onClick={() => navigate('/manage-list')}>Add item!</button>
+					<p>Ready to add your first item? Start adding below!</p>
+
+					<AddItems />
 				</>
 			) : (
 				<>
