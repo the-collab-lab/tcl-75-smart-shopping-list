@@ -10,8 +10,10 @@ export function ListItem({
 	nextPurchaseDate,
 }) {
 	useEffect(() => {
+		const currentDate = new Date();
+		const nextPurchase = nextPurchaseDate.toDate();
 		if (purchaseDate) {
-			if (purchaseDate < nextPurchaseDate) {
+			if (currentDate < nextPurchase) {
 				setIsPurchased(true);
 			} else {
 				setIsPurchased(false);
