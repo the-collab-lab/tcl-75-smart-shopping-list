@@ -12,18 +12,22 @@ export function List({ data, listPath }) {
 	const filteredItems = data.filter((item) =>
 		item.name.toLowerCase().includes(searchItem.toLowerCase()),
 	);
+
+	const listName = listPath.slice(29);
+
 	return (
 		<>
-			<p>Welcome to the {listPath.slice(29)} list!</p>
-
 			{data.length === 0 ? (
 				<>
+					<p>Welcome to the {listName} List!</p>
 					<p>Ready to add your first item? Start adding below!</p>
 
 					<AddItems />
 				</>
 			) : (
 				<>
+					<p>{listName} List</p>
+
 					<form onSubmit={(event) => event.preventDefault()}>
 						<label htmlFor="search-item">Search Item: </label>
 
