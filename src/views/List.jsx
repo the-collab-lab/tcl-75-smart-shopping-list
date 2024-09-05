@@ -19,14 +19,14 @@ export function List({ data, listPath }) {
 		<>
 			{data.length === 0 ? (
 				<>
-					<p>Welcome to the {listName} List!</p>
+					<p>Welcome to {listName}!</p>
 					<p>Ready to add your first item? Start adding below!</p>
 
 					<AddItems />
 				</>
 			) : (
 				<>
-					<p>{listName} List</p>
+					<p>{listName}</p>
 
 					<form onSubmit={(event) => event.preventDefault()}>
 						<label htmlFor="search-item">Search Item: </label>
