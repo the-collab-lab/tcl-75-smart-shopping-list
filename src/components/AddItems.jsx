@@ -13,12 +13,7 @@ export function AddItems() {
 	const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
 
 	const handleTextChange = (event) => {
-		switch (event.target.id) {
-			case 'item-name':
-				return setItemName(event.target.value);
-			case 'email-input':
-				return setEmailData(event.target.value);
-		}
+		return setItemName(event.target.value);
 	};
 
 	const handleChange = (event) => {

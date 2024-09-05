@@ -9,12 +9,7 @@ export function ShareList() {
 	const userEmail = user?.email;
 
 	const handleTextChange = (event) => {
-		switch (event.target.id) {
-			case 'item-name':
-				return setItemName(event.target.value);
-			case 'email-input':
-				return setEmailData(event.target.value);
-		}
+		return setEmailData(event.target.value);
 	};
 
 	const shareCurrentList = async () => {
