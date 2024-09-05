@@ -1,7 +1,7 @@
 import { ListItem } from '../components';
 import { useState } from 'react';
 
-export function List({ data }) {
+export function List({ data, listPath }) {
 	const [searchItem, setSearchItem] = useState('');
 
 	const handleTextChange = (event) => {
@@ -38,7 +38,14 @@ export function List({ data }) {
 			</form>
 			<ul>
 				{filteredItems.map((item) => {
-					return <ListItem key={item.id} name={item.name} />;
+					return (
+						<ListItem
+							key={item.id}
+							name={item.name}
+							itemId={item.id}
+							listPath={listPath}
+						/>
+					);
 				})}
 			</ul>
 		</>
