@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './ListItem.css';
+import { updateItem } from '../api';
 
 export function ListItem({ name, itemId, listPath }) {
 	console.log('check item name', name);

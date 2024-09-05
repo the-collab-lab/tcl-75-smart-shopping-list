@@ -189,6 +189,10 @@ export async function updateItem(listPath, itemId) {
 	 * to update an existing item. You'll need to figure out what arguments
 	 * this function must accept!
 	 */
+	const itemDocRef = doc(db, listPath, 'items', itemId);
+	const datePurchased = new Date();
+	console.log('check itemDocRef', itemDocRef);
+	console.log('check date purchased', datePurchased);
 }
 
 export async function deleteItem() {
