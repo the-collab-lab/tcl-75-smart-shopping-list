@@ -45,6 +45,7 @@ export function List({ data, listPath }) {
 							itemId={item.id}
 							listPath={listPath}
 							purchaseDate={item.dateLastPurchased}
+							nextPurchaseDate={item.dateNextPurchased}
 						/>
 					);
 				})}

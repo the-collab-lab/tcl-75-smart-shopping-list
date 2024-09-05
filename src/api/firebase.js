@@ -189,6 +189,7 @@ export async function updateItem(listPath, itemId) {
 	await updateDoc(itemDocRef, {
 		dateLastPurchased: datePurchased,
 		totalPurchases: increment(1),
+		dateNextPurchased: getFutureDate(1),
 	});
 }
 
