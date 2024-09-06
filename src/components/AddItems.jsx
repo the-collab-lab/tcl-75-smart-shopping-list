@@ -1,6 +1,8 @@
 import { useCallback, useState } from 'react';
 import { useStateWithStorage } from '../utils';
 import { addItem } from '../api';
+import InputElement from './InputElement';
+import RadioInputElement from './RadioInputElement';
 
 const soonDate = 7;
 const kindOfSoonDate = 14;
@@ -49,7 +51,42 @@ export function AddItems() {
 	return (
 		<div>
 			<form onSubmit={handleSubmit}>
-				<label htmlFor="item-name">
+				<InputElement
+					type="text"
+					id="item-name"
+					onChange={handleTextChange}
+					value={itemName}
+				>
+					Item Name:
+				</InputElement>
+
+				<RadioInputElement
+					id="soon"
+					value={soonDate}
+					checked={daysUntilNextPurchase === soonDate}
+					onChange={handleChange}
+				>
+					Soon
+				</RadioInputElement>
+
+				<RadioInputElement
+					id="kindofsoon"
+					value={kindOfSoonDate}
+					checked={daysUntilNextPurchase === kindOfSoonDate}
+					onChange={handleChange}
+				>
+					Kind of soon
+				</RadioInputElement>
+
+				<RadioInputElement
+					id="notsoon"
+					value={notSoonDate}
+					checked={daysUntilNextPurchase === notSoonDate}
+					onChange={handleChange}
+				>
+					Not soon
+				</RadioInputElement>
+				{/* <label htmlFor="item-name">
 					Item Name:
 					<br />
 					<input
@@ -58,10 +95,10 @@ export function AddItems() {
 						onChange={handleTextChange}
 						value={itemName}
 					/>
-				</label>
+				</label> */}
 
-				<br />
-				<label>
+				{/* <br /> */}
+				{/* <label>
 					<input
 						type="radio"
 						value={soonDate}
@@ -70,8 +107,8 @@ export function AddItems() {
 					/>
 					Soon
 				</label>
-				<br />
-				<label>
+				<br /> */}
+				{/* <label>
 					<input
 						type="radio"
 						value={kindOfSoonDate}
@@ -80,8 +117,8 @@ export function AddItems() {
 					/>
 					Kind of soon
 				</label>
-				<br />
-				<label>
+				<br /> */}
+				{/* <label>
 					<input
 						type="radio"
 						value={notSoonDate}
@@ -91,7 +128,7 @@ export function AddItems() {
 					Not soon
 				</label>
 				<br />
-				<button type="submit">Submit</button>
+				<button type="submit">Submit</button> */}
 			</form>
 		</div>
 	);
