@@ -17,7 +17,7 @@ export function List({ data, listPath }) {
 
 	return (
 		<>
-			{data.length === 0 ? (
+			{!data.length ? (
 				<>
 					<p>Welcome to {listName}!</p>
 					<p>Ready to add your first item? Start adding below!</p>
