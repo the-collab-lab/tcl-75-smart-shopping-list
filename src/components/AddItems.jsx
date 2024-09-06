@@ -12,9 +12,7 @@ export function AddItems() {
 
 	const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
 
-	const handleTextChange = (event) => {
-		return setItemName(event.target.value);
-	};
+	const handleTextChange = (event) => setItemName(event.target.value);
 
 	const handleChange = (event) => {
 		const numberOfDays = parseInt(event.target.value);
@@ -39,7 +37,7 @@ export function AddItems() {
 					daysUntilNextPurchase,
 				});
 				alert(
-					`${itemName} was added to the database! Next purchase time: ${daysUntilNextPurchase}.`,
+					`${itemName} was added to the list! The next purchase date is set to ${daysUntilNextPurchase} days from now.`,
 				);
 			} catch (error) {
 				alert(`Item was not added to the database, Error: ${error.message}`);
