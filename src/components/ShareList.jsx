@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { shareList, useAuth } from '../api';
+import { useStateWithStorage } from '../utils';
 
 export function ShareList() {
 	const [emailData, setEmailData] = useState('');
+	const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
 
 	const { user } = useAuth();
 	const userId = user?.uid;
