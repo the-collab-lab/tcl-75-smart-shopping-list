@@ -39,9 +39,7 @@ export function AddItems() {
 					daysUntilNextPurchase,
 				});
 				alert(
-					'Item was added to the database!',
-					itemName,
-					daysUntilNextPurchase,
+					`${itemName} was added to the database! Next purchase time: ${daysUntilNextPurchase}.`,
 				);
 			} catch (error) {
 				alert(`Item was not added to the database, Error: ${error.message}`);
