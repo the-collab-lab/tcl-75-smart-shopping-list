@@ -9,6 +9,8 @@ export function ListItem({
 	purchaseDate,
 	nextPurchaseDate,
 }) {
+	let [isPurchased, setIsPurchased] = useState(false);
+
 	useEffect(() => {
 		const currentDate = new Date();
 		const nextPurchase = nextPurchaseDate.toDate();
@@ -21,10 +23,6 @@ export function ListItem({
 		}
 	}, []);
 
-	// local state to keep track of purchased status
-	let [isPurchased, setIsPurchased] = useState(false);
-
-	// toggle purchase status and send the listPath and itemId to the updateItem function
 	const handleChange = async () => {
 		setIsPurchased(!isPurchased);
 		if (!isPurchased) {
