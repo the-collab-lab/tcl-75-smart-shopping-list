@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { useStateWithStorage } from '../utils';
 import { addItem } from '../api';
-import InputElement from './InputElement';
+import TextInputElement from './TextInputElement';
 import RadioInputElement from './RadioInputElement';
 
 const soonDate = 7;
@@ -51,14 +51,14 @@ export function AddItems() {
 	return (
 		<div>
 			<form onSubmit={handleSubmit}>
-				<InputElement
+				<TextInputElement
 					type="text"
 					id="item-name"
 					onChange={handleTextChange}
 					value={itemName}
 				>
 					Item Name:
-				</InputElement>
+				</TextInputElement>
 
 				<RadioInputElement
 					id="soon"
