@@ -13,7 +13,7 @@ export function List({ data, listPath }) {
 		item.name.toLowerCase().includes(searchItem.toLowerCase()),
 	);
 
-	const listName = listPath.slice(29);
+	const listName = listPath.slice(listPath.indexOf('/') + 1);
 
 	return (
 		<>
