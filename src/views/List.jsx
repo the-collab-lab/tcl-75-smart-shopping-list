@@ -2,6 +2,7 @@ import { ListItem } from '../components';
 import { useState } from 'react';
 import { useStateWithStorage } from '../utils';
 import { AddItems } from '../components/AddItems';
+import TextInputElement from '../components/TextInputElement';
 
 export function List({ data }) {
 	const [searchItem, setSearchItem] = useState('');
@@ -31,15 +32,14 @@ export function List({ data }) {
 					<p>{listName}</p>
 
 					<form onSubmit={(event) => event.preventDefault()}>
-						<label htmlFor="search-item">Search Item: </label>
-
-						<input
+						<TextInputElement
 							id="search-item"
 							type="search"
 							placeholder="Search Item..."
 							onChange={handleTextChange}
-							value={searchItem}
-						/>
+						>
+							Search Item:
+						</TextInputElement>
 					</form>
 					<ul>
 						{filteredItems.map((item) => {
