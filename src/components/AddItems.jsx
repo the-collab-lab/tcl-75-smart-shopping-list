@@ -1,27 +1,32 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { useStateWithStorage } from '../utils';
 import { addItem } from '../api';
 import TextInputElement from './TextInputElement';
 import RadioInputElement from './RadioInputElement';
 
-const soonDate = 7;
-const kindOfSoonDate = 14;
-const notSoonDate = 30;
+const nextPurchaseDate = {
+	soon: 7,
+	kindOfSoon: 14,
+	notSoon: 30,
+};
+
+const radioInputOptions = {
+	soon: ['soon', nextPurchaseDate.soon, 'Soon'],
+	kindOfSoon: ['kindofsoon', nextPurchaseDate.kindOfSoon, 'Kind of soon'],
+	notSoon: ['notsoon', nextPurchaseDate.notSoon, 'Not Soon'],
+};
 
 export function AddItems() {
-	const [daysUntilNextPurchase, setDaysUntilNextPurchase] = useState(null);
 	const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
-
-	const handleChange = (event) => {
-		const numberOfDays = parseInt(event.target.value);
-		setDaysUntilNextPurchase(numberOfDays);
-	};
 
 	const handleSubmit = useCallback(
 		async (event) => {
-			console.log(event.target.elements, 'form elements');
-			const itemName = event.target.elements['item-name'].value;
 			event.preventDefault();
+
+			const itemName = event.target.elements['item-name'].value;
+			const daysUntilNextPurchase =
+				event.target.elements['purchase-date'].value;
+
 			if (itemName === '') {
 				alert('Please add an item name.');
 				return;
@@ -45,7 +50,7 @@ export function AddItems() {
 				event.target.reset();
 			}
 		},
-		[daysUntilNextPurchase, listPath],
+		[listPath],
 	);
 
 	return (
@@ -55,32 +60,12 @@ export function AddItems() {
 					Item Name:
 				</TextInputElement>
 
-				<RadioInputElement
-					id="soon"
-					value={soonDate}
-					checked={daysUntilNextPurchase === soonDate}
-					onChange={handleChange}
-				>
-					Soon
-				</RadioInputElement>
+				{Object.values(radioInputOptions).map((date) => (
+					<RadioInputElement key={date[0]} id={date[0]} value={date[1]}>
+						{date[2]}
+					</RadioInputElement>
+				))}
 
-				<RadioInputElement
-					id="kindofsoon"
-					value={kindOfSoonDate}
-					checked={daysUntilNextPurchase === kindOfSoonDate}
-					onChange={handleChange}
-				>
-					Kind of soon
-				</RadioInputElement>
-
-				<RadioInputElement
-					id="notsoon"
-					value={notSoonDate}
-					checked={daysUntilNextPurchase === notSoonDate}
-					onChange={handleChange}
-				>
-					Not soon
-				</RadioInputElement>
 				<button type="submit">Submit</button>
 			</form>
 		</div>
