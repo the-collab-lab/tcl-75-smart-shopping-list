@@ -1,14 +1,7 @@
-const RadioInputElement = ({ children, id, value, checked, onChange }) => {
+const RadioInputElement = ({ children, id, value }) => {
 	return (
 		<>
-			<input
-				type="radio"
-				id={id}
-				value={value}
-				checked={checked}
-				onChange={onChange}
-				required
-			/>
+			<input type="radio" name="purchase-date" id={id} value={value} required />
 			<label htmlFor={id}>{children}</label>
 			<br />
 		</>
