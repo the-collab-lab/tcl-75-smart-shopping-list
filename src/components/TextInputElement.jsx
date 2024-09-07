@@ -3,7 +3,7 @@ const TextInputElement = ({ children, type, id, onChange, value }) => {
 		<>
 			<label htmlFor={id}>{children}</label>
 			<br />
-			<input type={type} id={id} onChange={onChange} value={value} />
+			<input type={type} id={id} onChange={onChange} value={value} required />
 			<br />
 		</>
 	);

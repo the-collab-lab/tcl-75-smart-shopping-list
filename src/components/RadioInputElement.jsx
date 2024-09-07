@@ -7,6 +7,7 @@ const RadioInputElement = ({ children, id, value, checked, onChange }) => {
 				value={value}
 				checked={checked}
 				onChange={onChange}
+				required
 			/>
 			<label htmlFor={id}>{children}</label>
 			<br />
