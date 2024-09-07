@@ -10,9 +10,7 @@ export function ShareList() {
 	const userId = user?.uid;
 	const userEmail = user?.email;
 
-	const handleTextChange = (event) => {
-		return setEmailData(event.target.value);
-	};
+	const handleTextChange = (event) => setEmailData(event.target.value);
 
 	const shareCurrentList = async () => {
 		const listShared = await shareList(listPath, userId, emailData);
