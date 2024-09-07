@@ -56,7 +56,11 @@ export function AddItems() {
 	return (
 		<div>
 			<form onSubmit={handleSubmit}>
-				<TextInputElement type="text" id="item-name">
+				<TextInputElement
+					type="text"
+					id="item-name"
+					placeholder="Enter item name"
+				>
 					Item Name:
 				</TextInputElement>
 
