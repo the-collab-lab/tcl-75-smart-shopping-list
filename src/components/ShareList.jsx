@@ -45,7 +45,6 @@ export function ShareList() {
 					id="email-input"
 					placeholder="Enter email"
 				>
-					{' '}
 					Enter Email:
 				</TextInputElement>
 				<button type="submit">Invite User</button>
