@@ -86,49 +86,7 @@ export function AddItems() {
 				>
 					Not soon
 				</RadioInputElement>
-				{/* <label htmlFor="item-name">
-					Item Name:
-					<br />
-					<input
-						type="text"
-						id="item-name"
-						onChange={handleTextChange}
-						value={itemName}
-					/>
-				</label> */}
-
-				{/* <br /> */}
-				{/* <label>
-					<input
-						type="radio"
-						value={soonDate}
-						checked={daysUntilNextPurchase === soonDate}
-						onChange={handleChange}
-					/>
-					Soon
-				</label>
-				<br /> */}
-				{/* <label>
-					<input
-						type="radio"
-						value={kindOfSoonDate}
-						checked={daysUntilNextPurchase === kindOfSoonDate}
-						onChange={handleChange}
-					/>
-					Kind of soon
-				</label>
-				<br /> */}
-				{/* <label>
-					<input
-						type="radio"
-						value={notSoonDate}
-						checked={daysUntilNextPurchase === notSoonDate}
-						onChange={handleChange}
-					/>
-					Not soon
-				</label>
-				<br />
-				<button type="submit">Submit</button> */}
+				<button type="submit">Submit</button>
 			</form>
 		</div>
 	);
