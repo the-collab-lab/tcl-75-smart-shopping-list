@@ -43,6 +43,8 @@ export function AddItems() {
 				);
 			} catch (error) {
 				alert(`Item was not added to the database, Error: ${error.message}`);
+			} finally {
+				setItemName('');
 			}
 		},
 		[itemName, daysUntilNextPurchase, listPath],
