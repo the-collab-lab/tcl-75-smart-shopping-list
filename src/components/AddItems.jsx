@@ -10,11 +10,7 @@ const notSoonDate = 30;
 
 export function AddItems() {
 	const [daysUntilNextPurchase, setDaysUntilNextPurchase] = useState(null);
-	const [itemName, setItemName] = useState('');
-
 	const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
-
-	const handleTextChange = (event) => setItemName(event.target.value);
 
 	const handleChange = (event) => {
 		const numberOfDays = parseInt(event.target.value);
@@ -23,6 +19,8 @@ export function AddItems() {
 
 	const handleSubmit = useCallback(
 		async (event) => {
+			console.log(event.target.elements, 'form elements');
+			const itemName = event.target.elements['item-name'].value;
 			event.preventDefault();
 			if (itemName === '') {
 				alert('Please add an item name.');
@@ -44,21 +42,16 @@ export function AddItems() {
 			} catch (error) {
 				alert(`Item was not added to the database, Error: ${error.message}`);
 			} finally {
-				setItemName('');
+				event.target.reset();
 			}
 		},
-		[itemName, daysUntilNextPurchase, listPath],
+		[daysUntilNextPurchase, listPath],
 	);
 
 	return (
 		<div>
 			<form onSubmit={handleSubmit}>
-				<TextInputElement
-					type="text"
-					id="item-name"
-					onChange={handleTextChange}
-					value={itemName}
-				>
+				<TextInputElement type="text" id="item-name">
 					Item Name:
 				</TextInputElement>
 
