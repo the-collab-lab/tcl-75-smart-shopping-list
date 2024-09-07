@@ -1,9 +1,9 @@
-const TextInputElement = ({ children, type, id }) => {
+const TextInputElement = ({ children, type, id, placeholder }) => {
 	return (
 		<>
 			<label htmlFor={id}>{children}</label>
 			<br />
-			<input type={type} id={id} required />
+			<input type={type} id={id} placeholder={placeholder} required />
 			<br />
 		</>
 	);
