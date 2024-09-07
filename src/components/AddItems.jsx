@@ -64,9 +64,9 @@ export function AddItems() {
 					Item Name:
 				</TextInputElement>
 
-				{Object.values(radioInputOptions).map((date) => (
-					<RadioInputElement key={date[0]} id={date[0]} value={date[1]}>
-						{date[2]}
+				{Object.values(radioInputOptions).map((option) => (
+					<RadioInputElement key={option[0]} id={option[0]} value={option[1]}>
+						{option[2]}
 					</RadioInputElement>
 				))}
 
