@@ -1,9 +1,11 @@
 import { ListItem } from '../components';
 import { useState } from 'react';
+import { useStateWithStorage } from '../utils';
 import { AddItems } from '../components/AddItems';
 
-export function List({ data, listPath }) {
+export function List({ data }) {
 	const [searchItem, setSearchItem] = useState('');
+	const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
 
 	const handleTextChange = (event) => {
 		setSearchItem(event.target.value);
@@ -38,17 +40,6 @@ export function List({ data, listPath }) {
 							onChange={handleTextChange}
 							value={searchItem}
 						/>
-
-						{searchItem && (
-							<button
-								type="button"
-								onClick={() => {
-									setSearchItem('');
-								}}
-							>
-								X
-							</button>
-						)}
 					</form>
 					<ul>
 						{filteredItems.map((item) => {
