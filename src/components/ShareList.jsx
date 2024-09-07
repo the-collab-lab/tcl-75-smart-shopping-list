@@ -1,18 +1,15 @@
-import { useState } from 'react';
 import { shareList, useAuth } from '../api';
 import { useStateWithStorage } from '../utils';
+import TextInputElement from './TextInputElement';
 
 export function ShareList() {
-	const [emailData, setEmailData] = useState('');
 	const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
 
 	const { user } = useAuth();
 	const userId = user?.uid;
 	const userEmail = user?.email;
 
-	const handleTextChange = (event) => setEmailData(event.target.value);
-
-	const shareCurrentList = async () => {
+	const shareCurrentList = async (emailData) => {
 		const listShared = await shareList(listPath, userId, emailData);
 
 		if (listShared === '!owner') {
@@ -29,28 +26,28 @@ export function ShareList() {
 	const handleEmailInputSubmit = (event) => {
 		event.preventDefault();
 
+		const emailData = event.target['email-input'].value;
+
 		if (userEmail === emailData) {
 			alert('You cannot share the list with yourself.');
 		} else {
-			shareCurrentList();
+			shareCurrentList(emailData);
 		}
 
-		setEmailData('');
+		event.target.reset();
 	};
 
 	return (
 		<div>
 			<form onSubmit={handleEmailInputSubmit}>
-				<label htmlFor="email-input">Enter Email:</label>
-				<input
+				<TextInputElement
 					type="email"
 					id="email-input"
-					value={emailData}
 					placeholder="Enter email"
-					required
-					onChange={handleTextChange}
-				/>
-				<br />
+				>
+					{' '}
+					Enter Email:
+				</TextInputElement>
 				<button type="submit">Invite User</button>
 			</form>
 		</div>
