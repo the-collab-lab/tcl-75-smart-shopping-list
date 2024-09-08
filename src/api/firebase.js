@@ -181,13 +181,21 @@ export async function addItem(listPath, { itemName, daysUntilNextPurchase }) {
 }
 
 export async function updateItem(listPath, itemId) {
+	// reference the item path
 	const itemDocRef = doc(db, listPath, 'items', itemId);
+	// set datePurchased to current time when the function was called
 	const datePurchased = new Date();
-	await updateDoc(itemDocRef, {
-		dateLastPurchased: datePurchased,
-		totalPurchases: increment(1),
-		dateNextPurchased: getFutureDate(1),
-	});
+	// update the item with the purchase date and increment the total purchases made
+	try {
+		await updateDoc(itemDocRef, {
+			dateLastPurchased: datePurchased,
+			totalPurchases: increment(1),
+			dateNextPurchased: getFutureDate(1),
+		});
+		return 'item purchased';
+	} catch {
+		return;
+	}
 }
 
 export async function deleteItem() {

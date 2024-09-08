@@ -9,7 +9,7 @@ export function ListItem({
 	purchaseDate,
 	nextPurchaseDate,
 }) {
-	let [isPurchased, setIsPurchased] = useState(false);
+	const [isPurchased, setIsPurchased] = useState(false);
 
 	useEffect(() => {
 		const currentDate = new Date();
