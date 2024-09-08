@@ -7,7 +7,6 @@ import {
 	doc,
 	onSnapshot,
 	updateDoc,
-	increment,
 } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { db } from './config';
@@ -180,17 +179,18 @@ export async function addItem(listPath, { itemName, daysUntilNextPurchase }) {
 	});
 }
 
-export async function updateItem(listPath, itemId) {
+export async function updateItem(
+	listPath,
+	itemId,
+	{ dateLastPurchased, totalPurchases },
+) {
 	// reference the item path
 	const itemDocRef = doc(db, listPath, 'items', itemId);
-	// set datePurchased to current time when the function was called
-	const datePurchased = new Date();
 	// update the item with the purchase date and increment the total purchases made
 	try {
 		await updateDoc(itemDocRef, {
-			dateLastPurchased: datePurchased,
-			totalPurchases: increment(1),
-			dateNextPurchased: getFutureDate(1),
+			dateLastPurchased,
+			totalPurchases,
 		});
 		return 'item purchased';
 	} catch {

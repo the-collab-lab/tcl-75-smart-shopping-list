@@ -1,7 +1,7 @@
 import { ListItem } from '../components';
 import { useState } from 'react';
 
-export function List({ data, listPath }) {
+export function List({ data }) {
 	const [searchItem, setSearchItem] = useState('');
 
 	const handleTextChange = (event) => {
@@ -43,9 +43,7 @@ export function List({ data, listPath }) {
 							key={item.id}
 							name={item.name}
 							itemId={item.id}
-							listPath={listPath}
-							purchaseDate={item.dateLastPurchased}
-							nextPurchaseDate={item.dateNextPurchased}
+							purchaseTimestamp={item.dateLastPurchased}
 						/>
 					);
 				})}
