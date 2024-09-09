@@ -170,12 +170,8 @@ export async function shareList(listPath, currentUserId, recipientEmail) {
  */
 export async function addItem(listPath, { itemName, daysUntilNextPurchase }) {
 	const listCollectionRef = collection(db, listPath, 'items');
-	// TODO: Replace this call to console.log with the appropriate
-	// Firebase function, so this information is sent to your database!
 	return addDoc(listCollectionRef, {
 		dateCreated: new Date(),
-		// NOTE: This is null because the item has just been created.
-		// We'll use updateItem to put a Date here when the item is purchased!
 		dateLastPurchased: null,
 		dateNextPurchased: getFutureDate(daysUntilNextPurchase),
 		name: itemName,
@@ -183,12 +179,23 @@ export async function addItem(listPath, { itemName, daysUntilNextPurchase }) {
 	});
 }
 
-export async function updateItem() {
-	/**
-	 * TODO: Fill this out so that it uses the correct Firestore function
-	 * to update an existing item. You'll need to figure out what arguments
-	 * this function must accept!
-	 */
+export async function updateItem(
+	listPath,
+	itemId,
+	{ dateLastPurchased, totalPurchases },
+) {
+	// reference the item path
+	const itemDocRef = doc(db, listPath, 'items', itemId);
+	// update the item with the purchase date and increment the total purchases made
+	try {
+		await updateDoc(itemDocRef, {
+			dateLastPurchased,
+			totalPurchases,
+		});
+		return 'item purchased';
+	} catch {
+		return;
+	}
 }
 
 export async function deleteItem() {
