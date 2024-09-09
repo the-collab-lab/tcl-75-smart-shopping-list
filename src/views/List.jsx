@@ -1,8 +1,12 @@
 import { ListItem } from '../components';
 import { useState } from 'react';
+import { useStateWithStorage } from '../utils';
+import { AddItems } from '../components/AddItems';
+import TextInputElement from '../components/TextInputElement';
 
 export function List({ data }) {
 	const [searchItem, setSearchItem] = useState('');
+	const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
 
 	const handleTextChange = (event) => {
 		setSearchItem(event.target.value);
@@ -12,42 +16,38 @@ export function List({ data }) {
 		item.name.toLowerCase().includes(searchItem.toLowerCase()),
 	);
 
+	const listName = listPath.slice(listPath.indexOf('/') + 1);
+
 	return (
 		<>
-			<form onSubmit={(event) => event.preventDefault()}>
-				<label htmlFor="search-item">Search Item: </label>
+			{!data.length ? (
+				<>
+					<p>Welcome to {listName}!</p>
+					<p>Ready to add your first item? Start adding below!</p>
 
-				<input
-					id="search-item"
-					type="search"
-					placeholder="Search Item..."
-					onChange={handleTextChange}
-					value={searchItem}
-				/>
+					<AddItems />
+				</>
+			) : (
+				<>
+					<p>{listName}</p>
 
-				{searchItem && (
-					<button
-						type="button"
-						onClick={() => {
-							setSearchItem('');
-						}}
-					>
-						X
-					</button>
-				)}
-			</form>
-			<ul>
-				{filteredItems.map((item) => {
-					return (
-						<ListItem
-							key={item.id}
-							name={item.name}
-							itemId={item.id}
-							purchaseTimestamp={item.dateLastPurchased}
-						/>
-					);
-				})}
-			</ul>
+					<form onSubmit={(event) => event.preventDefault()}>
+						<TextInputElement
+							id="search-item"
+							type="search"
+							placeholder="Search Item..."
+							onChange={handleTextChange}
+						>
+							Search Item:
+						</TextInputElement>
+					</form>
+					<ul>
+						{filteredItems.map((item) => {
+							return <ListItem key={item.id} name={item.name} />;
+						})}
+					</ul>
+				</>
+			)}
 		</>
 	);
 }
