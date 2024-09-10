@@ -45,9 +45,9 @@ export function AddItems() {
 					type="text"
 					id="item-name"
 					placeholder="Enter item name"
-				>
-					Item Name:
-				</TextInputElement>
+					label="Item Name:"
+					required={true}
+				/>
 
 				{Object.entries(daysUntilPurchaseOptions).map(([key, value]) => (
 					<RadioInputElement

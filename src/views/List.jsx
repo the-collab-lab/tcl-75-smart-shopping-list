@@ -36,10 +36,10 @@ export function List({ data }) {
 							id="search-item"
 							type="search"
 							placeholder="Search Item..."
+							required={true}
 							onChange={handleTextChange}
-						>
-							Search Item:
-						</TextInputElement>
+							label="Search Item:"
+						/>
 					</form>
 					<ul>
 						{filteredItems.map((item) => {
