@@ -4,16 +4,10 @@ import { addItem } from '../api';
 import TextInputElement from './TextInputElement';
 import RadioInputElement from './RadioInputElement';
 
-const nextPurchaseDate = {
-	soon: 7,
-	kindOfSoon: 14,
-	notSoon: 30,
-};
-
-const radioInputOptions = {
-	soon: ['soon', nextPurchaseDate.soon, 'Soon'],
-	kindOfSoon: ['kindofsoon', nextPurchaseDate.kindOfSoon, 'Kind of soon'],
-	notSoon: ['notsoon', nextPurchaseDate.notSoon, 'Not Soon'],
+const daysUntilPurchaseOptions = {
+	Soon: 7,
+	'Kind of soon': 14,
+	'Not soon': 30,
 };
 
 export function AddItems() {
@@ -64,10 +58,14 @@ export function AddItems() {
 					Item Name:
 				</TextInputElement>
 
-				{Object.values(radioInputOptions).map((option) => (
-					<RadioInputElement key={option[0]} id={option[0]} value={option[1]}>
-						{option[2]}
-					</RadioInputElement>
+				{Object.entries(daysUntilPurchaseOptions).map(([key, value]) => (
+					<RadioInputElement
+						key={key}
+						label={key}
+						id={key}
+						value={value}
+						required={true}
+					/>
 				))}
 
 				<button type="submit">Submit</button>
