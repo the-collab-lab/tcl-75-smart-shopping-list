@@ -29,13 +29,19 @@ export function AddItems({ data }) {
 				.trim()
 				.toLowerCase()
 				.replace(/[&\/\\#, +$!,~%.'":*?<>{}]/g, '');
-
-			const currentItems = data.map((item) =>
-				item.name
-					.trim()
-					.toLowerCase()
-					.replace(/[&\/\\#, +$!,~%.'":*?<>{}]/g, ''),
-			);
+			if (data) {
+				const currentItems = data.map((item) =>
+					item.name
+						.trim()
+						.toLowerCase()
+						.replace(/[&\/\\#, +$!,~%.'":*?<>{}]/g, ''),
+				);
+				if (currentItems.includes(normalizedItemName)) {
+					alert('This item already exists in the list');
+					event.target.reset();
+					return;
+				}
+			}
 
 			const daysUntilNextPurchase =
 				event.target.elements['purchase-date'].value;
@@ -48,11 +54,13 @@ export function AddItems({ data }) {
 				alert('Please select an option for date');
 				return;
 			}
-			if (currentItems.includes(normalizedItemName)) {
-				alert('This item already exists in the list');
-				event.target.reset();
-				return;
-			}
+			// if (data) {
+			// 	if (currentItems.includes(normalizedItemName)) {
+			// 		alert('This item already exists in the list');
+			// 		event.target.reset();
+			// 		return;
+			// 	}
+			// }
 
 			try {
 				await addItem(listPath, {
