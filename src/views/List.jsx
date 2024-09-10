@@ -43,7 +43,14 @@ export function List({ data }) {
 					</form>
 					<ul>
 						{filteredItems.map((item) => {
-							return <ListItem key={item.id} name={item.name} />;
+							return (
+								<ListItem
+									key={item.id}
+									name={item.name}
+									itemId={item.id}
+									purchaseTimestamp={item.dateLastPurchased}
+								/>
+							);
 						})}
 					</ul>
 				</>
