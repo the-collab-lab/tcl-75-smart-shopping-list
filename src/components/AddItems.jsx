@@ -18,7 +18,6 @@ const radioInputOptions = {
 
 export function AddItems({ data }) {
 	const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
-	console.log(data);
 
 	const handleSubmit = useCallback(
 		async (event) => {
