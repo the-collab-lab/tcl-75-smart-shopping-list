@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 import './ListItem.css';
-import { updateItem } from '../api';
+import { updateItem, getNextPurchaseEstimate } from '../api';
 import { useStateWithStorage } from '../utils';
 import { increment } from 'firebase/firestore';
+
+// move current date outside of component to use it thoroughout the component
+const currentDate = new Date();
 
 export function ListItem({ name, itemId, purchaseTimestamp }) {
 	const [isPurchased, setIsPurchased] = useState(false);
@@ -15,7 +18,6 @@ export function ListItem({ name, itemId, purchaseTimestamp }) {
 		}
 		const purchaseDate = purchaseTimestamp.toDate();
 		const oneDayLater = new Date(purchaseDate.getTime() + 24 * 60 * 60 * 1000);
-		const currentDate = new Date();
 		if (purchaseTimestamp) {
 			if (currentDate < oneDayLater) {
 				setIsPurchased(true);
@@ -27,14 +29,37 @@ export function ListItem({ name, itemId, purchaseTimestamp }) {
 		}
 	}, []);
 
+	const handleNextPurchaseDate = async (
+		listPath,
+		itemId,
+		currentDate,
+		purchaseTimestamp,
+	) => {
+		console.log('Attempting updating next purchase date...');
+		const response = await getNextPurchaseEstimate(
+			listPath,
+			itemId,
+			currentDate,
+			purchaseTimestamp,
+		);
+		console.log(response);
+	};
+
 	const handleChange = async () => {
 		setIsPurchased(!isPurchased);
 		if (!isPurchased) {
 			try {
 				await updateItem(listPath, itemId, {
-					dateLastPurchased: new Date(),
+					dateLastPurchased: currentDate,
 					totalPurchases: increment(1),
 				});
+
+				handleNextPurchaseDate(
+					listPath,
+					itemId,
+					currentDate,
+					purchaseTimestamp,
+				);
 			} catch (error) {
 				alert(`Item was not marked as purchased`, error);
 			}
