@@ -10,7 +10,8 @@ import {
 } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { db } from './config';
-import { getFutureDate } from '../utils';
+import { getFutureDate, getDaysBetweenDates } from '../utils';
+import { calculateEstimate } from '@the-collab-lab/shopping-list-utils';
 
 /**
  * A custom hook that subscribes to the user's shopping lists in our Firestore
@@ -204,4 +205,57 @@ export async function deleteItem() {
 	 * to delete an existing item. You'll need to figure out what arguments
 	 * this function must accept!
 	 */
+}
+
+export async function getNextPurchaseEstimate(
+	listPath,
+	itemId,
+	currentDate,
+	purchaseTimestamp,
+) {
+	// reference the item path
+	const itemDocRef = doc(db, listPath, 'items', itemId);
+	try {
+		const itemDocSnap = await getDoc(itemDocRef);
+		if (itemDocSnap.exists()) {
+			const itemData = itemDocSnap.data();
+			// get previous purchase date or date item was created
+			const previousPurchase =
+				purchaseTimestamp !== null
+					? purchaseTimestamp.toDate()
+					: itemData.dateCreated.toDate();
+
+			console.log(
+				`Current item was previously purchased on ${previousPurchase.toLocaleString()}`,
+			);
+			// calculate the previous estimate and days since last purchase
+			const previousEstimate = getDaysBetweenDates(
+				previousPurchase,
+				itemData.dateNextPurchased.toDate(),
+			);
+			const daysSinceLastPurchase = getDaysBetweenDates(
+				previousPurchase,
+				currentDate,
+			);
+
+			// calculate the next purchase estimate
+			const nextPurchaseEstimatedDays = calculateEstimate(
+				previousEstimate,
+				daysSinceLastPurchase,
+				itemData.totalPurchases,
+			);
+
+			const nextPurchaseEstimate = getFutureDate(nextPurchaseEstimatedDays);
+			// update the document with the new next purchase date
+			await updateDoc(itemDocRef, {
+				dateNextPurchased: nextPurchaseEstimate,
+			});
+
+			return `Estimated amount of days until next purchase is ${nextPurchaseEstimatedDays} day(s)`;
+		} else {
+			throw new Error(`Item with ID ${itemId} not found in list ${listPath}`);
+		}
+	} catch (error) {
+		throw new Error(`Failed updaing date next purchased: ${error}`);
+	}
 }
