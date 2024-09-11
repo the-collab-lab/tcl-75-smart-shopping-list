@@ -16,14 +16,33 @@ const radioInputOptions = {
 	notSoon: ['notsoon', nextPurchaseDate.notSoon, 'Not Soon'],
 };
 
-export function AddItems() {
+export function AddItems({ data }) {
 	const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
+	console.log(data);
 
 	const handleSubmit = useCallback(
 		async (event) => {
 			event.preventDefault();
 
 			const itemName = event.target.elements['item-name'].value;
+			const normalizedItemName = itemName
+				.trim()
+				.toLowerCase()
+				.replace(/[&\/\\#, +$!,~%.'":*?<>{}]/g, '');
+			if (data) {
+				const currentItems = data.map((item) =>
+					item.name
+						.trim()
+						.toLowerCase()
+						.replace(/[&\/\\#, +$!,~%.'":*?<>{}]/g, ''),
+				);
+				if (currentItems.includes(normalizedItemName)) {
+					alert('This item already exists in the list');
+					event.target.reset();
+					return;
+				}
+			}
+
 			const daysUntilNextPurchase =
 				event.target.elements['purchase-date'].value;
 
@@ -35,6 +54,13 @@ export function AddItems() {
 				alert('Please select an option for date');
 				return;
 			}
+			// if (data) {
+			// 	if (currentItems.includes(normalizedItemName)) {
+			// 		alert('This item already exists in the list');
+			// 		event.target.reset();
+			// 		return;
+			// 	}
+			// }
 
 			try {
 				await addItem(listPath, {
