@@ -1,4 +1,4 @@
-name: Run Tests on Every Commit and Merge to Main
+name: Run Tests on Every Commit and Pull Request
 
 on:
   push:
