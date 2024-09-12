@@ -18,7 +18,6 @@ const radioInputOptions = {
 
 export function AddItems({ data }) {
 	const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
-	console.log(data);
 
 	const handleSubmit = useCallback(
 		async (event) => {
@@ -54,13 +53,6 @@ export function AddItems({ data }) {
 				alert('Please select an option for date');
 				return;
 			}
-			// if (data) {
-			// 	if (currentItems.includes(normalizedItemName)) {
-			// 		alert('This item already exists in the list');
-			// 		event.target.reset();
-			// 		return;
-			// 	}
-			// }
 
 			try {
 				await addItem(listPath, {
