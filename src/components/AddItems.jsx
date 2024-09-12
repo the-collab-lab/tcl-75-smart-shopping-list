@@ -41,7 +41,6 @@ export function AddItems({ data }) {
 					);
 					if (currentItems.includes(normalizedItemName)) {
 						alert('This item already exists in the list');
-						event.target.reset();
 						return;
 					}
 				}
