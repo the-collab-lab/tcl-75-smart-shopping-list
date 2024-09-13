@@ -47,14 +47,13 @@ export function ListItem({ item, listPath }) {
 		setIsPurchased(!isPurchased);
 		if (!isPurchased) {
 			try {
-				// not sure how else to increment purchases
-				const incrementedPurchases = totalPurchases + 1;
 				// name is only passed for testing purposes
 				const updatedDateNextPurchased = handleNextPurchaseDate(
 					name,
 					currentDate,
 					dateCreated,
-					incrementedPurchases,
+					// not sure how else to increment purchases
+					totalPurchases + 1,
 					dateNextPurchased,
 					dateLastPurchased,
 				);
