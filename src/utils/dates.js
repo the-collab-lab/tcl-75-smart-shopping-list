@@ -1,4 +1,6 @@
-const ONE_DAY_IN_MILLISECONDS = 86400000;
+import { calculateEstimate } from '@the-collab-lab/shopping-list-utils';
+
+export const ONE_DAY_IN_MILLISECONDS = 86400000;
 
 /**
  * Get a new JavaScript Date that is `offset` days in the future.
