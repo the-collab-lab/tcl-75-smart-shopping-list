@@ -14,8 +14,14 @@ export function ListItem({ item, listPath }) {
 	// navigates to the first empty list instead of the path that was clicked on
 	// const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
 	// ---------------------------------------------------------------
-	const { name, id, dateLastPurchased, dateNextPurchased, totalPurchases } =
-		item;
+	const {
+		name,
+		id,
+		dateLastPurchased,
+		dateCreated,
+		dateNextPurchased,
+		totalPurchases,
+	} = item;
 
 	useEffect(() => {
 		if (!dateLastPurchased) {
@@ -47,6 +53,7 @@ export function ListItem({ item, listPath }) {
 				const updatedDateNextPurchased = handleNextPurchaseDate(
 					name,
 					currentDate,
+					dateCreated,
 					incrementedPurchases,
 					dateNextPurchased,
 					dateLastPurchased,

@@ -16,6 +16,7 @@ export function getFutureDate(offset) {
 export const handleNextPurchaseDate = (
 	name,
 	currentDate,
+	dateCreated,
 	purchasesCount,
 	dateNextPurchased,
 	dateLastPurchased,
@@ -27,6 +28,7 @@ export const handleNextPurchaseDate = (
 		// get purchase intervals and get new estimation for next purchase date
 		const purchaseIntervals = calculatePurchaseIntervals(
 			currentDate,
+			dateCreated,
 			dateNextPurchased,
 			dateLastPurchased,
 		);
@@ -54,11 +56,11 @@ function getDaysBetweenDates(earlierDate, laterDate) {
 
 function calculatePurchaseIntervals(
 	currentDate,
+	dateCreated,
 	dateNextPurchased,
 	dateLastPurchased,
 ) {
 	const lastPurchaseDate = dateLastPurchased?.toDate(); // valid to be null
-
 	console.log(
 		`Previously purchased on: ${lastPurchaseDate === undefined ? undefined : lastPurchaseDate.toLocaleString()}`,
 	);
@@ -67,10 +69,10 @@ function calculatePurchaseIntervals(
 	);
 
 	// valid to be undefined
-	const lastEstimatedInterval =
-		lastPurchaseDate === undefined
-			? undefined
-			: getDaysBetweenDates(lastPurchaseDate, dateNextPurchased.toDate());
+	const lastEstimatedInterval = getDaysBetweenDates(
+		lastPurchaseDate === undefined ? dateCreated.toDate() : lastPurchaseDate,
+		dateNextPurchased.toDate(),
+	);
 
 	console.log(`Last estimated interval: ${lastEstimatedInterval}`);
 
