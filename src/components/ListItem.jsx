@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './ListItem.css';
-import { updateItem, getNextPurchaseEstimate } from '../api';
-import { useStateWithStorage } from '../utils';
+import { updateItem } from '../api';
+import { handleNextPurchaseDate, ONE_DAY_IN_MILLISECONDS } from '../utils';
 import { increment } from 'firebase/firestore';
 
 // move current date outside of component to use it thoroughout the component
