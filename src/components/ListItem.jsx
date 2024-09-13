@@ -37,37 +37,26 @@ export function ListItem({ item, listPath }) {
 		}
 	}, []);
 
-	const handleNextPurchaseDate = async (
-		listPath,
-		itemId,
-		currentDate,
-		purchaseTimestamp,
-	) => {
-		console.log('Attempting updating next purchase date...');
-		const response = await getNextPurchaseEstimate(
-			listPath,
-			itemId,
-			currentDate,
-			purchaseTimestamp,
-		);
-		console.log(response);
-	};
-
 	const handleChange = async () => {
 		setIsPurchased(!isPurchased);
 		if (!isPurchased) {
 			try {
-				await updateItem(listPath, itemId, {
+				// not sure how else to increment purchases
+				const incrementedPurchases = totalPurchases + 1;
+				// name is only passed for testing purposes
+				const updatedDateNextPurchased = handleNextPurchaseDate(
+					name,
+					currentDate,
+					incrementedPurchases,
+					dateNextPurchased,
+					dateLastPurchased,
+				);
+
+				await updateItem(listPath, id, {
 					dateLastPurchased: currentDate,
+					dateNextPurchased: updatedDateNextPurchased,
 					totalPurchases: increment(1),
 				});
-
-				handleNextPurchaseDate(
-					listPath,
-					itemId,
-					currentDate,
-					purchaseTimestamp,
-				);
 			} catch (error) {
 				alert(`Item was not marked as purchased`, error);
 			}
