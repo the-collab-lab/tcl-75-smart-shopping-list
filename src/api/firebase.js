@@ -10,8 +10,7 @@ import {
 } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { db } from './config';
-import { getFutureDate, getDaysBetweenDates } from '../utils';
-import { calculateEstimate } from '@the-collab-lab/shopping-list-utils';
+import { getFutureDate } from '../utils';
 
 /**
  * A custom hook that subscribes to the user's shopping lists in our Firestore
@@ -180,10 +179,21 @@ export async function addItem(listPath, { itemName, daysUntilNextPurchase }) {
 	});
 }
 
+/**
+ * Update an item in the user's list in Firestore with new purchase information.
+ * @param {string} listPath The path of the list the item belongs to.
+ * @param {string} itemId The ID of the item being updated.
+ * @param {Object} updatedData Object containing the updated item data.
+ * @param {Date} updatedData.dateLastPurchased The date the item was last purchased.
+ * @param {Date} updatedData.dateNextPurchased The estimated date for the next purchase.
+ * @param {number} updatedData.totalPurchases The total number of times the item has been purchased.
+ * @returns {Promise<string>} A message confirming the item was successfully updated.
+ * @throws {Error} If the item update fails.
+ */
 export async function updateItem(
 	listPath,
 	itemId,
-	{ dateLastPurchased, totalPurchases },
+	{ dateLastPurchased, dateNextPurchased, totalPurchases },
 ) {
 	// reference the item path
 	const itemDocRef = doc(db, listPath, 'items', itemId);
@@ -191,11 +201,12 @@ export async function updateItem(
 	try {
 		await updateDoc(itemDocRef, {
 			dateLastPurchased,
+			dateNextPurchased,
 			totalPurchases,
 		});
 		return 'item purchased';
-	} catch {
-		return;
+	} catch (error) {
+		throw new Error(`Failed updating item: ${error}`);
 	}
 }
 
@@ -205,57 +216,4 @@ export async function deleteItem() {
 	 * to delete an existing item. You'll need to figure out what arguments
 	 * this function must accept!
 	 */
-}
-
-export async function getNextPurchaseEstimate(
-	listPath,
-	itemId,
-	currentDate,
-	purchaseTimestamp,
-) {
-	// reference the item path
-	const itemDocRef = doc(db, listPath, 'items', itemId);
-	try {
-		const itemDocSnap = await getDoc(itemDocRef);
-		if (itemDocSnap.exists()) {
-			const itemData = itemDocSnap.data();
-			// get previous purchase date or date item was created
-			const previousPurchase =
-				purchaseTimestamp !== null
-					? purchaseTimestamp.toDate()
-					: itemData.dateCreated.toDate();
-
-			console.log(
-				`Current item was previously purchased on ${previousPurchase.toLocaleString()}`,
-			);
-			// calculate the previous estimate and days since last purchase
-			const previousEstimate = getDaysBetweenDates(
-				previousPurchase,
-				itemData.dateNextPurchased.toDate(),
-			);
-			const daysSinceLastPurchase = getDaysBetweenDates(
-				previousPurchase,
-				currentDate,
-			);
-
-			// calculate the next purchase estimate
-			const nextPurchaseEstimatedDays = calculateEstimate(
-				previousEstimate,
-				daysSinceLastPurchase,
-				itemData.totalPurchases,
-			);
-
-			const nextPurchaseEstimate = getFutureDate(nextPurchaseEstimatedDays);
-			// update the document with the new next purchase date
-			await updateDoc(itemDocRef, {
-				dateNextPurchased: nextPurchaseEstimate,
-			});
-
-			return `Estimated amount of days until next purchase is ${nextPurchaseEstimatedDays} day(s)`;
-		} else {
-			throw new Error(`Item with ID ${itemId} not found in list ${listPath}`);
-		}
-	} catch (error) {
-		throw new Error(`Failed updaing date next purchased: ${error}`);
-	}
 }
