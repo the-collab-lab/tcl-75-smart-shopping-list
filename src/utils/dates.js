@@ -13,8 +13,41 @@ export function getFutureDate(offset) {
 	return new Date(Date.now() + offset * ONE_DAY_IN_MILLISECONDS);
 }
 
-export function getDaysBetweenDates(earlierDate, laterDate) {
-	const daysBetweenDates = Math.floor(
+export const handleNextPurchaseDate = (
+	name,
+	currentDate,
+	purchasesCount,
+	dateNextPurchased,
+	dateLastPurchased,
+) => {
+	console.log('-------------------------------------------');
+	console.log(`[${name}]`);
+
+	try {
+		// get purchase intervals and get new estimation for next purchase date
+		const purchaseIntervals = calculatePurchaseIntervals(
+			currentDate,
+			dateNextPurchased,
+			dateLastPurchased,
+		);
+		const estimatedNextPurchaseDate = getNextPurchaseEstimate(
+			purchaseIntervals,
+			purchasesCount,
+		);
+
+		console.log(
+			`New next purchase date: ${estimatedNextPurchaseDate.toLocaleString()}`,
+		);
+		console.log('-------------------------------------------');
+
+		return estimatedNextPurchaseDate;
+	} catch (error) {
+		throw new Error(`Failed getting next purchase date: ${error}`);
+	}
+};
+
+function getDaysBetweenDates(earlierDate, laterDate) {
+	return Math.floor(
 		(laterDate.getTime() - earlierDate.getTime()) / ONE_DAY_IN_MILLISECONDS,
 	);
 	console.log(
