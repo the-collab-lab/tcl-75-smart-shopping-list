@@ -7,9 +7,15 @@ import { increment } from 'firebase/firestore';
 // move current date outside of component to use it thoroughout the component
 const currentDate = new Date();
 
-export function ListItem({ name, itemId, purchaseTimestamp }) {
+export function ListItem({ item, listPath }) {
 	const [isPurchased, setIsPurchased] = useState(false);
-	const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
+	// ---------------------------------------------------------------
+	// the path from the hook is glitching in case the user has multiple empty lists:
+	// navigates to the first empty list instead of the path that was clicked on
+	// const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
+	// ---------------------------------------------------------------
+	const { name, id, dateLastPurchased, dateNextPurchased, totalPurchases } =
+		item;
 
 	useEffect(() => {
 		if (!purchaseTimestamp) {
