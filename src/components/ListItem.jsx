@@ -1,24 +1,32 @@
 import { useEffect, useState } from 'react';
 import './ListItem.css';
-import { updateItem, getNextPurchaseEstimate } from '../api';
-import { useStateWithStorage } from '../utils';
+import { updateItem } from '../api';
+import { handleNextPurchaseDate, ONE_DAY_IN_MILLISECONDS } from '../utils';
 import { increment } from 'firebase/firestore';
 
 // move current date outside of component to use it thoroughout the component
 const currentDate = new Date();
 
-export function ListItem({ name, itemId, purchaseTimestamp }) {
+export function ListItem({ item, listPath }) {
 	const [isPurchased, setIsPurchased] = useState(false);
-	const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
+	// ---------------------------------------------------------------
+	// the path from the hook is glitching in case the user has multiple empty lists:
+	// navigates to the first empty list instead of the path that was clicked on
+	// const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
+	// ---------------------------------------------------------------
+	const { name, id, dateLastPurchased, dateNextPurchased, totalPurchases } =
+		item;
 
 	useEffect(() => {
-		if (!purchaseTimestamp) {
+		if (!dateLastPurchased) {
 			setIsPurchased(false);
 			return;
 		}
-		const purchaseDate = purchaseTimestamp.toDate();
-		const oneDayLater = new Date(purchaseDate.getTime() + 24 * 60 * 60 * 1000);
-		if (purchaseTimestamp) {
+		const purchaseDate = dateLastPurchased.toDate();
+		const oneDayLater = new Date(
+			purchaseDate.getTime() + ONE_DAY_IN_MILLISECONDS,
+		);
+		if (dateLastPurchased) {
 			if (currentDate < oneDayLater) {
 				setIsPurchased(true);
 			} else {
@@ -29,37 +37,26 @@ export function ListItem({ name, itemId, purchaseTimestamp }) {
 		}
 	}, []);
 
-	const handleNextPurchaseDate = async (
-		listPath,
-		itemId,
-		currentDate,
-		purchaseTimestamp,
-	) => {
-		console.log('Attempting updating next purchase date...');
-		const response = await getNextPurchaseEstimate(
-			listPath,
-			itemId,
-			currentDate,
-			purchaseTimestamp,
-		);
-		console.log(response);
-	};
-
 	const handleChange = async () => {
 		setIsPurchased(!isPurchased);
 		if (!isPurchased) {
 			try {
-				await updateItem(listPath, itemId, {
+				// not sure how else to increment purchases
+				const incrementedPurchases = totalPurchases + 1;
+				// name is only passed for testing purposes
+				const updatedDateNextPurchased = handleNextPurchaseDate(
+					name,
+					currentDate,
+					incrementedPurchases,
+					dateNextPurchased,
+					dateLastPurchased,
+				);
+
+				await updateItem(listPath, id, {
 					dateLastPurchased: currentDate,
+					dateNextPurchased: updatedDateNextPurchased,
 					totalPurchases: increment(1),
 				});
-
-				handleNextPurchaseDate(
-					listPath,
-					itemId,
-					currentDate,
-					purchaseTimestamp,
-				);
 			} catch (error) {
 				alert(`Item was not marked as purchased`, error);
 			}
@@ -70,11 +67,11 @@ export function ListItem({ name, itemId, purchaseTimestamp }) {
 		<li className="ListItem">
 			<input
 				type="checkbox"
-				id={`checkbox-${itemId}`}
+				id={`checkbox-${id}`}
 				checked={isPurchased}
 				onChange={handleChange}
 			/>
-			<label htmlFor={`checkbox-${itemId}`}>{name}</label>
+			<label htmlFor={`checkbox-${id}`}>{name}</label>
 		</li>
 	);
 }
