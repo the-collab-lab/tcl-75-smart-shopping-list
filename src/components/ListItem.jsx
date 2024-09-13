@@ -18,13 +18,15 @@ export function ListItem({ item, listPath }) {
 		item;
 
 	useEffect(() => {
-		if (!purchaseTimestamp) {
+		if (!dateLastPurchased) {
 			setIsPurchased(false);
 			return;
 		}
-		const purchaseDate = purchaseTimestamp.toDate();
-		const oneDayLater = new Date(purchaseDate.getTime() + 24 * 60 * 60 * 1000);
-		if (purchaseTimestamp) {
+		const purchaseDate = dateLastPurchased.toDate();
+		const oneDayLater = new Date(
+			purchaseDate.getTime() + ONE_DAY_IN_MILLISECONDS,
+		);
+		if (dateLastPurchased) {
 			if (currentDate < oneDayLater) {
 				setIsPurchased(true);
 			} else {
@@ -76,11 +78,11 @@ export function ListItem({ item, listPath }) {
 		<li className="ListItem">
 			<input
 				type="checkbox"
-				id={`checkbox-${itemId}`}
+				id={`checkbox-${id}`}
 				checked={isPurchased}
 				onChange={handleChange}
 			/>
-			<label htmlFor={`checkbox-${itemId}`}>{name}</label>
+			<label htmlFor={`checkbox-${id}`}>{name}</label>
 		</li>
 	);
 }
