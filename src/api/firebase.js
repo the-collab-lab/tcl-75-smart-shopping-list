@@ -206,7 +206,7 @@ export async function updateItem(
 		});
 		return 'item purchased';
 	} catch (error) {
-		throw new Error(`Failed updating item: ${error}`);
+		throw new Error(`Failed updating item: ${error.message}`);
 	}
 }
 
