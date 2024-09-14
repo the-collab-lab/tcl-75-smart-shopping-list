@@ -46,6 +46,12 @@ export const calculateDateNextPurchased = (currentDate, item) => {
 };
 
 function getDaysBetweenDates(earlierDate, laterDate) {
+	/**
+	 * Calculate the number of days between two dates.
+	 * @param {Date} earlierDate The starting date.
+	 * @param {Date} laterDate The ending date.
+	 * @returns {number} The number of days between the two dates.
+	 */
 	return Math.floor(
 		(laterDate.getTime() - earlierDate.getTime()) / ONE_DAY_IN_MILLISECONDS,
 	);
