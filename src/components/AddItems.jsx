@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useStateWithStorage } from '../utils';
+import { useStateWithStorage, normalizeItemName } from '../utils';
 import { addItem } from '../api';
 import TextInputElement from './TextInputElement';
 import RadioInputElement from './RadioInputElement';
@@ -28,21 +28,13 @@ export function AddItems({ data }) {
 				event.target.elements['purchase-date'].value;
 
 			try {
-				if (itemName === '') {
+				if (itemName.trim() === '') {
 					alert('Please add an item name.');
 					return;
 				}
-				const normalizedItemName = itemName
-					.trim()
-					.toLowerCase()
-					.replace(/[&\/\\#, +$!,~%.'":*?<>{}]/g, '');
+				const normalizedItemName = normalizeItemName(itemName);
 				if (data) {
-					const currentItems = data.map((item) =>
-						item.name
-							.trim()
-							.toLowerCase()
-							.replace(/[&\/\\#, +$!,~%.'":*?<>{}]/g, ''),
-					);
+					const currentItems = data.map((item) => normalizeItemName(item.name));
 					if (currentItems.includes(normalizedItemName)) {
 						alert('This item already exists in the list');
 						return;
@@ -71,6 +63,7 @@ export function AddItems({ data }) {
 					type="text"
 					id="item-name"
 					placeholder="Enter item name"
+					pattern="^[^\s].+[^\s]$"
 				>
 					Item Name:
 				</TextInputElement>
