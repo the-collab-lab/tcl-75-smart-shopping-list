@@ -13,34 +13,31 @@ export function addDaysFromToday(daysOffset) {
 	return new Date(Date.now() + daysOffset * ONE_DAY_IN_MILLISECONDS);
 }
 
-export const handleNextPurchaseDate = (
-	name,
-	currentDate,
-	dateCreated,
-	purchasesCount,
-	dateNextPurchased,
-	dateLastPurchased,
-) => {
-	console.log('-------------------------------------------');
-	console.log(`[${name}]`);
-
+/**
+ * Calculates the estimated date for the next purchase based on current date, purchase history,
+ * and total purchases.
+ * @param {Date} currentDate - The current date to calculate against.
+ * @param {Object} item - The item object containing purchase data.
+ * @param {Date} item.dateCreated - The date the item was created.
+ * @param {Date} item.dateNextPurchased - The previously estimated next purchase date.
+ * @param {Date|null} item.dateLastPurchased - The last date the item was actually purchased, or null if not purchased yet.
+ * @param {number} item.totalPurchases - The total number of purchases made for the item.
+ * @returns {Date} - The estimated date of the next purchase.
+ * @throws {Error} - Throws an error if the next purchase date cannot be calculated.
+ */
+export const calculateDateNextPurchased = (currentDate, item) => {
 	try {
 		// get purchase intervals and get new estimation for next purchase date
 		const purchaseIntervals = calculatePurchaseIntervals(
 			currentDate,
-			dateCreated,
-			dateNextPurchased,
-			dateLastPurchased,
+			item.dateCreated,
+			item.dateNextPurchased,
+			item.dateLastPurchased,
 		);
 		const estimatedNextPurchaseDate = getNextPurchaseEstimate(
 			purchaseIntervals,
-			purchasesCount,
+			item.totalPurchases + 1,
 		);
-
-		console.log(
-			`New next purchase date: ${estimatedNextPurchaseDate.toLocaleString()}`,
-		);
-		console.log('-------------------------------------------');
 
 		return estimatedNextPurchaseDate;
 	} catch (error) {
