@@ -58,34 +58,32 @@ function getDaysBetweenDates(earlierDate, laterDate) {
 }
 
 function calculatePurchaseIntervals(
+	/**
+	 * Calculate the purchase intervals between current, next, and last purchase dates.
+	 * @param {Date} currentDate The current date.
+	 * @param {Date} dateNextPurchased The previously estimated next purchase date.
+	 * @param {Date|null} dateLastPurchased The date the item was last purchased (can be null).
+	 * @returns {Object} An object containing the last estimated interval and days since last purchase.
+	 */
 	currentDate,
 	dateCreated,
 	dateNextPurchased,
 	dateLastPurchased,
 ) {
-	const lastPurchaseDate = dateLastPurchased?.toDate(); // valid to be null
-	console.log(
-		`Previously purchased on: ${lastPurchaseDate === undefined ? undefined : lastPurchaseDate.toLocaleString()}`,
-	);
-	console.log(
-		`Previous next purchase date: ${dateNextPurchased.toDate().toLocaleString()}`,
-	);
+	const lastPurchaseDate = dateLastPurchased?.toDate();
 
-	// valid to be undefined
+	const lastEstimatedIntervalStartDate =
+		lastPurchaseDate ?? dateCreated.toDate();
+
 	const lastEstimatedInterval = getDaysBetweenDates(
-		lastPurchaseDate === undefined ? dateCreated.toDate() : lastPurchaseDate,
+		lastEstimatedIntervalStartDate,
 		dateNextPurchased.toDate(),
 	);
 
-	console.log(`Last estimated interval: ${lastEstimatedInterval}`);
-
-	// has to be a number
 	const daysSinceLastPurchase =
 		lastPurchaseDate === undefined
 			? 0
 			: getDaysBetweenDates(lastPurchaseDate, currentDate);
-
-	console.log(`Days since last purchase: ${daysSinceLastPurchase}`);
 
 	return { lastEstimatedInterval, daysSinceLastPurchase };
 }
