@@ -45,15 +45,6 @@ export function AddItems({ items }) {
 			const daysUntilNextPurchase =
 				event.target.elements['purchase-date'].value;
 
-			if (itemName === '') {
-				alert('Please add an item name.');
-				return;
-			}
-			if (!daysUntilNextPurchase) {
-				alert('Please select an option for date');
-				return;
-			}
-
 			try {
 				await addItem(listPath, {
 					itemName,
