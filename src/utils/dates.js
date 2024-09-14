@@ -89,14 +89,21 @@ function calculatePurchaseIntervals(
 }
 
 function getNextPurchaseEstimate(purchaseIntervals, totalPurchases) {
-	console.log(`Total purchases: ${totalPurchases}`);
+	/**
+	 * Calculate the next purchase estimate based on purchase intervals and total purchases.
+	 * @param {Object} purchaseIntervals The intervals between the previous and current purchases.
+	 * @param {number} purchaseIntervals.lastEstimatedInterval The previously estimated number of days between purchases.
+	 * @param {number} purchaseIntervals.daysSinceLastPurchase The number of days since the last purchase.
+	 * @param {number} totalPurchases The total number of purchases made.
+	 * @returns {Date} The estimated next purchase date.
+	 * @throws {Error} If an error occurs during the next purchase estimation process.
+	 */
 	const { lastEstimatedInterval, daysSinceLastPurchase } = purchaseIntervals;
 
 	try {
-		// calculate the next purchase estimate
 		const estimatedDaysUntilPurchase = calculateEstimate(
-			lastEstimatedInterval, // valid to be undefined
-			daysSinceLastPurchase, // has to be a number
+			lastEstimatedInterval,
+			daysSinceLastPurchase,
 			totalPurchases,
 		);
 
