@@ -16,7 +16,7 @@ const radioInputOptions = {
 	notSoon: ['notsoon', nextPurchaseDate.notSoon, 'Not Soon'],
 };
 
-export function AddItems({ data }) {
+export function AddItems({ items }) {
 	const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
 
 	const handleSubmit = useCallback(
@@ -28,8 +28,8 @@ export function AddItems({ data }) {
 				.trim()
 				.toLowerCase()
 				.replace(/[&\/\\#, +$!,~%.'":*?<>{}]/g, '');
-			if (data) {
-				const currentItems = data.map((item) =>
+			if (items) {
+				const currentItems = items.map((item) =>
 					item.name
 						.trim()
 						.toLowerCase()
@@ -53,13 +53,6 @@ export function AddItems({ data }) {
 				alert('Please select an option for date');
 				return;
 			}
-			// if (data) {
-			// 	if (currentItems.includes(normalizedItemName)) {
-			// 		alert('This item already exists in the list');
-			// 		event.target.reset();
-			// 		return;
-			// 	}
-			// }
 
 			try {
 				await addItem(listPath, {
@@ -70,7 +63,7 @@ export function AddItems({ data }) {
 					`${itemName} was added to the list! The next purchase date is set to ${daysUntilNextPurchase} days from now.`,
 				);
 			} catch (error) {
-				alert(`Item was not added to the database, Error: ${error.message}`);
+				alert(`Item was not added to the itemsbase, Error: ${error.message}`);
 			} finally {
 				event.target.reset();
 			}
