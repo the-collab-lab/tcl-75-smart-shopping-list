@@ -10,7 +10,7 @@ import {
 } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { db } from './config';
-import { getFutureDate } from '../utils';
+import { addDaysFromToday } from '../utils';
 
 /**
  * A custom hook that subscribes to the user's shopping lists in our Firestore
@@ -173,7 +173,7 @@ export async function addItem(listPath, { itemName, daysUntilNextPurchase }) {
 	return addDoc(listCollectionRef, {
 		dateCreated: new Date(),
 		dateLastPurchased: null,
-		dateNextPurchased: getFutureDate(daysUntilNextPurchase),
+		dateNextPurchased: addDaysFromToday(daysUntilNextPurchase),
 		name: itemName,
 		totalPurchases: 0,
 	});

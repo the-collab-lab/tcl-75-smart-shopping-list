@@ -46,7 +46,7 @@ This function takes user-provided data and uses it to create a new item in the F
 
 #### Note
 
-**`daysUntilNextPurchase` is not added to the item directly**. It is used alomngside the `getFutureDate` utility function to create a new _JavaScript Date_ that represents when we think the user will buy the item again.
+**`daysUntilNextPurchase` is not added to the item directly**. It is used alomngside the `addDaysFromToday` utility function to create a new _JavaScript Date_ that represents when we think the user will buy the item again.
 
 ### `updateItem`
 

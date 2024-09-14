@@ -6,11 +6,11 @@ export const ONE_DAY_IN_MILLISECONDS = 86400000;
  * Get a new JavaScript Date that is `offset` days in the future.
  * @example
  * // Returns a Date 3 days in the future
- * getFutureDate(3)
- * @param {number} offset
+ * addDaysFromToday(3)
+ * @param {number} daysOffset
  */
-export function getFutureDate(offset) {
-	return new Date(Date.now() + offset * ONE_DAY_IN_MILLISECONDS);
+export function addDaysFromToday(daysOffset) {
+	return new Date(Date.now() + daysOffset * ONE_DAY_IN_MILLISECONDS);
 }
 
 export const handleNextPurchaseDate = (
@@ -99,11 +99,7 @@ function getNextPurchaseEstimate(purchaseIntervals, totalPurchases) {
 			totalPurchases,
 		);
 
-		console.log(
-			`Estimated days until next purchase: ${estimatedDaysUntilPurchase}`,
-		);
-
-		const nextPurchaseEstimate = getFutureDate(estimatedDaysUntilPurchase);
+		const nextPurchaseEstimate = addDaysFromToday(estimatedDaysUntilPurchase);
 
 		return nextPurchaseEstimate;
 	} catch (error) {
