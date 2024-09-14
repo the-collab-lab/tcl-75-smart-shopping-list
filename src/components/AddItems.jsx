@@ -28,6 +28,10 @@ export function AddItems({ data }) {
 				event.target.elements['purchase-date'].value;
 
 			try {
+				if (itemName === '') {
+					alert('Please add an item name.');
+					return;
+				}
 				const normalizedItemName = itemName
 					.trim()
 					.toLowerCase()
