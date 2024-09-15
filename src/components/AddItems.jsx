@@ -48,7 +48,7 @@ export function AddItems({ items }) {
 					`${itemName} was added to the list! The next purchase date is set to ${daysUntilNextPurchase} days from now.`,
 				);
 			} catch (error) {
-				alert(`Item was not added to the itemsbase, Error: ${error.message}`);
+				alert(`Item was not added to the database, Error: ${error.message}`);
 			} finally {
 				event.target.reset();
 			}

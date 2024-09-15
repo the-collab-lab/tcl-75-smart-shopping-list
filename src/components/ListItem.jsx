@@ -8,13 +8,13 @@ const currentDate = new Date();
 const calculateIsPurchased = (dateLastPurchased) => {
 	if (!dateLastPurchased) {
 		return false;
-	} else {
-		const purchaseDate = dateLastPurchased.toDate();
-		const oneDayLater = new Date(
-			purchaseDate.getTime() + ONE_DAY_IN_MILLISECONDS,
-		);
-		return currentDate < oneDayLater;
 	}
+	const purchaseDate = dateLastPurchased.toDate();
+	const oneDayLater = new Date(
+		purchaseDate.getTime() + ONE_DAY_IN_MILLISECONDS,
+	);
+
+	return currentDate < oneDayLater;
 };
 
 export function ListItem({ item, listPath }) {
