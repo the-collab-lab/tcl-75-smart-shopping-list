@@ -31,7 +31,7 @@ describe('List Component', () => {
 		expect(screen.getByLabelText('Item Name:')).toBeInTheDocument();
 		expect(screen.getByLabelText('Soon')).toBeInTheDocument();
 		expect(screen.getByLabelText('Kind of soon')).toBeInTheDocument();
-		expect(screen.getByLabelText('Not Soon')).toBeInTheDocument();
+		expect(screen.getByLabelText('Not soon')).toBeInTheDocument();
 		expect(screen.getByText('Submit')).toBeInTheDocument();
 	});
 });
