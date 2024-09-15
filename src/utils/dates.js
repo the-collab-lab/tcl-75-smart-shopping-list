@@ -45,26 +45,26 @@ export const calculateDateNextPurchased = (currentDate, item) => {
 	}
 };
 
+/**
+ * Calculate the number of days between two dates.
+ * @param {Date} earlierDate The starting date.
+ * @param {Date} laterDate The ending date.
+ * @returns {number} The number of days between the two dates.
+ */
 function getDaysBetweenDates(earlierDate, laterDate) {
-	/**
-	 * Calculate the number of days between two dates.
-	 * @param {Date} earlierDate The starting date.
-	 * @param {Date} laterDate The ending date.
-	 * @returns {number} The number of days between the two dates.
-	 */
 	return Math.floor(
 		(laterDate.getTime() - earlierDate.getTime()) / ONE_DAY_IN_MILLISECONDS,
 	);
 }
 
+/**
+ * Calculate the purchase intervals between current, next, and last purchase dates.
+ * @param {Date} currentDate The current date.
+ * @param {Date} dateNextPurchased The previously estimated next purchase date.
+ * @param {Date|null} dateLastPurchased The date the item was last purchased (can be null).
+ * @returns {Object} An object containing the last estimated interval and days since last purchase.
+ */
 function calculatePurchaseIntervals(
-	/**
-	 * Calculate the purchase intervals between current, next, and last purchase dates.
-	 * @param {Date} currentDate The current date.
-	 * @param {Date} dateNextPurchased The previously estimated next purchase date.
-	 * @param {Date|null} dateLastPurchased The date the item was last purchased (can be null).
-	 * @returns {Object} An object containing the last estimated interval and days since last purchase.
-	 */
 	currentDate,
 	dateCreated,
 	dateNextPurchased,
@@ -88,16 +88,16 @@ function calculatePurchaseIntervals(
 	return { lastEstimatedInterval, daysSinceLastPurchase };
 }
 
+/**
+ * Calculate the next purchase estimate based on purchase intervals and total purchases.
+ * @param {Object} purchaseIntervals The intervals between the previous and current purchases.
+ * @param {number} purchaseIntervals.lastEstimatedInterval The previously estimated number of days between purchases.
+ * @param {number} purchaseIntervals.daysSinceLastPurchase The number of days since the last purchase.
+ * @param {number} totalPurchases The total number of purchases made.
+ * @returns {Date} The estimated next purchase date.
+ * @throws {Error} If an error occurs during the next purchase estimation process.
+ */
 function getNextPurchaseEstimate(purchaseIntervals, totalPurchases) {
-	/**
-	 * Calculate the next purchase estimate based on purchase intervals and total purchases.
-	 * @param {Object} purchaseIntervals The intervals between the previous and current purchases.
-	 * @param {number} purchaseIntervals.lastEstimatedInterval The previously estimated number of days between purchases.
-	 * @param {number} purchaseIntervals.daysSinceLastPurchase The number of days since the last purchase.
-	 * @param {number} totalPurchases The total number of purchases made.
-	 * @returns {Date} The estimated next purchase date.
-	 * @throws {Error} If an error occurs during the next purchase estimation process.
-	 */
 	const { lastEstimatedInterval, daysSinceLastPurchase } = purchaseIntervals;
 
 	try {
