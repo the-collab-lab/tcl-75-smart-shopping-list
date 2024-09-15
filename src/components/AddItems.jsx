@@ -10,7 +10,7 @@ const daysUntilPurchaseOptions = {
 	'Not soon': 30,
 };
 
-export function AddItems() {
+export function AddItems({ items }) {
 	const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
 
 	const handleSubmit = useCallback(
@@ -18,6 +18,24 @@ export function AddItems() {
 			event.preventDefault();
 
 			const itemName = event.target.elements['item-name'].value;
+			const normalizedItemName = itemName
+				.trim()
+				.toLowerCase()
+				.replace(/[&\/\\#, +$!,~%.'":*?<>{}]/g, '');
+			if (items) {
+				const currentItems = items.map((item) =>
+					item.name
+						.trim()
+						.toLowerCase()
+						.replace(/[&\/\\#, +$!,~%.'":*?<>{}]/g, ''),
+				);
+				if (currentItems.includes(normalizedItemName)) {
+					alert('This item already exists in the list');
+					event.target.reset();
+					return;
+				}
+			}
+
 			const daysUntilNextPurchase =
 				event.target.elements['purchase-date'].value;
 

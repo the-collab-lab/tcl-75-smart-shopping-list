@@ -10,7 +10,7 @@ import {
 } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { db } from './config';
-import { getFutureDate } from '../utils';
+import { addDaysFromToday } from '../utils';
 
 /**
  * A custom hook that subscribes to the user's shopping lists in our Firestore
@@ -173,16 +173,27 @@ export async function addItem(listPath, { itemName, daysUntilNextPurchase }) {
 	return addDoc(listCollectionRef, {
 		dateCreated: new Date(),
 		dateLastPurchased: null,
-		dateNextPurchased: getFutureDate(daysUntilNextPurchase),
+		dateNextPurchased: addDaysFromToday(daysUntilNextPurchase),
 		name: itemName,
 		totalPurchases: 0,
 	});
 }
 
+/**
+ * Update an item in the user's list in Firestore with new purchase information.
+ * @param {string} listPath The path of the list the item belongs to.
+ * @param {string} itemId The ID of the item being updated.
+ * @param {Object} updatedData Object containing the updated item data.
+ * @param {Date} updatedData.dateLastPurchased The date the item was last purchased.
+ * @param {Date} updatedData.dateNextPurchased The estimated date for the next purchase.
+ * @param {number} updatedData.totalPurchases The total number of times the item has been purchased.
+ * @returns {Promise<string>} A message confirming the item was successfully updated.
+ * @throws {Error} If the item update fails.
+ */
 export async function updateItem(
 	listPath,
 	itemId,
-	{ dateLastPurchased, totalPurchases },
+	{ dateLastPurchased, dateNextPurchased, totalPurchases },
 ) {
 	// reference the item path
 	const itemDocRef = doc(db, listPath, 'items', itemId);
@@ -190,11 +201,12 @@ export async function updateItem(
 	try {
 		await updateDoc(itemDocRef, {
 			dateLastPurchased,
+			dateNextPurchased,
 			totalPurchases,
 		});
 		return 'item purchased';
-	} catch {
-		return;
+	} catch (error) {
+		throw new Error(`Failed updating item: ${error.message}`);
 	}
 }
 
