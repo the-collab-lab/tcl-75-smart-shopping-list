@@ -16,7 +16,7 @@ const radioInputOptions = {
 	notSoon: ['notsoon', nextPurchaseDate.notSoon, 'Not Soon'],
 };
 
-export function AddItems({ data }) {
+export function AddItems({ items }) {
 	const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
 
 	const handleSubmit = useCallback(
@@ -32,9 +32,13 @@ export function AddItems({ data }) {
 					alert('Please add an item name.');
 					return;
 				}
+				// normalize the name by removing all punctuation and spaces to check if the normalized item is already in the list
 				const normalizedItemName = normalizeItemName(itemName);
-				if (data) {
-					const currentItems = data.map((item) => normalizeItemName(item.name));
+				if (items) {
+					// normalize the existing list items to compare them to the new input
+					const currentItems = items.map((item) =>
+						normalizeItemName(item.name),
+					);
 					if (currentItems.includes(normalizedItemName)) {
 						alert('This item already exists in the list');
 						return;
