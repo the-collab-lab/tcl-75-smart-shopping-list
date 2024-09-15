@@ -1,14 +1,21 @@
-const TextInputElement = ({ children, type, id, placeholder, onChange }) => {
+const TextInputElement = ({
+	label,
+	type,
+	id,
+	placeholder,
+	onChange,
+	required,
+}) => {
 	return (
 		<>
-			<label htmlFor={id}>{children}</label>
+			<label htmlFor={id}>{label}</label>
 			<br />
 			<input
 				type={type}
 				id={id}
 				placeholder={placeholder}
 				onChange={onChange}
-				required
+				required={required}
 			/>
 			<br />
 		</>

@@ -36,21 +36,14 @@ export function List({ data }) {
 							id="search-item"
 							type="search"
 							placeholder="Search Item..."
+							required={true}
 							onChange={handleTextChange}
-						>
-							Search Item:
-						</TextInputElement>
+							label="Search Item:"
+						/>
 					</form>
 					<ul>
 						{filteredItems.map((item) => {
-							return (
-								<ListItem
-									key={item.id}
-									name={item.name}
-									itemId={item.id}
-									purchaseTimestamp={item.dateLastPurchased}
-								/>
-							);
+							return <ListItem key={item.id} item={item} listPath={listPath} />;
 						})}
 					</ul>
 				</>
