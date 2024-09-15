@@ -83,10 +83,9 @@ export function AddItems({ items }) {
 				>
 					Item Name:
 				</TextInputElement>
-					<label="Item Name:"
-					required={true}
-				/>
-
+				<label htmlFor="item-name" required={true}>
+					Item Name:
+				</label>
 				{Object.entries(daysUntilPurchaseOptions).map(([key, value]) => (
 					<RadioInputElement
 						key={key}
@@ -96,7 +95,6 @@ export function AddItems({ items }) {
 						required={true}
 					/>
 				))}
-
 				<button type="submit">Submit</button>
 			</form>
 		</div>
