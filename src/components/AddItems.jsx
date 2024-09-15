@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useStateWithStorage } from '../utils';
+import { useStateWithStorage, normalizeItemName } from '../utils';
 import { addItem } from '../api';
 import TextInputElement from './TextInputElement';
 import RadioInputElement from './RadioInputElement';
@@ -40,6 +40,22 @@ export function AddItems({ items }) {
 				event.target.elements['purchase-date'].value;
 
 			try {
+				if (itemName.trim() === '') {
+					alert('Please add an item name.');
+					return;
+				}
+				// normalize the name by removing all punctuation and spaces to check if the normalized item is already in the list
+				const normalizedItemName = normalizeItemName(itemName);
+				if (items) {
+					// normalize the existing list items to compare them to the new input
+					const currentItems = items.map((item) =>
+						normalizeItemName(item.name),
+					);
+					if (currentItems.includes(normalizedItemName)) {
+						alert('This item already exists in the list');
+						return;
+					}
+				}
 				await addItem(listPath, {
 					itemName,
 					daysUntilNextPurchase,
@@ -63,10 +79,13 @@ export function AddItems({ items }) {
 					type="text"
 					id="item-name"
 					placeholder="Enter item name"
-					label="Item Name:"
-					required={true}
-				/>
-
+					pattern="^[^\s].+[^\s]$"
+				>
+					Item Name:
+				</TextInputElement>
+				<label htmlFor="item-name" required={true}>
+					Item Name:
+				</label>
 				{Object.entries(daysUntilPurchaseOptions).map(([key, value]) => (
 					<RadioInputElement
 						key={key}
@@ -76,7 +95,6 @@ export function AddItems({ items }) {
 						required={true}
 					/>
 				))}
-
 				<button type="submit">Submit</button>
 			</form>
 		</div>
