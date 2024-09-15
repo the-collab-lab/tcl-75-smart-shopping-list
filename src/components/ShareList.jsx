@@ -44,9 +44,9 @@ export function ShareList() {
 					type="email"
 					id="email-input"
 					placeholder="Enter email"
-				>
-					Enter Email:
-				</TextInputElement>
+					label="Enter Email:"
+					required={true}
+				/>
 				<button type="submit">Invite User</button>
 			</form>
 		</div>

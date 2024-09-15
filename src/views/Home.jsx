@@ -1,38 +1,34 @@
 import './Home.css';
 import { SingleList } from '../components';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createList } from '../api';
+import TextInputElement from '../components/TextInputElement';
 
 export function Home({ data, setListPath, userId, userEmail }) {
-	const [listName, setListName] = useState('');
 	const navigate = useNavigate();
-
-	const handleChange = (event) => {
-		setListName(event.target.value);
-	};
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
+		const listName = event.target['list-name'].value;
 		const currentLists = data.map((list) => {
 			return list.name.toLowerCase();
 		});
 
-		if (currentLists.includes(listName.toLowerCase())) {
-			alert('The list already exists. Please enter a different name.');
-			setListName('');
-			return;
-		}
-
 		try {
+			if (currentLists.includes(listName.toLowerCase())) {
+				alert('The list already exists. Please enter a different name.');
+				return;
+			}
+
 			const listPath = await createList(userId, userEmail, listName);
 			setListPath(listPath);
-			setListName('');
 			alert('List added');
 			navigate('/list');
 		} catch (err) {
 			console.error(err);
 			alert('List not created');
+		} finally {
+			event.target.reset();
 		}
 	};
 
@@ -42,17 +38,17 @@ export function Home({ data, setListPath, userId, userEmail }) {
 				Hello from the home (<code>/</code>) page!
 			</p>
 			<form id="list-form" onSubmit={handleSubmit}>
-				<label htmlFor="list-name">Enter New List:</label>
-				<input
-					id="list-name"
+				<TextInputElement
+					key="list-name"
+					label="Enter New List:"
 					type="text"
-					value={listName}
+					id="list-name"
 					placeholder="New List Name"
-					onChange={handleChange}
-					required
-				></input>
+					required={true}
+				/>
 				<button type="submit">Add List</button>
 			</form>
+
 			<ul>
 				{data.map((item, index) => {
 					return (

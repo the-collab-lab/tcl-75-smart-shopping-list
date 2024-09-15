@@ -4,16 +4,10 @@ import { addItem } from '../api';
 import TextInputElement from './TextInputElement';
 import RadioInputElement from './RadioInputElement';
 
-const nextPurchaseDate = {
-	soon: 7,
-	kindOfSoon: 14,
-	notSoon: 30,
-};
-
-const radioInputOptions = {
-	soon: ['soon', nextPurchaseDate.soon, 'Soon'],
-	kindOfSoon: ['kindofsoon', nextPurchaseDate.kindOfSoon, 'Kind of soon'],
-	notSoon: ['notsoon', nextPurchaseDate.notSoon, 'Not Soon'],
+const daysUntilPurchaseOptions = {
+	Soon: 7,
+	'Kind of soon': 14,
+	'Not soon': 30,
 };
 
 export function AddItems() {
@@ -26,15 +20,6 @@ export function AddItems() {
 			const itemName = event.target.elements['item-name'].value;
 			const daysUntilNextPurchase =
 				event.target.elements['purchase-date'].value;
-
-			if (itemName === '') {
-				alert('Please add an item name.');
-				return;
-			}
-			if (!daysUntilNextPurchase) {
-				alert('Please select an option for date');
-				return;
-			}
 
 			try {
 				await addItem(listPath, {
@@ -60,14 +45,18 @@ export function AddItems() {
 					type="text"
 					id="item-name"
 					placeholder="Enter item name"
-				>
-					Item Name:
-				</TextInputElement>
+					label="Item Name:"
+					required={true}
+				/>
 
-				{Object.values(radioInputOptions).map((option) => (
-					<RadioInputElement key={option[0]} id={option[0]} value={option[1]}>
-						{option[2]}
-					</RadioInputElement>
+				{Object.entries(daysUntilPurchaseOptions).map(([key, value]) => (
+					<RadioInputElement
+						key={key}
+						label={key}
+						id={key}
+						value={value}
+						required={true}
+					/>
 				))}
 
 				<button type="submit">Submit</button>
