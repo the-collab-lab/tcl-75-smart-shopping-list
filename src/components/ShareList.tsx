@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { shareList, useAuth } from '../api';
 import { useStateWithStorage } from '../utils';
 import TextInputElement from './TextInputElement';
@@ -11,7 +9,7 @@ export function ShareList() {
 	const userId = user?.uid;
 	const userEmail = user?.email;
 
-	const shareCurrentList = async (emailData) => {
+	const shareCurrentList = async (emailData: string) => {
 		const listShared = await shareList(listPath, userId, emailData);
 
 		if (listShared === '!owner') {
@@ -25,10 +23,12 @@ export function ShareList() {
 		}
 	};
 
-	const handleEmailInputSubmit = (event) => {
+	const handleEmailInputSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-
-		const emailData = event.target['email-input'].value;
+		const form = event.target as HTMLFormElement;
+		const emailData = (
+			form.elements.namedItem('email-input') as HTMLInputElement
+		).value;
 
 		if (userEmail === emailData) {
 			alert('You cannot share the list with yourself.');
@@ -36,7 +36,7 @@ export function ShareList() {
 			shareCurrentList(emailData);
 		}
 
-		event.target.reset();
+		form.reset();
 	};
 
 	return (
