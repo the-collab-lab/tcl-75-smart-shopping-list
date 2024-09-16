@@ -1,12 +1,18 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import './ListItem.css';
 import { updateItem } from '../api';
 import { calculateDateNextPurchased, ONE_DAY_IN_MILLISECONDS } from '../utils';
+import { DocumentData, Timestamp } from 'firebase/firestore';
+
+type Props = {
+	item: DocumentData;
+	listPath: string;
+};
 
 const currentDate = new Date();
 
-const calculateIsPurchased = (dateLastPurchased) => {
+const calculateIsPurchased = (dateLastPurchased: Timestamp) => {
 	if (!dateLastPurchased) {
 		return false;
 	}
@@ -18,7 +24,7 @@ const calculateIsPurchased = (dateLastPurchased) => {
 	return currentDate < oneDayLater;
 };
 
-export function ListItem({ item, listPath }) {
+export function ListItem({ item, listPath }: Props) {
 	const [isPurchased, setIsPurchased] = useState(() =>
 		calculateIsPurchased(item.dateLastPurchased),
 	);
@@ -40,7 +46,9 @@ export function ListItem({ item, listPath }) {
 
 				await updateItem(listPath, id, { ...updatedItem });
 			} catch (error) {
-				alert(`Item was not marked as purchased`, error.message);
+				alert(
+					`Item was not marked as purchased. Error: ${error instanceof Error ? error.message : error}`,
+				);
 			}
 		}
 	};
