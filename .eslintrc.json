@@ -1,7 +1,7 @@
 {
 	"extends": [
 		"plugin:react/recommended",
-		"plugin:react/jsx-runtime",
+		"plugin:@typescript-eslint/recommended",
 		"plugin:jsx-a11y/recommended",
 		"prettier"
 	],
@@ -10,13 +10,16 @@
 	},
 	"parserOptions": {
 		"ecmaVersion": "latest",
-		"sourceType": "module"
+		"sourceType": "module",
+		"ecmaFeatures": {
+			"jsx": true
+		}
 	},
 	"settings": { "react": { "version": "detect" } },
 	"rules": {
 		"no-duplicate-imports": "warn",
 		"no-unused-vars": "warn",
-		"react/jsx-filename-extension": [1, { "allow": "as-needed" }],
+		"react/jsx-filename-extension": [1, { "extensions": [".tsx"] }],
 		"react/prop-types": "off",
 		"react/jsx-no-target-blank": "off"
 	}

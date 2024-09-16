@@ -1,3 +1,5 @@
+import React from 'react';
+
 const RadioInputElement = ({ label, id, value, required }) => {
 	return (
 		<>

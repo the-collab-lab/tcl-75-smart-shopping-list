@@ -1,4 +1,5 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
+
 import { useStateWithStorage, normalizeItemName } from '../utils';
 import { addItem } from '../api';
 import TextInputElement from './TextInputElement';

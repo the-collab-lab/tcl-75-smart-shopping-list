@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { shareList, useAuth } from '../api';
 import { useStateWithStorage } from '../utils';
 import TextInputElement from './TextInputElement';
