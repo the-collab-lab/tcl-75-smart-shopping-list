@@ -1,6 +1,7 @@
 import { calculateEstimate } from '@the-collab-lab/shopping-list-utils';
+import { DocumentData, Timestamp } from 'firebase/firestore';
 
-export const ONE_DAY_IN_MILLISECONDS = 86400000;
+export const ONE_DAY_IN_MILLISECONDS: number = 86400000;
 
 /**
  * Get a new JavaScript Date that is `offset` days in the future.
@@ -9,7 +10,7 @@ export const ONE_DAY_IN_MILLISECONDS = 86400000;
  * addDaysFromToday(3)
  * @param {number} daysOffset
  */
-export function addDaysFromToday(daysOffset) {
+export function addDaysFromToday(daysOffset: number): Date {
 	return new Date(Date.now() + daysOffset * ONE_DAY_IN_MILLISECONDS);
 }
 
@@ -25,7 +26,10 @@ export function addDaysFromToday(daysOffset) {
  * @returns {Date} - The estimated date of the next purchase.
  * @throws {Error} - Throws an error if the next purchase date cannot be calculated.
  */
-export const calculateDateNextPurchased = (currentDate, item) => {
+export const calculateDateNextPurchased = (
+	currentDate: Date,
+	item: DocumentData,
+): Date => {
 	try {
 		// get purchase intervals and get new estimation for next purchase date
 		const purchaseIntervals = calculatePurchaseIntervals(
@@ -51,11 +55,16 @@ export const calculateDateNextPurchased = (currentDate, item) => {
  * @param {Date} laterDate The ending date.
  * @returns {number} The number of days between the two dates.
  */
-function getDaysBetweenDates(earlierDate, laterDate) {
+function getDaysBetweenDates(earlierDate: Date, laterDate: Date): number {
 	return Math.floor(
 		(laterDate.getTime() - earlierDate.getTime()) / ONE_DAY_IN_MILLISECONDS,
 	);
 }
+
+type PurchaseIntervals = {
+	lastEstimatedInterval: number;
+	daysSinceLastPurchase: number;
+};
 
 /**
  * Calculate the purchase intervals between current, next, and last purchase dates.
@@ -65,11 +74,11 @@ function getDaysBetweenDates(earlierDate, laterDate) {
  * @returns {Object} An object containing the last estimated interval and days since last purchase.
  */
 function calculatePurchaseIntervals(
-	currentDate,
-	dateCreated,
-	dateNextPurchased,
-	dateLastPurchased,
-) {
+	currentDate: Date,
+	dateCreated: Timestamp,
+	dateNextPurchased: Timestamp,
+	dateLastPurchased: Timestamp | null,
+): PurchaseIntervals {
 	const lastPurchaseDate = dateLastPurchased?.toDate();
 
 	const lastEstimatedIntervalStartDate =
@@ -97,7 +106,10 @@ function calculatePurchaseIntervals(
  * @returns {Date} The estimated next purchase date.
  * @throws {Error} If an error occurs during the next purchase estimation process.
  */
-function getNextPurchaseEstimate(purchaseIntervals, totalPurchases) {
+function getNextPurchaseEstimate(
+	purchaseIntervals: PurchaseIntervals,
+	totalPurchases: number,
+): Date {
 	const { lastEstimatedInterval, daysSinceLastPurchase } = purchaseIntervals;
 
 	try {
