@@ -4,16 +4,21 @@ import { ListItem } from '../components';
 import { useStateWithStorage } from '../utils';
 import { AddItems } from '../components/AddItems';
 import TextInputElement from '../components/TextInputElement';
+import { Item } from '../types/types';
 
-export function List({ data }) {
+type ListProps = {
+	items: Item[];
+};
+
+export function List({ items }: ListProps) {
 	const [searchItem, setSearchItem] = useState('');
 	const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
 
-	const handleTextChange = (event) => {
+	const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setSearchItem(event.target.value);
 	};
 
-	const filteredItems = data.filter((item) =>
+	const filteredItems = items.filter((item) =>
 		item.name.toLowerCase().includes(searchItem.toLowerCase()),
 	);
 
@@ -21,12 +26,12 @@ export function List({ data }) {
 
 	return (
 		<>
-			{!data.length ? (
+			{!items.length ? (
 				<>
 					<p>Welcome to {listName}!</p>
 					<p>Ready to add your first item? Start adding below!</p>
 
-					<AddItems />
+					<AddItems items={items} />
 				</>
 			) : (
 				<>
