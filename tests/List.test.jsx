@@ -14,7 +14,7 @@ beforeEach(() => {
 
 describe('List Component', () => {
 	test('renders the shopping list name, search field, and all list items from the data prop', () => {
-		render(<List data={mockShoppingListData} />);
+		render(<List items={mockShoppingListData} />);
 
 		expect(screen.getByText('groceries')).toBeInTheDocument();
 		expect(screen.getByLabelText('Search Item:')).toBeInTheDocument();
@@ -25,7 +25,7 @@ describe('List Component', () => {
 	});
 
 	test('shows welcome message and AddItems component when no items are present', () => {
-		render(<List data={[]} />);
+		render(<List items={[]} />);
 
 		expect(screen.getByText('Welcome to groceries!')).toBeInTheDocument();
 		expect(screen.getByLabelText('Item Name:')).toBeInTheDocument();
