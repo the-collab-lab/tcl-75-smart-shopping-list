@@ -12,7 +12,10 @@ import {
 import { useEffect, useState } from 'react';
 import { db } from './config';
 import { addDaysFromToday } from '../utils';
-import { ListPath } from '../types/types';
+
+export type ListPath = {
+	[key: string]: string | null;
+};
 
 /**
  * A custom hook that subscribes to the user's shopping lists in our Firestore
@@ -57,7 +60,9 @@ export const useShoppingLists = (
  * @param {string | null} listPath
  * @see https://firebase.google.com/docs/firestore/query-data/listen
  */
-export const useShoppingListData = (listPath: string): DocumentData[] => {
+export const useShoppingListData = (
+	listPath: string | null,
+): DocumentData[] => {
 	// Start with an empty array for our data.
 	/** @type {import('firebase/firestore').DocumentData[]} */
 	const initialState: DocumentData[] = [];
@@ -114,23 +119,17 @@ export const addUserToDatabase = async (user: DocumentData): Promise<void> => {
 	}
 };
 
-export type CreateListProps = {
-	userId: string;
-	userEmail: string;
-	listName: string;
-};
-
 /**
  * Create a new list and add it to a user's lists in Firestore.
  * @param {string} userId The id of the user who owns the list.
  * @param {string} userEmail The email of the user who owns the list.
  * @param {string} listName The name of the new list.
  */
-export const createList = async ({
-	userId,
-	userEmail,
-	listName,
-}: CreateListProps): Promise<string> => {
+export const createList = async (
+	userId: string,
+	userEmail: string,
+	listName: string,
+): Promise<string> => {
 	const listDocRef = doc(db, userId, listName);
 
 	await setDoc(listDocRef, {
@@ -145,24 +144,18 @@ export const createList = async ({
 	return listDocRef.path;
 };
 
-export type ShareListProps = {
-	listPath: string;
-	currentUserId: string;
-	recipientEmail: string;
-};
-
 /**
  * Shares a list with another user.
  * @param {string} listPath The path to the list to share.
  * @param {string} recipientEmail The email of the user to share the list with.
  */
-export const shareList = async ({
-	listPath,
-	currentUserId,
-	recipientEmail,
-}: ShareListProps): Promise<string | void> => {
+export const shareList = async (
+	listPath: string | null,
+	currentUserId: string,
+	recipientEmail: string,
+): Promise<string | void> => {
 	// Check if current user is owner.
-	if (!listPath.includes(currentUserId)) {
+	if (!listPath?.includes(currentUserId)) {
 		return '!owner';
 	}
 	// Get the document for the recipient user.
@@ -198,9 +191,12 @@ type itemData = {
  * @param {number} itemData.daysUntilNextPurchase The number of days until the user thinks they'll need to buy the item again.
  */
 export const addItem = async (
-	listPath: string,
+	listPath: string | null,
 	{ itemName, daysUntilNextPurchase }: itemData,
 ): Promise<DocumentData> => {
+	if (!listPath) {
+		throw new Error('List path is undefined');
+	}
 	const listCollectionRef = collection(db, listPath, 'items');
 	return addDoc(listCollectionRef, {
 		dateCreated: new Date(),
@@ -211,14 +207,10 @@ export const addItem = async (
 	});
 };
 
-export type UpdateItemProps = {
-	listPath: string;
-	itemId: string;
-	updatedData: {
-		dateLastPurchased: Date;
-		dateNextPurchased: Date;
-		totalPurchases: number;
-	};
+export type UpdatedData = {
+	dateLastPurchased: Date;
+	dateNextPurchased: Date;
+	totalPurchases: number;
 };
 
 /**
@@ -232,11 +224,11 @@ export type UpdateItemProps = {
  * @returns {Promise<string>} A message confirming the item was successfully updated.
  * @throws {Error} If the item update fails.
  */
-export const updateItem = async ({
-	listPath,
-	itemId,
-	updatedData: { dateLastPurchased, dateNextPurchased, totalPurchases },
-}: UpdateItemProps): Promise<string | Error> => {
+export const updateItem = async (
+	listPath: string,
+	itemId: string,
+	{ dateLastPurchased, dateNextPurchased, totalPurchases }: UpdatedData,
+): Promise<string | Error> => {
 	// reference the item path
 	const itemDocRef = doc(db, listPath, 'items', itemId);
 	// update the item with the purchase date and increment the total purchases made
