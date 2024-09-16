@@ -18,7 +18,7 @@ export function List({ items }: ListProps) {
 		setSearchItem(event.target.value);
 	};
 
-	const filteredItems = items.filter((item) =>
+	const filteredItems = items?.filter((item) =>
 		item.name.toLowerCase().includes(searchItem.toLowerCase()),
 	);
 
@@ -26,7 +26,7 @@ export function List({ items }: ListProps) {
 
 	return (
 		<>
-			{!items.length ? (
+			{!items?.length ? (
 				<>
 					<p>Welcome to {listName}!</p>
 					<p>Ready to add your first item? Start adding below!</p>
