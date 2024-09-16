@@ -12,7 +12,7 @@ import {
 import { useEffect, useState } from 'react';
 import { db } from './config';
 import { addDaysFromToday } from '../utils';
-import { ListPath, User } from '../types/types';
+import { ListPath } from '../types/types';
 
 /**
  * A custom hook that subscribes to the user's shopping lists in our Firestore
@@ -95,7 +95,7 @@ export const useShoppingListData = (listPath: string): DocumentData[] => {
  * Add a new user to the users collection in Firestore.
  * @param {Object} user The user object from Firebase Auth.
  */
-export const addUserToDatabase = async (user: User): Promise<void> => {
+export const addUserToDatabase = async (user: DocumentData): Promise<void> => {
 	// Check if the user already exists in the database.
 	const userDoc = await getDoc(doc(db, 'users', user.email));
 	// If the user already exists, we don't need to do anything.
