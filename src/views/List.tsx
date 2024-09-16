@@ -4,10 +4,10 @@ import { ListItem } from '../components';
 import { useStateWithStorage } from '../utils';
 import { AddItems } from '../components/AddItems';
 import TextInputElement from '../components/TextInputElement';
-import { Item } from '../types/types';
+import { DocumentData } from 'firebase/firestore';
 
 type ListProps = {
-	items: Item[];
+	items: DocumentData[];
 };
 
 export function List({ items }: ListProps) {
@@ -22,7 +22,7 @@ export function List({ items }: ListProps) {
 		item.name.toLowerCase().includes(searchItem.toLowerCase()),
 	);
 
-	const listName = listPath.slice(listPath.indexOf('/') + 1);
+	const listName = listPath?.slice(listPath.indexOf('/') + 1);
 
 	return (
 		<>
