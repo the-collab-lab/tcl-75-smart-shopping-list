@@ -1,9 +1,14 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 
 import { useStateWithStorage, normalizeItemName } from '../utils';
 import { addItem } from '../api';
 import TextInputElement from './TextInputElement';
 import RadioInputElement from './RadioInputElement';
+import { Item } from '../types/types';
+
+type Props = {
+	items: Item[];
+};
 
 const daysUntilPurchaseOptions = {
 	Soon: 7,
@@ -11,34 +16,19 @@ const daysUntilPurchaseOptions = {
 	'Not soon': 30,
 };
 
-export function AddItems({ items }) {
+export function AddItems({ items }: Props) {
 	const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
 
 	const handleSubmit = useCallback(
-		async (event) => {
+		async (event: React.FormEvent<HTMLFormElement>) => {
 			event.preventDefault();
-
-			const itemName = event.target.elements['item-name'].value;
-			const normalizedItemName = itemName
-				.trim()
-				.toLowerCase()
-				.replace(/[&\/\\#, +$!,~%.'":*?<>{}]/g, '');
-			if (items) {
-				const currentItems = items.map((item) =>
-					item.name
-						.trim()
-						.toLowerCase()
-						.replace(/[&\/\\#, +$!,~%.'":*?<>{}]/g, ''),
-				);
-				if (currentItems.includes(normalizedItemName)) {
-					alert('This item already exists in the list');
-					event.target.reset();
-					return;
-				}
-			}
-
-			const daysUntilNextPurchase =
-				event.target.elements['purchase-date'].value;
+			const form = event.target as HTMLFormElement;
+			const itemName = (
+				form.elements.namedItem('item-name') as HTMLInputElement
+			).value;
+			const daysUntilNextPurchase = (
+				form.elements.namedItem('purchase-date') as HTMLInputElement
+			).value;
 
 			try {
 				if (itemName.trim() === '') {
@@ -65,9 +55,11 @@ export function AddItems({ items }) {
 					`${itemName} was added to the list! The next purchase date is set to ${daysUntilNextPurchase} days from now.`,
 				);
 			} catch (error) {
-				alert(`Item was not added to the database, Error: ${error.message}`);
+				alert(
+					`Item was not added to the database, Error: ${error instanceof Error ? error.message : error}`,
+				);
 			} finally {
-				event.target.reset();
+				form.reset();
 			}
 		},
 		[listPath],
@@ -80,13 +72,10 @@ export function AddItems({ items }) {
 					type="text"
 					id="item-name"
 					placeholder="Enter item name"
-					pattern="^[^\s].+[^\s]$"
-				>
-					Item Name:
-				</TextInputElement>
-				<label htmlFor="item-name" required={true}>
-					Item Name:
-				</label>
+					label={'Item Name: '}
+					required={true}
+				/>
+
 				{Object.entries(daysUntilPurchaseOptions).map(([key, value]) => (
 					<RadioInputElement
 						key={key}
