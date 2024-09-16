@@ -225,11 +225,14 @@ export type UpdatedData = {
  * @throws {Error} If the item update fails.
  */
 export const updateItem = async (
-	listPath: string,
+	listPath: string | null,
 	itemId: string,
 	{ dateLastPurchased, dateNextPurchased, totalPurchases }: UpdatedData,
 ): Promise<string | Error> => {
 	// reference the item path
+	if (!listPath) {
+		throw new Error(`Invalid list path: ${listPath}`);
+	}
 	const itemDocRef = doc(db, listPath, 'items', itemId);
 	// update the item with the purchase date and increment the total purchases made
 	try {

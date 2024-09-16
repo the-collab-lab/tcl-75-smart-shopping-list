@@ -7,7 +7,7 @@ import { DocumentData, Timestamp } from 'firebase/firestore';
 
 type Props = {
 	item: DocumentData;
-	listPath: string;
+	listPath: string | null;
 };
 
 const currentDate = new Date();
