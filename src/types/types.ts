@@ -1,4 +1,6 @@
 export type Item = {
+	id: string;
+	listPath: string;
 	dateCreated: Date;
 	dateLastPurchased: Date | null;
 	dateNextPurchased: Date;
@@ -8,6 +10,10 @@ export type Item = {
 
 export type User = {
 	email: string;
-	name: string;
+	displayName: string;
 	uid: number;
+};
+
+export type ListPath = {
+	[key: string]: string;
 };
