@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { auth } from './config.js';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { addUserToDatabase } from './firebase.js';
+import { User } from '../types/types.js';
 
 /**
  * A button that signs the user in using Google OAuth. When clicked,
@@ -32,7 +33,8 @@ export const SignOutButton = () => (
  * @see https://firebase.google.com/docs/auth/web/start#set_an_authentication_state_observer_and_get_user_data
  */
 export const useAuth = () => {
-	const [user, setUser] = useState(null);
+	const initialState: User | null = null;
+	const [user, setUser] = useState<User | null>(initialState);
 
 	useEffect(() => {
 		auth.onAuthStateChanged((user) => {

@@ -9,9 +9,9 @@ export type Item = {
 };
 
 export type User = {
-	email: string;
-	displayName: string;
-	uid: number;
+	email: string | null;
+	displayName: string | null;
+	uid: string | null;
 };
 
 export type ListPath = {
