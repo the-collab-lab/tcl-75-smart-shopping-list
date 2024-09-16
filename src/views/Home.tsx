@@ -1,17 +1,26 @@
-import React from 'react';
-
 import './Home.css';
-import { SingleList } from '../components';
+import { Dispatch } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { DocumentData } from 'firebase/firestore';
 import { createList } from '../api';
+import { SingleList } from '../components';
 import TextInputElement from '../components/TextInputElement';
 
-export function Home({ data, setListPath, userId, userEmail }) {
+type Props = {
+	data: DocumentData[];
+	setListPath: Dispatch<string | null>;
+	userId: string;
+	userEmail: string;
+};
+
+export function Home({ data, setListPath, userId, userEmail }: Props) {
 	const navigate = useNavigate();
 
-	const handleSubmit = async (event) => {
+	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		const listName = event.target['list-name'].value;
+		const form = event.target as HTMLFormElement;
+		const listName = (form.elements.namedItem('item-name') as HTMLInputElement)
+			.value;
 		const currentLists = data.map((list) => {
 			return list.name.toLowerCase();
 		});
@@ -30,7 +39,7 @@ export function Home({ data, setListPath, userId, userEmail }) {
 			console.error(err);
 			alert('List not created');
 		} finally {
-			event.target.reset();
+			form.reset();
 		}
 	};
 
