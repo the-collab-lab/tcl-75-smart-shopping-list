@@ -185,12 +185,9 @@ export const shareList = async ({
 	}
 };
 
-export type AddItemProps = {
-	listPath: string;
-	itemData: {
-		itemName: string;
-		daysUntilNextPurchase: number;
-	};
+type itemData = {
+	itemName: string;
+	daysUntilNextPurchase: string;
 };
 
 /**
@@ -200,15 +197,15 @@ export type AddItemProps = {
  * @param {string} itemData.itemName The name of the item.
  * @param {number} itemData.daysUntilNextPurchase The number of days until the user thinks they'll need to buy the item again.
  */
-export const addItem = async ({
-	listPath,
-	itemData: { itemName, daysUntilNextPurchase },
-}: AddItemProps): Promise<DocumentData> => {
+export const addItem = async (
+	listPath: string,
+	{ itemName, daysUntilNextPurchase }: itemData,
+): Promise<DocumentData> => {
 	const listCollectionRef = collection(db, listPath, 'items');
 	return addDoc(listCollectionRef, {
 		dateCreated: new Date(),
 		dateLastPurchased: null,
-		dateNextPurchased: addDaysFromToday(daysUntilNextPurchase),
+		dateNextPurchased: addDaysFromToday(parseInt(daysUntilNextPurchase)),
 		name: itemName,
 		totalPurchases: 0,
 	});
