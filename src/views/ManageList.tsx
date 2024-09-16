@@ -1,9 +1,12 @@
-import React from 'react';
-
 import { AddItems } from '../components/AddItems';
 import { ShareList } from '../components/ShareList';
+import { Item } from '../types/types';
 
-export function ManageList({ items }) {
+type ManageListProps = {
+	items: Item[];
+};
+
+export function ManageList({ items }: ManageListProps) {
 	return (
 		<div>
 			<AddItems items={items} />
