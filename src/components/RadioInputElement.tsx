@@ -1,6 +1,11 @@
-import React from 'react';
+type Props = {
+	label: string;
+	id: string;
+	value: number;
+	required: boolean;
+};
 
-const RadioInputElement = ({ label, id, value, required }) => {
+const RadioInputElement = ({ label, id, value, required }: Props) => {
 	return (
 		<>
 			<input
