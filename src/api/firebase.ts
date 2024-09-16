@@ -14,11 +14,6 @@ import { db } from './config';
 import { addDaysFromToday } from '../utils';
 import { ListPath, User } from '../types/types';
 
-export type UseShoppingListsProps = {
-	userId: string | null;
-	userEmail: string | null;
-};
-
 /**
  * A custom hook that subscribes to the user's shopping lists in our Firestore
  * database and returns new data whenever the lists change.
@@ -26,10 +21,10 @@ export type UseShoppingListsProps = {
  * @param {string | null} userEmail
  * @returns
  */
-export const useShoppingLists = ({
-	userId,
-	userEmail,
-}: UseShoppingListsProps): ListPath[] => {
+export const useShoppingLists = (
+	userId: string | null,
+	userEmail: string | null,
+): ListPath[] => {
 	// Start with an empty array for our data.
 	const [data, setData] = useState<ListPath[]>([]);
 
