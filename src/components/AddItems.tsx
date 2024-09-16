@@ -4,10 +4,10 @@ import { useStateWithStorage, normalizeItemName } from '../utils';
 import { addItem } from '../api';
 import TextInputElement from './TextInputElement';
 import RadioInputElement from './RadioInputElement';
-import { Item } from '../types/types';
+import { DocumentData } from 'firebase/firestore';
 
 type Props = {
-	items: Item[];
+	items: DocumentData[];
 };
 
 const daysUntilPurchaseOptions = {
