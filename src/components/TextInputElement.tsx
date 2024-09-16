@@ -1,4 +1,13 @@
-import React from 'react';
+import React, { ChangeEventHandler } from 'react';
+
+type Props = {
+	label: string;
+	type: string;
+	id: string;
+	placeholder: string;
+	onChange?: ChangeEventHandler<HTMLInputElement>;
+	required: boolean;
+};
 
 const TextInputElement = ({
 	label,
@@ -7,7 +16,7 @@ const TextInputElement = ({
 	placeholder,
 	onChange,
 	required,
-}) => {
+}: Props) => {
 	return (
 		<>
 			<label htmlFor={id}>{label}</label>
@@ -18,6 +27,7 @@ const TextInputElement = ({
 				placeholder={placeholder}
 				onChange={onChange}
 				required={required}
+				pattern="^[^\s].+[^\s]$"
 			/>
 			<br />
 		</>
