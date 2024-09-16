@@ -8,12 +8,6 @@ export type Item = {
 	totalPurchases: number;
 };
 
-export type User = {
-	email: string | null;
-	displayName: string | null;
-	uid: string | null;
-};
-
 export type ListPath = {
 	[key: string]: string;
 };
