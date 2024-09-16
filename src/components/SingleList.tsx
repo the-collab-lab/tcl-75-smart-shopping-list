@@ -1,8 +1,13 @@
-import React from 'react';
-
+import { Dispatch } from 'react';
 import './SingleList.css';
 
-export function SingleList({ name, path, setListPath }) {
+type Props = {
+	name: string;
+	path: string;
+	setListPath: Dispatch<string>;
+};
+
+export function SingleList({ name, path, setListPath }: Props) {
 	function handleClick() {
 		setListPath(path);
 	}
