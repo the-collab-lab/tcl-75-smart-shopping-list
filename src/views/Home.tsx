@@ -34,13 +34,11 @@ export function Home({ data, setListPath, userId, userEmail }: Props) {
 			const listPath = await createList(userId, userEmail, listName);
 			setListPath(listPath);
 			console.log(`Setting list path with: ${listPath}`);
-			setTimeout(() => {
-				console.log(
-					`LocalStorage listPath after state update: ${localStorage.getItem('tcl-shopping-list-path')}`,
-				);
-				alert('List added');
-				navigate('/list');
-			}, 0);
+			console.log(
+				`LocalStorage listPath after state update: ${localStorage.getItem('tcl-shopping-list-path')}`,
+			);
+			alert('List added');
+			navigate('/list');
 		} catch (err) {
 			console.error(err);
 			alert('List not created');

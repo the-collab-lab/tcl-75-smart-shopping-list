@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 
 import { ListItem } from '../components';
-import { useStateWithStorage } from '../utils';
 import { AddItems } from '../components/AddItems';
 import TextInputElement from '../components/TextInputElement';
 import { DocumentData } from 'firebase/firestore';
 
 type ListProps = {
 	items: DocumentData[];
+	listPath: string | null;
 };
 
-export function List({ items }: ListProps) {
+export function List({ items, listPath }: ListProps) {
 	const [searchItem, setSearchItem] = useState('');
-	const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
 
 	const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setSearchItem(event.target.value);
