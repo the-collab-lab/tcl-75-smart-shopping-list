@@ -31,10 +31,6 @@ export function AddItems({ items }: Props) {
 			).value;
 
 			try {
-				if (itemName.trim() === '') {
-					alert('Please add an item name.');
-					return;
-				}
 				// normalize the name by removing all punctuation and spaces to check if the normalized item is already in the list
 				const normalizedItemName = normalizeItemName(itemName);
 				if (items) {

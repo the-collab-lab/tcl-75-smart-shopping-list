@@ -19,7 +19,7 @@ export function Home({ data, setListPath, userId, userEmail }: Props) {
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		const form = event.target as HTMLFormElement;
-		const listName = (form.elements.namedItem('item-name') as HTMLInputElement)
+		const listName = (form.elements.namedItem('list-name') as HTMLInputElement)
 			.value;
 		const currentLists = data.map((list) => {
 			return list.name.toLowerCase();
