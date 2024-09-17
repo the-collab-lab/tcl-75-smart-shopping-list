@@ -18,15 +18,15 @@ export function List({ items }: ListProps) {
 		setSearchItem(event.target.value);
 	};
 
-	const filteredItems = items?.filter((item) =>
+	const filteredItems = items.filter((item) =>
 		item.name.toLowerCase().includes(searchItem.toLowerCase()),
 	);
-
+	console.log(`Current list path: ${listPath}`);
 	const listName = listPath?.slice(listPath.indexOf('/') + 1);
 
 	return (
 		<>
-			{!items?.length ? (
+			{!items.length ? (
 				<>
 					<p>Welcome to {listName}!</p>
 					<p>Ready to add your first item? Start adding below!</p>

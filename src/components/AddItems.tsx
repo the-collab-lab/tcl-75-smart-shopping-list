@@ -22,6 +22,7 @@ export function AddItems({ items }: Props) {
 	const handleSubmit = useCallback(
 		async (event: React.FormEvent<HTMLFormElement>) => {
 			event.preventDefault();
+
 			const form = event.target as HTMLFormElement;
 			const itemName = (
 				form.elements.namedItem('item-name') as HTMLInputElement
@@ -31,13 +32,19 @@ export function AddItems({ items }: Props) {
 			).value;
 
 			try {
+				if (itemName.trim() === '') {
+					alert('Please add an item name.');
+					return;
+				}
 				// normalize the name by removing all punctuation and spaces to check if the normalized item is already in the list
 				const normalizedItemName = normalizeItemName(itemName);
+				console.log('Normalized new item:', normalizedItemName);
 				if (items) {
 					// normalize the existing list items to compare them to the new input
 					const currentItems = items.map((item) =>
 						normalizeItemName(item.name),
 					);
+					console.log('Normalized current items:', currentItems);
 					if (currentItems.includes(normalizedItemName)) {
 						alert('This item already exists in the list');
 						return;
