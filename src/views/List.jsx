@@ -25,7 +25,7 @@ export function List({ data }) {
 					<p>Welcome to {listName}!</p>
 					<p>Ready to add your first item? Start adding below!</p>
 
-					<AddItems />
+					<AddItems items={items} />
 				</>
 			) : (
 				<>
