@@ -62,13 +62,10 @@ export function AddItems({ items }) {
 					type="text"
 					id="item-name"
 					placeholder="Enter item name"
-					pattern="^[^\s].+[^\s]$"
-				>
-					Item Name:
-				</TextInputElement>
-				<label htmlFor="item-name" required={true}>
-					Item Name:
-				</label>
+					label="Item Name:"
+					required={true}
+				/>
+
 				{Object.entries(daysUntilPurchaseOptions).map(([key, value]) => (
 					<RadioInputElement
 						key={key}

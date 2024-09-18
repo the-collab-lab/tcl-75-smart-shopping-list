@@ -16,6 +16,7 @@ const TextInputElement = ({
 				placeholder={placeholder}
 				onChange={onChange}
 				required={required}
+				pattern="^[^\s].+[^\s]$"
 			/>
 			<br />
 		</>
