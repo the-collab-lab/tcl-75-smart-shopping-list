@@ -32,7 +32,7 @@ export function Home({ data, setListPath, userId, userEmail }: Props) {
 			}
 
 			const listPath = await createList(userId, userEmail, listName);
-			setListPath(listPath);
+			setListPath(listPath ?? null);
 			console.log(`Setting list path with: ${listPath}`);
 			console.log(
 				`LocalStorage listPath after state update: ${localStorage.getItem('tcl-shopping-list-path')}`,
