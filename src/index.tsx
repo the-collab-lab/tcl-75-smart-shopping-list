@@ -4,9 +4,16 @@ import { App } from './App';
 
 import './index.css';
 
-const root = createRoot(document.getElementById('root'));
-root.render(
-	<StrictMode>
-		<App />
-	</StrictMode>,
-);
+const rootElement = document.getElementById('root');
+try {
+	if (rootElement) {
+		const root = createRoot(rootElement);
+		root.render(
+			<StrictMode>
+				<App />
+			</StrictMode>,
+		);
+	}
+} catch (error) {
+	throw new Error(`Could not get root element. Error: ${error}`);
+}
