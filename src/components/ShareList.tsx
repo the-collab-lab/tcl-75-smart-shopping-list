@@ -10,6 +10,8 @@ export function ShareList() {
 	const userEmail = user?.email;
 
 	const shareCurrentList = async (emailData: string) => {
+		if (!userId) return;
+
 		const listShared = await shareList(listPath, userId, emailData);
 
 		if (listShared === '!owner') {

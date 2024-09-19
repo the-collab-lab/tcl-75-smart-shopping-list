@@ -25,8 +25,8 @@ export type ListPath = {
  * @returns
  */
 export const useShoppingLists = (
-	userId: string | null,
-	userEmail: string | null,
+	userId: string | null | undefined,
+	userEmail: string | null | undefined,
 ): ListPath[] => {
 	// Start with an empty array for our data.
 	const [data, setData] = useState<ListPath[]>([]);
@@ -126,10 +126,12 @@ export const addUserToDatabase = async (user: DocumentData): Promise<void> => {
  * @param {string} listName The name of the new list.
  */
 export const createList = async (
-	userId: string,
-	userEmail: string,
+	userId: string | null | undefined,
+	userEmail: string | null | undefined,
 	listName: string,
-): Promise<string> => {
+): Promise<string | void> => {
+	if (!userId || !userEmail) return;
+
 	const listDocRef = doc(db, userId, listName);
 
 	await setDoc(listDocRef, {

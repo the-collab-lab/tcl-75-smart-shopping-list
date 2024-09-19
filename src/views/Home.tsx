@@ -9,8 +9,8 @@ import TextInputElement from '../components/TextInputElement';
 type Props = {
 	data: DocumentData[];
 	setListPath: Dispatch<string | null>;
-	userId: string;
-	userEmail: string;
+	userId: string | null | undefined;
+	userEmail: string | null | undefined;
 };
 
 export function Home({ data, setListPath, userId, userEmail }: Props) {
