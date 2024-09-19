@@ -10,7 +10,7 @@ import {
 } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { db } from './config';
-import { addDaysFromToday } from '../utils';
+import { addDaysFromToday, getDaysBetweenDates } from '../utils';
 
 /**
  * A custom hook that subscribes to the user's shopping lists in our Firestore
@@ -218,4 +218,22 @@ export async function deleteItem() {
 	 */
 }
 
-export function comparePurchaseUrgency() {}
+export function comparePurchaseUrgency(item1, item2) {
+	// const today = new Date();
+	// const daysPassedItem1 = getDaysBetweenDates(
+	// 	item1.dateLastPurchased?.toDate() || item1.dateCreated.toDate(),
+	// 	today,
+	// );
+	// const daysPassedItem2 = getDaysBetweenDates(
+	// 	item2.dateLastPurchased?.toDate() || item2.dateCreated.toDate(),
+	// 	today,
+	// );
+	// if (daysPassedItem1 < daysPassedItem2) {
+	// }
+	// TO DO:
+	// 1) Get status number for each item
+	// 2) Compare item numbers
+	// 3) Sorting: sort by status number and then sort by name
+	// 4) If item2.statusNum - item1.statusNum = 0, compare the names
+	// 5) If its not 0, return the item2.statusNum - item1.statusNum
+}
