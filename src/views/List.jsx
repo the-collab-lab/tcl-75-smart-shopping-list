@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useStateWithStorage } from '../utils';
 import { AddItems } from '../components/AddItems';
 import TextInputElement from '../components/TextInputElement';
+import { comparePurchaseUrgency } from '../api';
 
 export function List({ data }) {
 	const [searchItem, setSearchItem] = useState('');
@@ -12,9 +13,11 @@ export function List({ data }) {
 		setSearchItem(event.target.value);
 	};
 
-	const filteredItems = data.filter((item) =>
-		item.name.toLowerCase().includes(searchItem.toLowerCase()),
-	);
+	const filteredItems = data
+		.filter((item) =>
+			item.name.toLowerCase().includes(searchItem.toLowerCase()),
+		)
+		.sort(comparePurchaseUrgency);
 
 	const listName = listPath.slice(listPath.indexOf('/') + 1);
 
