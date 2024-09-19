@@ -10,7 +10,7 @@ import {
 } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { db } from './config';
-import { addDaysFromToday, getDaysBetweenDates } from '../utils';
+import { addDaysFromToday, getDaysFromDate } from '../utils';
 
 /**
  * A custom hook that subscribes to the user's shopping lists in our Firestore
