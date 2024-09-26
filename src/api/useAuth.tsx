@@ -2,12 +2,7 @@ import { useEffect, useState } from 'react';
 import { auth } from './config.js';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { addUserToDatabase } from './firebase.js';
-
-export type User = {
-	email: string | null | undefined;
-	displayName: string | null | undefined;
-	uid: string | null | undefined;
-};
+import { DocumentData } from 'firebase/firestore';
 
 /**
  * A button that signs the user in using Google OAuth. When clicked,
@@ -39,7 +34,7 @@ export const SignOutButton = () => (
  */
 export const useAuth = () => {
 	const initialState = null;
-	const [user, setUser] = useState<User | null>(initialState);
+	const [user, setUser] = useState<DocumentData | null>(initialState);
 
 	useEffect(() => {
 		auth.onAuthStateChanged((user) => {
