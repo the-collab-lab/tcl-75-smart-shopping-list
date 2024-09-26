@@ -21,13 +21,10 @@ export type ListPath = {
 /**
  * A custom hook that subscribes to the user's shopping lists in our Firestore
  * database and returns new data whenever the lists change.
- * @param {string | null} userId
- * @param {string | null} userEmail
- * @returns
  */
 export const useShoppingLists = (
-	userId: string | null | undefined,
-	userEmail: string | null | undefined,
+	userId?: string | null,
+	userEmail?: string | null,
 ): ListPath[] => {
 	// Start with an empty array for our data.
 	const [data, setData] = useState<ListPath[]>([]);
@@ -58,7 +55,6 @@ export const useShoppingLists = (
 /**
  * A custom hook that subscribes to a shopping list in our Firestore database
  * and returns new data whenever the list changes.
- * @param {string | null} listPath
  * @see https://firebase.google.com/docs/firestore/query-data/listen
  */
 export const useShoppingListData = (
@@ -99,7 +95,6 @@ export const useShoppingListData = (
 
 /**
  * Add a new user to the users collection in Firestore.
- * @param {Object} user The user object from Firebase Auth.
  */
 export const addUserToDatabase = async (user: DocumentData): Promise<void> => {
 	// Check if the user already exists in the database.
@@ -122,17 +117,12 @@ export const addUserToDatabase = async (user: DocumentData): Promise<void> => {
 
 /**
  * Create a new list and add it to a user's lists in Firestore.
- * @param {string} userId The id of the user who owns the list.
- * @param {string} userEmail The email of the user who owns the list.
- * @param {string} listName The name of the new list.
  */
 export const createList = async (
-	userId: string | null | undefined,
-	userEmail: string | null | undefined,
 	listName: string,
+	userId: string,
+	userEmail: string,
 ): Promise<string | void> => {
-	if (!userId || !userEmail) return;
-
 	const listDocRef = doc(db, userId, listName);
 
 	await setDoc(listDocRef, {
@@ -149,11 +139,9 @@ export const createList = async (
 
 /**
  * Shares a list with another user.
- * @param {string} listPath The path to the list to share.
- * @param {string} recipientEmail The email of the user to share the list with.
  */
 export const shareList = async (
-	listPath: string | null,
+	listPath: string,
 	currentUserId: string,
 	recipientEmail: string,
 ): Promise<string | void> => {
@@ -181,25 +169,19 @@ export const shareList = async (
 	}
 };
 
-type itemData = {
-	itemName: string;
-	daysUntilNextPurchase: string;
-};
-
 /**
  * Add a new item to the user's list in Firestore.
- * @param {string} listPath The path of the list we're adding to.
- * @param {Object} itemData Information about the new item.
- * @param {string} itemData.itemName The name of the item.
- * @param {number} itemData.daysUntilNextPurchase The number of days until the user thinks they'll need to buy the item again.
  */
 export const addItem = async (
-	listPath: string | null,
-	{ itemName, daysUntilNextPurchase }: itemData,
+	listPath: string,
+	{
+		itemName,
+		daysUntilNextPurchase,
+	}: {
+		itemName: string;
+		daysUntilNextPurchase: string;
+	},
 ): Promise<DocumentData> => {
-	if (!listPath) {
-		throw new Error('List path is undefined');
-	}
 	const listCollectionRef = collection(db, listPath, 'items');
 	return addDoc(listCollectionRef, {
 		dateCreated: new Date(),
@@ -210,32 +192,22 @@ export const addItem = async (
 	});
 };
 
-export type UpdatedData = {
-	dateLastPurchased: Date;
-	dateNextPurchased: Date;
-	totalPurchases: number;
-};
-
 /**
  * Update an item in the user's list in Firestore with new purchase information.
- * @param {string} listPath The path of the list the item belongs to.
- * @param {string} itemId The ID of the item being updated.
- * @param {Object} updatedData Object containing the updated item data.
- * @param {Date} updatedData.dateLastPurchased The date the item was last purchased.
- * @param {Date} updatedData.dateNextPurchased The estimated date for the next purchase.
- * @param {number} updatedData.totalPurchases The total number of times the item has been purchased.
- * @returns {Promise<string>} A message confirming the item was successfully updated.
- * @throws {Error} If the item update fails.
  */
 export const updateItem = async (
-	listPath: string | null,
+	listPath: string,
 	itemId: string,
-	{ dateLastPurchased, dateNextPurchased, totalPurchases }: UpdatedData,
+	{
+		dateLastPurchased,
+		dateNextPurchased,
+		totalPurchases,
+	}: {
+		dateLastPurchased: Date;
+		dateNextPurchased: Date;
+		totalPurchases: number;
+	},
 ): Promise<string | Error> => {
-	// reference the item path
-	if (!listPath) {
-		throw new Error(`Invalid list path: ${listPath}`);
-	}
 	const itemDocRef = doc(db, listPath, 'items', itemId);
 	// update the item with the purchase date and increment the total purchases made
 	try {
@@ -252,6 +224,9 @@ export const updateItem = async (
 	}
 };
 
+/**
+ * Delete an item from the user's list in Firestore.
+ */
 export async function deleteItem(listPath: string, itemId: string) {
 	// reference the item path
 	const itemDocRef = doc(db, listPath, 'items', itemId);
