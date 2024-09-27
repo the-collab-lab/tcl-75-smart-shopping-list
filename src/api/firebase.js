@@ -15,6 +15,8 @@ import {
 	addDaysFromToday,
 	getDaysBetweenDates,
 	ONE_DAY_IN_MILLISECONDS,
+	getDateLastPurchasedOrDateCreated,
+	getDaysFromDate,
 } from '../utils';
 
 /**
@@ -227,17 +229,27 @@ export async function deleteItem(listPath, itemId) {
 }
 
 export function comparePurchaseUrgency(item1, item2) {
-	// const today = new Date();
-	// const daysPassedItem1 = getDaysBetweenDates(
-	// 	item1.dateLastPurchased?.toDate() || item1.dateCreated.toDate(),
-	// 	today,
-	// );
-	// const daysPassedItem2 = getDaysBetweenDates(
-	// 	item2.dateLastPurchased?.toDate() || item2.dateCreated.toDate(),
-	// 	today,
-	// );
-	// if (daysPassedItem1 < daysPassedItem2) {
-	// }
+	const item1Date = getDateLastPurchasedOrDateCreated(
+		item1.dateLastPurchased,
+		item1.dateCreated,
+	);
+	const item1DaysFromDate = getDaysFromDate(item1Date);
+	console.log(item1DaysFromDate);
+
+	const item2Date = getDateLastPurchasedOrDateCreated(
+		item2.dateLastPurchased,
+		item2.dateCreated,
+	);
+	const item2DaysFromDate = getDaysFromDate(item2Date);
+	console.log(item2DaysFromDate);
+
+	if (item1DaysFromDate < item2DaysFromDate) {
+		return item1DaysFromDate - item2DaysFromDate;
+	} else if (item1DaysFromDate - item2DaysFromDate === 0) {
+		return item1.name.localeCompare(item2.name);
+	} else {
+		return item2DaysFromDate - item1DaysFromDate;
+	}
 	// TO DO:
 	// 1) Get status number for each item
 	// 2) Compare item numbers
