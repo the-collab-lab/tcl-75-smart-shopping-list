@@ -1,11 +1,27 @@
 import { ListItem } from '../components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AddItems } from '../components/AddItems';
 import TextInputElement from '../components/TextInputElement';
-import { comparePurchaseUrgency } from '../api';
+import { comparePurchaseUrgency, urgencyObject } from '../api';
 
 export function List({ data, listPath }) {
 	const [searchItem, setSearchItem] = useState('');
+	const [urgency, setUrgency] = useState(urgencyObject);
+	const listName = listPath.slice(listPath.indexOf('/') + 1);
+
+	useEffect(() => {
+		setUrgency(urgencyObject);
+	}, [urgencyObject]);
+
+	const getClassName = (name) => {
+		const statusArray = Object.entries(urgency).find(([_, items]) => {
+			return Array.from(items).some((item) => item.name === name);
+		});
+		if (!statusArray) {
+			throw new Error(`Failed to get class name of ${name}`);
+		}
+		return statusArray[0];
+	};
 
 	const handleTextChange = (event) => {
 		setSearchItem(event.target.value);
@@ -17,9 +33,11 @@ export function List({ data, listPath }) {
 			item.name.toLowerCase().includes(searchItem.toLowerCase()),
 		)
 		.sort(comparePurchaseUrgency);
+
 	console.log(`filter: ${filteredItems.map((d) => d.name)}`);
 	console.log('----');
-	const listName = listPath.slice(listPath.indexOf('/') + 1);
+	console.log(`Urgency state object:`);
+	console.log(urgency);
 
 	return (
 		<>
@@ -46,10 +64,18 @@ export function List({ data, listPath }) {
 					</form>
 					<ul>
 						{filteredItems.map((item) => {
+							const itemClassName = getClassName(item.name);
 							console.log(
-								`${item.name} ${item.dateLastPurchased ? 'purchased' : 'created'} [${item.dateLastPurchased?.toDate().toLocaleString() ?? item.dateCreated.toDate().toLocaleString()}]`,
+								`${item.name}: class [${itemClassName}], ${item.dateLastPurchased ? 'purchased' : 'created'} [${item.dateLastPurchased?.toDate().toLocaleString() ?? item.dateCreated.toDate().toLocaleString()}]`,
 							);
-							return <ListItem key={item.id} item={item} listPath={listPath} />;
+							return (
+								<ListItem
+									key={item.id}
+									item={item}
+									listPath={listPath}
+									className={itemClassName}
+								/>
+							);
 						})}
 					</ul>
 				</>

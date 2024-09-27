@@ -226,6 +226,36 @@ export async function deleteItem(listPath, itemId) {
 	}
 }
 
+export let urgencyObject = {
+	soon: new Set(),
+	kindOfSoon: new Set(),
+	notSoon: new Set(),
+	inactive: new Set(),
+};
+
+/**
+ * Sorts an item into one of four urgency categories based on the provided urgency status.
+ *
+ * Items are categorized into 'soon', 'kindOfSoon', 'notSoon', or 'inactive' based on the urgency.
+ *
+ * @param {Object} item - The item to be categorized. Should include at least a `name` property.
+ * @param {number} urgencyStatus - The urgency status of the item, used to determine its category.
+ * @throws Will throw an error if the item cannot be placed in a category.
+ */
+const sortByUrgency = (item, urgencyStatus) => {
+	if (urgencyStatus < 7) {
+		urgencyObject.soon.add(item);
+	} else if (urgencyStatus >= 7 && urgencyStatus < 14) {
+		urgencyObject.kindOfSoon.add(item);
+	} else if (urgencyStatus >= 14 && urgencyStatus < 30) {
+		urgencyObject.notSoon.add(item);
+	} else if (urgencyStatus >= 30) {
+		urgencyObject.inactive.add(item);
+	} else {
+		throw new Error(`Failed to place [${item.name}]`);
+	}
+};
+
 /**
  * Calculates the urgency of an item based on the number of days
  * since it was last purchased or created.
@@ -240,8 +270,10 @@ const getItemUrgency = (item) => {
 		item.dateLastPurchased,
 		item.dateCreated,
 	);
+	const daysFromDate = getDaysFromDate(itemDate);
+	sortByUrgency(item, daysFromDate);
 
-	return getDaysFromDate(itemDate);
+	return daysFromDate;
 };
 
 /**
@@ -258,9 +290,9 @@ export function comparePurchaseUrgency(item1, item2) {
 	const item2UrgencyStatus = getItemUrgency(item2);
 
 	// compare by name if items were bought on the same day
-	if (item2UrgencyStatus - item1UrgencyStatus === 0) {
+	if (item1UrgencyStatus - item2UrgencyStatus === 0) {
 		return item1.name.localeCompare(item2.name);
 	}
 	// otherwise sort in descending order
-	return item2UrgencyStatus - item1UrgencyStatus;
+	return item1UrgencyStatus - item2UrgencyStatus;
 }
