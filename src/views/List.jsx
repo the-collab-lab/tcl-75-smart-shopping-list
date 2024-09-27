@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { AddItems } from '../components/AddItems';
 import TextInputElement from '../components/TextInputElement';
 import { comparePurchaseUrgency } from '../api';
-import { ONE_DAY_IN_MILLISECONDS } from '../utils';
 
 export function List({ data, listPath }) {
 	const [searchItem, setSearchItem] = useState('');
@@ -18,6 +17,7 @@ export function List({ data, listPath }) {
 			item.name.toLowerCase().includes(searchItem.toLowerCase()),
 		)
 		.sort(comparePurchaseUrgency);
+	console.log(filteredItems);
 	console.log(`filter: ${filteredItems.map((d) => d.name)}`);
 	console.log('----');
 	const listName = listPath.slice(listPath.indexOf('/') + 1);
@@ -37,7 +37,7 @@ export function List({ data, listPath }) {
 			kindOfSoon.push(item);
 		} else if (item.daysUntilNextPurchase >= 30) {
 			notSoon.push(item);
-		} else if (item.dateLastPurchased / ONE_DAY_IN_MILLISECONDS >= 60) {
+		} else if (item.daysSinceLastPurchase >= 60) {
 			inactive.push(item);
 		}
 	});
