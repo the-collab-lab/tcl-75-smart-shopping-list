@@ -40,6 +40,7 @@ export const useShoppingLists = (
 		onSnapshot(userDocRef, (docSnap) => {
 			if (docSnap.exists()) {
 				const listRefs: ListPath[] = docSnap.data().sharedLists;
+
 				const newData = listRefs.map((listRef) => {
 					// We keep the list's id and path so we can use them later.
 					return { name: listRef.id, path: listRef.path };
@@ -57,9 +58,7 @@ export const useShoppingLists = (
  * and returns new data whenever the list changes.
  * @see https://firebase.google.com/docs/firestore/query-data/listen
  */
-export const useShoppingListData = (
-	listPath: string | null,
-): DocumentData[] => {
+export const useShoppingListData = (listPath: string): DocumentData[] => {
 	// Start with an empty array for our data.
 	/** @type {import('firebase/firestore').DocumentData[]} */
 	const initialState: DocumentData[] = [];
@@ -119,10 +118,10 @@ export const addUserToDatabase = async (user: DocumentData): Promise<void> => {
  * Create a new list and add it to a user's lists in Firestore.
  */
 export const createList = async (
-	listName: string,
 	userId: string,
 	userEmail: string,
-): Promise<string | void> => {
+	listName: string,
+): Promise<string> => {
 	const listDocRef = doc(db, userId, listName);
 
 	await setDoc(listDocRef, {
@@ -144,17 +143,19 @@ export const shareList = async (
 	listPath: string,
 	currentUserId: string,
 	recipientEmail: string,
-): Promise<string | void> => {
+): Promise<boolean> => {
 	// Check if current user is owner.
 	if (!listPath?.includes(currentUserId)) {
-		return '!owner';
+		throw new Error('You cannot share the list you do not own.');
 	}
 	// Get the document for the recipient user.
 	const usersCollectionRef = collection(db, 'users');
 	const recipientDoc = await getDoc(doc(usersCollectionRef, recipientEmail));
 	// If the recipient user doesn't exist, we can't share the list.
 	if (!recipientDoc.exists()) {
-		return;
+		throw new Error(
+			"The list was not shared because the recipient's email address does not exist in the system.",
+		);
 	}
 	// Add the list to the recipient user's sharedLists array.
 	const listDocumentRef = doc(db, listPath);
@@ -163,9 +164,11 @@ export const shareList = async (
 		updateDoc(userDocumentRef, {
 			sharedLists: arrayUnion(listDocumentRef),
 		});
-		return 'shared';
-	} catch {
-		return;
+		return true;
+	} catch (error) {
+		throw new Error(
+			`List was not shared: ${error instanceof Error ? error.message : error}`,
+		);
 	}
 };
 
