@@ -1,26 +1,27 @@
 import { shareList, useAuth } from '../api';
 import { useStateWithStorage } from '../utils';
-import TextInputElement from './TextInputElement';
+import { TextInputElement } from '../components';
 
 export function ShareList() {
-	const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
+	const [listPath] = useStateWithStorage('tcl-shopping-list-path', '/');
 
 	const { user } = useAuth();
 	const userId = user?.uid;
 	const userEmail = user?.email;
 
 	const shareCurrentList = async (emailData: string) => {
-		if (!userId) return;
+		if (!userId || !listPath) return;
+		try {
+			const listShared = await shareList(listPath, userId, emailData);
 
-		const listShared = await shareList(listPath, userId, emailData);
-
-		if (listShared === '!owner') {
-			alert('You cannot share the list you do not own.');
-		} else if (listShared === 'shared') {
-			alert('List was shared with recipient.');
-		} else {
+			if (listShared) {
+				alert('List was shared with recipient.');
+			}
+		} catch (error) {
 			alert(
-				"The list was not shared because the recipient's email address does not exist in the system.",
+				error instanceof Error
+					? error.message
+					: 'An error occurred while sharing the list.',
 			);
 		}
 	};
