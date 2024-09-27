@@ -17,7 +17,6 @@ export function List({ data, listPath }) {
 			item.name.toLowerCase().includes(searchItem.toLowerCase()),
 		)
 		.sort(comparePurchaseUrgency);
-	console.log(filteredItems);
 	console.log(`filter: ${filteredItems.map((d) => d.name)}`);
 	console.log('----');
 	const listName = listPath.slice(listPath.indexOf('/') + 1);
