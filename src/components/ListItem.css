@@ -12,3 +12,18 @@
 .ListItem-label {
 	margin-left: 0.2em;
 }
+
+.soon {
+	border: 1px solid green;
+}
+.kindOfSoon {
+	border: 1px solid pink;
+}
+
+.notSoon {
+	border: 1px solid blue;
+}
+
+.inactive {
+	border: 1px solid red;
+}

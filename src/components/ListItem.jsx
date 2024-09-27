@@ -17,7 +17,7 @@ const calculateIsPurchased = (dateLastPurchased) => {
 	return currentDate < oneDayLater;
 };
 
-export function ListItem({ item, listPath }) {
+export function ListItem({ item, listPath, className }) {
 	const [isPurchased, setIsPurchased] = useState(() =>
 		calculateIsPurchased(item.dateLastPurchased),
 	);
@@ -56,7 +56,7 @@ export function ListItem({ item, listPath }) {
 	};
 
 	return (
-		<li className="ListItem">
+		<li className={`ListItem ${className}`}>
 			<input
 				type="checkbox"
 				id={`checkbox-${id}`}
