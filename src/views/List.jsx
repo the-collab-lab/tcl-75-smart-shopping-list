@@ -10,13 +10,15 @@ export function List({ data, listPath }) {
 	const handleTextChange = (event) => {
 		setSearchItem(event.target.value);
 	};
-
+	console.log('----');
+	console.log(`before filter: ${data.map((d) => d.name)}`);
 	const filteredItems = data
 		.filter((item) =>
 			item.name.toLowerCase().includes(searchItem.toLowerCase()),
 		)
 		.sort(comparePurchaseUrgency);
-
+	console.log(`filter: ${filteredItems.map((d) => d.name)}`);
+	console.log('----');
 	const listName = listPath.slice(listPath.indexOf('/') + 1);
 
 	return (
@@ -44,6 +46,9 @@ export function List({ data, listPath }) {
 					</form>
 					<ul>
 						{filteredItems.map((item) => {
+							console.log(
+								`${item.name} ${item.dateLastPurchased ? 'purchased' : 'created'} [${item.dateLastPurchased?.toDate().toLocaleString() ?? item.dateCreated.toDate().toLocaleString()}]`,
+							);
 							return <ListItem key={item.id} item={item} listPath={listPath} />;
 						})}
 					</ul>
