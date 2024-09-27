@@ -19,7 +19,7 @@ export function App() {
 	 */
 	const [listPath, setListPath] = useStateWithStorage(
 		'tcl-shopping-list-path',
-		null,
+		'/',
 	);
 
 	/**
