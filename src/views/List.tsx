@@ -1,17 +1,23 @@
 import React, { useState } from 'react';
-
-import { ListItem } from '../components';
-import { AddItems } from '../components/AddItems';
-import TextInputElement from '../components/TextInputElement';
 import { DocumentData } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
+import { ListItem, AddItems, TextInputElement } from '../components';
 
-type ListProps = {
+export function List({
+	items,
+	listPath,
+}: {
 	items: DocumentData[];
-	listPath: string | null;
-};
-
-export function List({ items, listPath }: ListProps) {
+	listPath: string;
+}) {
 	const [searchItem, setSearchItem] = useState('');
+	const navigate = useNavigate();
+
+	const navigateHome = () => {
+		alert('List path is not found');
+		navigate('/home');
+		return;
+	};
 
 	const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setSearchItem(event.target.value);
@@ -20,7 +26,6 @@ export function List({ items, listPath }: ListProps) {
 	const filteredItems = items.filter((item) =>
 		item.name.toLowerCase().includes(searchItem.toLowerCase()),
 	);
-	console.log(`Current list path: ${listPath}`);
 	const listName = listPath?.slice(listPath.indexOf('/') + 1);
 
 	return (
@@ -46,11 +51,15 @@ export function List({ items, listPath }: ListProps) {
 							label="Search Item:"
 						/>
 					</form>
-					<ul>
-						{filteredItems.map((item) => {
-							return <ListItem key={item.id} item={item} listPath={listPath} />;
-						})}
-					</ul>
+					{!listPath ? (
+						navigateHome()
+					) : (
+						<ul>
+							{filteredItems.map((item) => (
+								<ListItem key={item.id} item={item} listPath={listPath} />
+							))}
+						</ul>
+					)}
 				</>
 			)}
 		</>
