@@ -226,32 +226,41 @@ export async function deleteItem(listPath, itemId) {
 	}
 }
 
+/**
+ * Calculates the urgency of an item based on the number of days
+ * since it was last purchased or created.
+ *
+ * @param {Object} item - The item object containing relevant date information.
+ * @param {string | null} item.dateLastPurchased - The date when the item was last purchased, or `null` if never purchased.
+ * @param {string} item.dateCreated - The date when the item was created.
+ * @returns {number} - The number of days since the item was last purchased or, if never purchased, since it was created.
+ */
+const getItemUrgency = (item) => {
+	const itemDate = getDateLastPurchasedOrDateCreated(
+		item.dateLastPurchased,
+		item.dateCreated,
+	);
+
+	return getDaysFromDate(itemDate);
+};
+
+/**
+ * Compares the urgency of purchasing two items based on their last purchase or creation date.
+ *
+ * @param {Object} item1 The first item to compare, containing purchase or creation data.
+ * @param {Object} item2 The second item to compare, containing purchase or creation data.
+ * @returns {number} A negative number if item1 is more urgent,
+ *                   a positive number if item2 is more urgent,
+ *                   or 0 if they have equal urgency, which leads to sorting by name.
+ */
 export function comparePurchaseUrgency(item1, item2) {
-	const item1Date = getDateLastPurchasedOrDateCreated(
-		item1.dateLastPurchased,
-		item1.dateCreated,
-	);
-	const item1DaysFromDate = getDaysFromDate(item1Date);
-	console.log(item1DaysFromDate);
+	const item1UrgencyStatus = getItemUrgency(item1);
+	const item2UrgencyStatus = getItemUrgency(item2);
 
-	const item2Date = getDateLastPurchasedOrDateCreated(
-		item2.dateLastPurchased,
-		item2.dateCreated,
-	);
-	const item2DaysFromDate = getDaysFromDate(item2Date);
-	console.log(item2DaysFromDate);
-
-	if (item1DaysFromDate < item2DaysFromDate) {
-		return item1DaysFromDate - item2DaysFromDate;
-	} else if (item1DaysFromDate - item2DaysFromDate === 0) {
+	// compare by name if items were bought on the same day
+	if (item2UrgencyStatus - item1UrgencyStatus === 0) {
 		return item1.name.localeCompare(item2.name);
-	} else {
-		return item2DaysFromDate - item1DaysFromDate;
 	}
-	// TO DO:
-	// 1) Get status number for each item
-	// 2) Compare item numbers
-	// 3) Sorting: sort by status number and then sort by name
-	// 4) If item2.statusNum - item1.statusNum = 0, compare the names
-	// 5) If its not 0, return the item2.statusNum - item1.statusNum
+	// otherwise sort in descending order
+	return item2UrgencyStatus - item1UrgencyStatus;
 }
