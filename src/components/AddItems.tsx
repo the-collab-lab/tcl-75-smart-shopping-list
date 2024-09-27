@@ -1,14 +1,8 @@
 import { useCallback } from 'react';
-
-import { useStateWithStorage, normalizeItemName } from '../utils';
+import { useStateWithStorage, normalizeAndVerifyItem } from '../utils';
 import { addItem } from '../api';
-import TextInputElement from './TextInputElement';
-import RadioInputElement from './RadioInputElement';
+import { RadioInputElement, TextInputElement } from '../components';
 import { DocumentData } from 'firebase/firestore';
-
-type Props = {
-	items: DocumentData[];
-};
 
 const daysUntilPurchaseOptions = {
 	Soon: 7,
@@ -16,11 +10,34 @@ const daysUntilPurchaseOptions = {
 	'Not soon': 30,
 };
 
-export function AddItems({ items }: Props) {
-	const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
+const addNormalizedItem = async (
+	itemName: string,
+	daysUntilNextPurchase: string,
+	listPath: string,
+) => {
+	try {
+		const isItemAdded = await addItem(listPath, {
+			itemName,
+			daysUntilNextPurchase,
+		});
+
+		if (isItemAdded) {
+			alert(
+				`${itemName} was added to the list! The next purchase date is set to ${daysUntilNextPurchase} days from now.`,
+			);
+		}
+	} catch (error) {
+		alert(
+			`Item was not added to the database, Error: ${error instanceof Error ? error.message : error}`,
+		);
+	}
+};
+
+export function AddItems({ items }: { items: DocumentData[] }) {
+	const [listPath] = useStateWithStorage('tcl-shopping-list-path', '/');
 
 	const handleSubmit = useCallback(
-		async (event: React.FormEvent<HTMLFormElement>) => {
+		(event: React.FormEvent<HTMLFormElement>) => {
 			event.preventDefault();
 
 			const form = event.target as HTMLFormElement;
@@ -32,40 +49,15 @@ export function AddItems({ items }: Props) {
 			).value;
 
 			try {
-				if (itemName.trim() === '') {
-					alert('Please add an item name.');
-					return;
-				}
-				// normalize the name by removing all punctuation and spaces to check if the normalized item is already in the list
-				const normalizedItemName = normalizeItemName(itemName);
-				console.log('Normalized new item:', normalizedItemName);
-				if (items) {
-					// normalize the existing list items to compare them to the new input
-					const currentItems = items.map((item) =>
-						normalizeItemName(item.name),
-					);
-					console.log('Normalized current items:', currentItems);
-					if (currentItems.includes(normalizedItemName)) {
-						alert('This item already exists in the list');
-						return;
-					}
-				}
-				await addItem(listPath, {
-					itemName,
-					daysUntilNextPurchase,
-				});
-				alert(
-					`${itemName} was added to the list! The next purchase date is set to ${daysUntilNextPurchase} days from now.`,
-				);
+				const normalizedItemName = normalizeAndVerifyItem(items, itemName);
+				addNormalizedItem(normalizedItemName, daysUntilNextPurchase, listPath);
 			} catch (error) {
-				alert(
-					`Item was not added to the database, Error: ${error instanceof Error ? error.message : error}`,
-				);
+				alert(error);
 			} finally {
 				form.reset();
 			}
 		},
-		[listPath],
+		[listPath, items],
 	);
 
 	return (
