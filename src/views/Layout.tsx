@@ -1,18 +1,19 @@
-import React from 'react';
-
+import './Layout.css';
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { Outlet, NavLink } from 'react-router-dom';
 import { useAuth, SignInButton, SignOutButton } from '../api/useAuth';
 
-import './Layout.css';
+const navLinkOptions: { [key: string]: string } = {
+	'/': 'Home',
+	'/list': 'List',
+	'/manage-list': 'Manage List',
+};
 
-/**
- * TODO: The links defined in this file don't work!
- *
- * Instead of anchor element, they should use a component
- * from `react-router-dom` to navigate to the routes
- * defined in `App.jsx`.
- */
+const navLinks = Object.entries(navLinkOptions).map(([path, linkText]) => (
+	<NavLink key={linkText} to={path} end className="Nav-link">
+		{linkText}
+	</NavLink>
+));
 
 export function Layout() {
 	const { user } = useAuth();
@@ -28,17 +29,7 @@ export function Layout() {
 					<Outlet />
 				</main>
 				<nav className="Nav">
-					<div className="Nav-container">
-						<NavLink to="/" end className="Nav-link">
-							Home
-						</NavLink>
-						<NavLink to="/list" className="Nav-link">
-							List
-						</NavLink>
-						<NavLink to="/manage-list" className="Nav-link">
-							Manage List
-						</NavLink>
-					</div>
+					<div className="Nav-container">{navLinks}</div>
 				</nav>
 			</div>
 		</>
