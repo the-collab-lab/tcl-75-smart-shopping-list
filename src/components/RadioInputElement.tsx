@@ -1,11 +1,14 @@
-type Props = {
+export const RadioInputElement = ({
+	label,
+	id,
+	value,
+	required,
+}: {
 	label: string;
 	id: string;
 	value: number;
 	required: boolean;
-};
-
-const RadioInputElement = ({ label, id, value, required }: Props) => {
+}) => {
 	return (
 		<>
 			<input
@@ -20,5 +23,3 @@ const RadioInputElement = ({ label, id, value, required }: Props) => {
 		</>
 	);
 };
-
-export default RadioInputElement;

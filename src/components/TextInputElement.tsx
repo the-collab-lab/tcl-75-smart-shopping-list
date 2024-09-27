@@ -1,22 +1,20 @@
-import React, { ChangeEventHandler } from 'react';
+import { ChangeEventHandler } from 'react';
 
-type Props = {
-	label: string;
-	type: string;
-	id: string;
-	placeholder: string;
-	onChange?: ChangeEventHandler<HTMLInputElement>;
-	required: boolean;
-};
-
-const TextInputElement = ({
+export const TextInputElement = ({
 	label,
 	type,
 	id,
 	placeholder,
 	onChange,
 	required,
-}: Props) => {
+}: {
+	label: string;
+	type: string;
+	id: string;
+	placeholder: string;
+	onChange?: ChangeEventHandler<HTMLInputElement>;
+	required: boolean;
+}) => {
 	return (
 		<>
 			<label htmlFor={id}>{label}</label>
@@ -33,5 +31,3 @@ const TextInputElement = ({
 		</>
 	);
 };
-
-export default TextInputElement;
