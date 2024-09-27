@@ -3,21 +3,26 @@ import { Dispatch } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DocumentData } from 'firebase/firestore';
 import { createList } from '../api';
-import { SingleList } from '../components';
-import TextInputElement from '../components/TextInputElement';
+import { SingleList, TextInputElement } from '../components';
 
-type Props = {
+export function Home({
+	data,
+	setListPath,
+	userId,
+	userEmail,
+}: {
 	data: DocumentData[];
-	setListPath: Dispatch<string | null>;
-	userId: string | null | undefined;
-	userEmail: string | null | undefined;
-};
-
-export function Home({ data, setListPath, userId, userEmail }: Props) {
+	setListPath: Dispatch<string>;
+	userId?: string | null;
+	userEmail?: string | null;
+}) {
 	const navigate = useNavigate();
 
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
+
+		if (!userId || !userEmail) return;
+
 		const form = event.target as HTMLFormElement;
 		const listName = (form.elements.namedItem('list-name') as HTMLInputElement)
 			.value;
@@ -30,18 +35,14 @@ export function Home({ data, setListPath, userId, userEmail }: Props) {
 				alert('The list already exists. Please enter a different name.');
 				return;
 			}
-
 			const listPath = await createList(userId, userEmail, listName);
-			setListPath(listPath ?? null);
-			console.log(`Setting list path with: ${listPath}`);
-			console.log(
-				`LocalStorage listPath after state update: ${localStorage.getItem('tcl-shopping-list-path')}`,
-			);
+
+			setListPath(listPath);
 			alert('List added');
 			navigate('/list');
 		} catch (err) {
-			console.error(err);
 			alert('List not created');
+			throw new Error(`${err instanceof Error ? err.message : err}`);
 		} finally {
 			form.reset();
 		}
