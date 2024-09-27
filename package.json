@@ -28,6 +28,7 @@
 		"jsdom": "^24.1.1",
 		"lint-staged": "^15.2.8",
 		"prettier": "^3.3.3",
+		"typescript": "^5.6.2",
 		"vite": "^5.3.5",
 		"vite-plugin-pwa": "^0.20.1",
 		"vite-plugin-svgr": "^4.2.0",
@@ -38,7 +39,8 @@
 		"build": "vite build",
 		"test": "vitest",
 		"preview": "vite preview",
-		"prepare": "husky"
+		"prepare": "husky",
+		"typecheck": "tsc -p tsconfig.json --noEmit"
 	},
 	"lint-staged": {
 		"*.{js,jsx,ts,tsx}": [

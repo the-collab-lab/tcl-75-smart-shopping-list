@@ -1,13 +1,11 @@
 import { ListItem } from '../components';
 import { useState } from 'react';
-import { useStateWithStorage } from '../utils';
 import { AddItems } from '../components/AddItems';
 import TextInputElement from '../components/TextInputElement';
 import { comparePurchaseUrgency } from '../api';
 
-export function List({ data }) {
+export function List({ data, listPath }) {
 	const [searchItem, setSearchItem] = useState('');
-	const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
 
 	const handleTextChange = (event) => {
 		setSearchItem(event.target.value);
@@ -23,12 +21,12 @@ export function List({ data }) {
 
 	return (
 		<>
-			{!data.length ? (
+			{!data?.length ? (
 				<>
 					<p>Welcome to {listName}!</p>
 					<p>Ready to add your first item? Start adding below!</p>
 
-					<AddItems />
+					<AddItems items={data} />
 				</>
 			) : (
 				<>

@@ -7,6 +7,7 @@ import {
 	doc,
 	onSnapshot,
 	updateDoc,
+	deleteDoc,
 } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { db } from './config';
@@ -214,12 +215,15 @@ export async function updateItem(
 	}
 }
 
-export async function deleteItem() {
-	/**
-	 * TODO: Fill this out so that it uses the correct Firestore function
-	 * to delete an existing item. You'll need to figure out what arguments
-	 * this function must accept!
-	 */
+export async function deleteItem(listPath, itemId) {
+	// reference the item path
+	const itemDocRef = doc(db, listPath, 'items', itemId);
+	try {
+		// delete the item from the database
+		await deleteDoc(itemDocRef);
+	} catch (error) {
+		throw new Error(`Failed updating item: ${error.message}`);
+	}
 }
 
 export function comparePurchaseUrgency(item1, item2) {
