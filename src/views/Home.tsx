@@ -1,15 +1,31 @@
 import './Home.css';
-import { SingleList } from '../components';
+import { Dispatch } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { DocumentData } from 'firebase/firestore';
 import { createList } from '../api';
-import TextInputElement from '../components/TextInputElement';
+import { SingleList, TextInputElement } from '../components';
 
-export function Home({ data, setListPath, userId, userEmail }) {
+export function Home({
+	data,
+	setListPath,
+	userId,
+	userEmail,
+}: {
+	data: DocumentData[];
+	setListPath: Dispatch<string>;
+	userId?: string | null;
+	userEmail?: string | null;
+}) {
 	const navigate = useNavigate();
 
-	const handleSubmit = async (event) => {
+	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		const listName = event.target['list-name'].value;
+
+		if (!userId || !userEmail) return;
+
+		const form = event.target as HTMLFormElement;
+		const listName = (form.elements.namedItem('list-name') as HTMLInputElement)
+			.value;
 		const currentLists = data.map((list) => {
 			return list.name.toLowerCase();
 		});
@@ -19,16 +35,16 @@ export function Home({ data, setListPath, userId, userEmail }) {
 				alert('The list already exists. Please enter a different name.');
 				return;
 			}
-
 			const listPath = await createList(userId, userEmail, listName);
+
 			setListPath(listPath);
 			alert('List added');
 			navigate('/list');
 		} catch (err) {
-			console.error(err);
 			alert('List not created');
+			throw new Error(`${err instanceof Error ? err.message : err}`);
 		} finally {
-			event.target.reset();
+			form.reset();
 		}
 	};
 

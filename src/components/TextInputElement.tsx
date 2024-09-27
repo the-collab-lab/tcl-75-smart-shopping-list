@@ -1,10 +1,19 @@
-const TextInputElement = ({
+import { ChangeEventHandler } from 'react';
+
+export const TextInputElement = ({
 	label,
 	type,
 	id,
 	placeholder,
 	onChange,
 	required,
+}: {
+	label: string;
+	type: string;
+	id: string;
+	placeholder: string;
+	onChange?: ChangeEventHandler<HTMLInputElement>;
+	required: boolean;
 }) => {
 	return (
 		<>
@@ -22,5 +31,3 @@ const TextInputElement = ({
 		</>
 	);
 };
-
-export default TextInputElement;

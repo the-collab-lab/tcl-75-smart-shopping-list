@@ -1,11 +1,12 @@
-import { useState } from 'react';
 import './ListItem.css';
+import { useState } from 'react';
 import { updateItem, deleteItem } from '../api';
 import { calculateDateNextPurchased, ONE_DAY_IN_MILLISECONDS } from '../utils';
+import { DocumentData, Timestamp } from 'firebase/firestore';
 
 const currentDate = new Date();
 
-const calculateIsPurchased = (dateLastPurchased) => {
+const calculateIsPurchased = (dateLastPurchased: Timestamp) => {
 	if (!dateLastPurchased) {
 		return false;
 	}
@@ -17,7 +18,13 @@ const calculateIsPurchased = (dateLastPurchased) => {
 	return currentDate < oneDayLater;
 };
 
-export function ListItem({ item, listPath }) {
+export function ListItem({
+	item,
+	listPath,
+}: {
+	item: DocumentData;
+	listPath: string;
+}) {
 	const [isPurchased, setIsPurchased] = useState(() =>
 		calculateIsPurchased(item.dateLastPurchased),
 	);
@@ -33,13 +40,15 @@ export function ListItem({ item, listPath }) {
 
 	const handleChange = async () => {
 		setIsPurchased(!isPurchased);
+
 		if (!isPurchased) {
 			try {
 				const updatedItem = updateItemOnPurchase();
-
 				await updateItem(listPath, id, { ...updatedItem });
 			} catch (error) {
-				alert(`Item was not marked as purchased`, error.message);
+				alert(
+					`Item was not marked as purchased. Error: ${error instanceof Error ? error.message : error}`,
+				);
 			}
 		}
 	};
@@ -49,7 +58,9 @@ export function ListItem({ item, listPath }) {
 			try {
 				await deleteItem(listPath, id);
 			} catch (error) {
-				alert('Item was not deleted');
+				alert(
+					`Item was not deleted. Error: ${error instanceof Error ? error.message : error}`,
+				);
 			}
 		}
 		return;
