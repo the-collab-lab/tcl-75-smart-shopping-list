@@ -71,7 +71,6 @@ export const getDateLastPurchasedOrDateCreated = (
 	dateCreated,
 ) => {
 	const lastPurchaseDate = dateLastPurchased?.toDate();
-	// console.log(lastPurchaseDate ?? dateCreated.toDate(), 'returning this from long name func');
 	return lastPurchaseDate ?? dateCreated.toDate();
 };
 
