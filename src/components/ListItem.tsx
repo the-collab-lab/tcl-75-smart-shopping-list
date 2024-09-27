@@ -1,14 +1,8 @@
-import { useState } from 'react';
-
 import './ListItem.css';
+import { useState } from 'react';
 import { updateItem, deleteItem } from '../api';
 import { calculateDateNextPurchased, ONE_DAY_IN_MILLISECONDS } from '../utils';
 import { DocumentData, Timestamp } from 'firebase/firestore';
-
-type Props = {
-	item: DocumentData;
-	listPath: string | null;
-};
 
 const currentDate = new Date();
 
@@ -24,7 +18,13 @@ const calculateIsPurchased = (dateLastPurchased: Timestamp) => {
 	return currentDate < oneDayLater;
 };
 
-export function ListItem({ item, listPath }: Props) {
+export function ListItem({
+	item,
+	listPath,
+}: {
+	item: DocumentData;
+	listPath: string;
+}) {
 	const [isPurchased, setIsPurchased] = useState(() =>
 		calculateIsPurchased(item.dateLastPurchased),
 	);
@@ -40,10 +40,10 @@ export function ListItem({ item, listPath }: Props) {
 
 	const handleChange = async () => {
 		setIsPurchased(!isPurchased);
+
 		if (!isPurchased) {
 			try {
 				const updatedItem = updateItemOnPurchase();
-
 				await updateItem(listPath, id, { ...updatedItem });
 			} catch (error) {
 				alert(
@@ -56,7 +56,6 @@ export function ListItem({ item, listPath }: Props) {
 	const handleDeleteItem = async () => {
 		if (confirm(`Are you sure you want to delete this item?`)) {
 			try {
-				if (!listPath) return;
 				await deleteItem(listPath, id);
 			} catch (error) {
 				alert(

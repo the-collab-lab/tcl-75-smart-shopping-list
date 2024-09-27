@@ -1,12 +1,7 @@
 import { DocumentData } from 'firebase/firestore';
-import { AddItems } from '../components/AddItems';
-import { ShareList } from '../components/ShareList';
+import { AddItems, ShareList } from '../components';
 
-type ManageListProps = {
-	items: DocumentData[];
-};
-
-export function ManageList({ items }: ManageListProps) {
+export function ManageList({ items }: { items: DocumentData[] }) {
 	return (
 		<div>
 			<AddItems items={items} />
