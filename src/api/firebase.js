@@ -13,8 +13,6 @@ import { useEffect, useState } from 'react';
 import { db } from './config';
 import {
 	addDaysFromToday,
-	getDaysBetweenDates,
-	ONE_DAY_IN_MILLISECONDS,
 	getDateLastPurchasedOrDateCreated,
 	getDaysFromDate,
 } from '../utils';
