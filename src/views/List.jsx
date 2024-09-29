@@ -2,9 +2,13 @@ import { ListItem } from '../components';
 import { useState } from 'react';
 import { AddItems } from '../components/AddItems';
 import TextInputElement from '../components/TextInputElement';
+import { useEnsureListPath } from '../hooks/useEnsureListPath';
 
 export function List({ data, listPath }) {
 	const [searchItem, setSearchItem] = useState('');
+
+	// Redirect to home if no list path is null
+	if (useEnsureListPath()) return <></>;
 
 	const handleTextChange = (event) => {
 		setSearchItem(event.target.value);
