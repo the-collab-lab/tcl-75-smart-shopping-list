@@ -14,6 +14,7 @@ import { db } from './config';
 import {
 	addDaysFromToday,
 	getDateLastPurchasedOrDateCreated,
+	getDaysBetweenDates,
 	getDaysFromDate,
 } from '../utils';
 
@@ -258,22 +259,38 @@ const sortByUrgency = (item, urgencyStatus) => {
 
 /**
  * Calculates the urgency of an item based on the number of days
- * since it was last purchased or created.
+ * since it was last purchased or created, and the time until the next purchase date.
  *
  * @param {Object} item - The item object containing relevant date information.
- * @param {string | null} item.dateLastPurchased - The date when the item was last purchased, or `null` if never purchased.
+ * @param {string | null} item.dateLastPurchased - The date when the item was last purchased, or null if never purchased.
  * @param {string} item.dateCreated - The date when the item was created.
- * @returns {number} - The number of days since the item was last purchased or, if never purchased, since it was created.
+ * @returns {number} - The urgency of the item:
+ *  - `100` if more than 60 days have passed since the last purchase or creation,
+ *  - or the number of days until the next purchase if fewer than 60 days have passed.
  */
 const getItemUrgency = (item) => {
+	// get date the item was purchased or created
 	const itemDate = getDateLastPurchasedOrDateCreated(
 		item.dateLastPurchased,
 		item.dateCreated,
 	);
-	const daysFromDate = getDaysFromDate(itemDate);
-	sortByUrgency(item, daysFromDate);
+	// check how many days have passed since that date
+	const daysToToday = getDaysFromDate(itemDate);
+	// if more than 60 days have passed
+	if (daysToToday >= 60) {
+		// sort as inactive
+		sortByUrgency(item, 100);
+		return 100;
+	} else {
+		// sort by the amount of days until next purchase date
+		const daysUntilNextPurchase = getDaysBetweenDates(
+			new Date(),
+			item.dateNextPurchased.toDate(),
+		);
+		sortByUrgency(item, daysUntilNextPurchase);
 
-	return daysFromDate;
+		return daysUntilNextPurchase;
+	}
 };
 
 /**
@@ -294,5 +311,5 @@ export function comparePurchaseUrgency(item1, item2) {
 		return item1.name.localeCompare(item2.name);
 	}
 	// otherwise sort in descending order
-	return item1UrgencyStatus - item2UrgencyStatus;
+	return item2UrgencyStatus - item1UrgencyStatus;
 }
