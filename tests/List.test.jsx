@@ -1,6 +1,10 @@
 import { render, screen } from '@testing-library/react';
+import { vi } from 'vitest';
 import { List } from '../src/views/List';
-import { mockShoppingListData } from '../src/mocks/__fixtures__/shoppingListData';
+import {
+	mockShoppingListData,
+	mockUrgencyObject,
+} from '../src/mocks/__fixtures__/shoppingListData';
 import {
 	useStateWithStorage,
 	getDateLastPurchasedOrDateCreated,
@@ -16,6 +20,10 @@ vi.mock('../src/utils', () => ({
 	getDaysFromDate: vi.fn(),
 	comparePurchaseUrgency: vi.fn(),
 	getDaysBetweenDates: vi.fn(),
+	useUrgency: vi.fn().mockReturnValue({
+		getUrgency: vi.fn(),
+		urgencyObject: mockUrgencyObject,
+	}),
 }));
 
 beforeEach(() => {
