@@ -56,7 +56,8 @@ export function ListItem({ item, listPath, className }) {
 	};
 
 	return (
-		<li className={`ListItem ${className}`}>
+		<li className={`ListItem`}>
+			<div className={`urgency-status ${className}`} />
 			<input
 				type="checkbox"
 				id={`checkbox-${id}`}
