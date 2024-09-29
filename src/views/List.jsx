@@ -1,43 +1,28 @@
 import { ListItem } from '../components';
-import { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { AddItems } from '../components/AddItems';
 import TextInputElement from '../components/TextInputElement';
-import { comparePurchaseUrgency, urgencyObject } from '../api';
+import { useUrgency } from '../utils';
 
-export function List({ data, listPath }) {
+export const List = React.memo(function List({ data, listPath }) {
 	const [searchItem, setSearchItem] = useState('');
-	const [urgency, setUrgency] = useState(urgencyObject);
+	const { getUrgency, urgencyObject } = useUrgency(data);
 	const listName = listPath.slice(listPath.indexOf('/') + 1);
 
-	useEffect(() => {
-		setUrgency(urgencyObject);
-	}, [urgencyObject]);
-
-	const getClassName = (name) => {
-		const statusArray = Object.entries(urgency).find(([_, items]) => {
-			return Array.from(items).some((item) => item.name === name);
-		});
-		if (!statusArray) {
-			throw new Error(`Failed to get class name of ${name}`);
-		}
-		return statusArray[0];
-	};
+	const sortedItems = Object.values(urgencyObject).flat();
 
 	const handleTextChange = (event) => {
 		setSearchItem(event.target.value);
 	};
+	console.log(sortedItems, 'sorted items');
 	console.log('----');
 	console.log(`before filter: ${data.map((d) => d.name)}`);
-	const filteredItems = data
-		.filter((item) =>
-			item.name.toLowerCase().includes(searchItem.toLowerCase()),
-		)
-		.sort(comparePurchaseUrgency);
+	const filteredItems = sortedItems.filter((item) =>
+		item.name.toLowerCase().includes(searchItem.toLowerCase()),
+	);
 
 	console.log(`filter: ${filteredItems.map((d) => d.name)}`);
 	console.log('----');
-	console.log(`Urgency state object:`);
-	console.log(urgency);
 
 	return (
 		<>
@@ -64,7 +49,7 @@ export function List({ data, listPath }) {
 					</form>
 					<ul>
 						{filteredItems.map((item) => {
-							const itemClassName = getClassName(item.name);
+							const itemClassName = getUrgency(item.name);
 							console.log(
 								`${item.name}: class [${itemClassName}], next purchase [${item.dateNextPurchased.toDate().toLocaleString()}]`,
 							);
@@ -82,4 +67,4 @@ export function List({ data, listPath }) {
 			)}
 		</>
 	);
-}
+});

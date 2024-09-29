@@ -11,12 +11,7 @@ import {
 } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { db } from './config';
-import {
-	addDaysFromToday,
-	getDateLastPurchasedOrDateCreated,
-	getDaysBetweenDates,
-	getDaysFromDate,
-} from '../utils';
+import { addDaysFromToday } from '../utils';
 
 /**
  * A custom hook that subscribes to the user's shopping lists in our Firestore
@@ -225,108 +220,4 @@ export async function deleteItem(listPath, itemId) {
 	} catch (error) {
 		throw new Error(`Failed updating item: ${error.message}`);
 	}
-}
-
-export let urgencyObject = {
-	overdue: new Set(),
-	soon: new Set(),
-	kindOfSoon: new Set(),
-	notSoon: new Set(),
-	inactive: new Set(),
-};
-
-/**
- * Sorts an item into one of four urgency categories based on the provided urgency status.
- *
- * Items are categorized into 'soon', 'kindOfSoon', 'notSoon', or 'inactive' based on the urgency.
- *
- * @param {Object} item - The item to be categorized. Should include at least a `name` property.
- * @param {number} urgencyStatus - The urgency status of the item, used to determine its category.
- * @throws Will throw an error if the item cannot be placed in a category.
- */
-const sortByUrgency = (item, daysUntilNextPurchase) => {
-	if (item.name.includes('sun')) {
-		console.log(`${item.name} urgencyStatus ${daysUntilNextPurchase}`);
-	}
-	if (daysUntilNextPurchase < 0) {
-		urgencyObject.overdue.add(item);
-		return;
-	} else if (daysUntilNextPurchase === 1000) {
-		urgencyObject.inactive.add(item);
-		return;
-	} else if (daysUntilNextPurchase < 7) {
-		urgencyObject.soon.add(item);
-		return;
-	} else if (daysUntilNextPurchase >= 7 && daysUntilNextPurchase < 30) {
-		urgencyObject.kindOfSoon.add(item);
-		return;
-	} else if (daysUntilNextPurchase >= 30) {
-		urgencyObject.notSoon.add(item);
-		return;
-	} else {
-		throw new Error(`Failed to place [${item.name}]`);
-	}
-};
-
-/**
- * Calculates the urgency of an item based on the number of days
- * since it was last purchased or created, and the time until the next purchase date.
- *
- * @param {Object} item - The item object containing relevant date information.
- * @param {string | null} item.dateLastPurchased - The date when the item was last purchased, or null if never purchased.
- * @param {string} item.dateCreated - The date when the item was created.
- * @returns {number} - The urgency of the item:
- *  - `100` if more than 60 days have passed since the last purchase or creation,
- *  - or the number of days until the next purchase if fewer than 60 days have passed.
- */
-const getItemUrgency = (item) => {
-	// get date the item was purchased or created
-	const itemDate = getDateLastPurchasedOrDateCreated(
-		item.dateLastPurchased,
-		item.dateCreated,
-	);
-	// check how many days have passed since that date
-	const daysToToday = getDaysFromDate(itemDate);
-
-	// if more than 60 days have passed
-	if (daysToToday >= 60) {
-		// sort as inactive
-		sortByUrgency(item, 1000);
-		return 1000;
-	} else {
-		// sort by the amount of days until next purchase date
-		const daysUntilNextPurchase = getDaysBetweenDates(
-			new Date(),
-			item.dateNextPurchased.toDate(),
-		);
-		if (item.name.includes('sun')) {
-			console.log(
-				`${item.name} days until next purchase is ${daysUntilNextPurchase}`,
-			);
-		}
-		sortByUrgency(item, daysUntilNextPurchase);
-
-		return daysUntilNextPurchase;
-	}
-};
-
-/**
- * Compares the urgency of purchasing two items based on their last purchase or creation date.
- *
- * @param {Object} item1 The first item to compare, containing purchase or creation data.
- * @param {Object} item2 The second item to compare, containing purchase or creation data.
- * @returns {number} A negative number if item1 is more urgent,
- *                   a positive number if item2 is more urgent,
- *                   or 0 if they have equal urgency, which leads to sorting by name.
- */
-export function comparePurchaseUrgency(item1, item2) {
-	const item1UrgencyStatus = getItemUrgency(item1);
-	const item2UrgencyStatus = getItemUrgency(item2);
-
-	if (item1UrgencyStatus === item2UrgencyStatus) {
-		console.log(`Sorting alphabetically: ${item1.name} vs ${item2.name}`);
-		return item1.name.localeCompare(item2.name);
-	}
-	// otherwise sort in descending order
-	return item1UrgencyStatus - item2UrgencyStatus;
 }
