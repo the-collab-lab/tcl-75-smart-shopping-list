@@ -1,17 +1,29 @@
 import { render, screen } from '@testing-library/react';
 import { List } from '../src/views/List';
 import { mockShoppingListData } from '../src/mocks/__fixtures__/shoppingListData';
-import { useStateWithStorage } from '../src/utils';
+import {
+	useStateWithStorage,
+	getDateLastPurchasedOrDateCreated,
+	getDaysBetweenDates,
+	getDaysFromDate,
+	comparePurchaseUrgency,
+} from '../src/utils';
 
 vi.mock('../src/utils', () => ({
 	useStateWithStorage: vi.fn(),
 	ONE_DAY_IN_MILLISECONDS: 86400000,
 	getDateLastPurchasedOrDateCreated: vi.fn(),
 	getDaysFromDate: vi.fn(),
+	comparePurchaseUrgency: vi.fn(),
+	getDaysBetweenDates: vi.fn(),
 }));
 
 beforeEach(() => {
 	useStateWithStorage.mockReturnValue(['/groceries']);
+	getDateLastPurchasedOrDateCreated.mockReturnValue(new Date());
+	getDaysFromDate.mockReturnValue(10);
+	comparePurchaseUrgency.mockReturnValue(1);
+	getDaysBetweenDates.mockReturnValue(5);
 });
 
 describe('List Component', () => {
