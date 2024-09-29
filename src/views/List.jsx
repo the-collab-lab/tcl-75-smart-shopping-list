@@ -66,7 +66,7 @@ export function List({ data, listPath }) {
 						{filteredItems.map((item) => {
 							const itemClassName = getClassName(item.name);
 							console.log(
-								`${item.name}: class [${itemClassName}], ${item.dateLastPurchased ? 'purchased' : 'created'} [${item.dateLastPurchased?.toDate().toLocaleString() ?? item.dateCreated.toDate().toLocaleString()}]`,
+								`${item.name}: class [${itemClassName}], next purchase [${item.dateNextPurchased.toDate().toLocaleString()}]`,
 							);
 							return (
 								<ListItem
