@@ -228,6 +228,7 @@ export async function deleteItem(listPath, itemId) {
 }
 
 export let urgencyObject = {
+	overdue: new Set(),
 	soon: new Set(),
 	kindOfSoon: new Set(),
 	notSoon: new Set(),
@@ -243,15 +244,25 @@ export let urgencyObject = {
  * @param {number} urgencyStatus - The urgency status of the item, used to determine its category.
  * @throws Will throw an error if the item cannot be placed in a category.
  */
-const sortByUrgency = (item, urgencyStatus) => {
-	if (urgencyStatus < 7) {
-		urgencyObject.soon.add(item);
-	} else if (urgencyStatus >= 7 && urgencyStatus < 14) {
-		urgencyObject.kindOfSoon.add(item);
-	} else if (urgencyStatus >= 14 && urgencyStatus < 30) {
-		urgencyObject.notSoon.add(item);
-	} else if (urgencyStatus >= 30) {
+const sortByUrgency = (item, daysUntilNextPurchase) => {
+	if (item.name.includes('sun')) {
+		console.log(`${item.name} urgencyStatus ${daysUntilNextPurchase}`);
+	}
+	if (daysUntilNextPurchase < 0) {
+		urgencyObject.overdue.add(item);
+		return;
+	} else if (daysUntilNextPurchase === 1000) {
 		urgencyObject.inactive.add(item);
+		return;
+	} else if (daysUntilNextPurchase < 7) {
+		urgencyObject.soon.add(item);
+		return;
+	} else if (daysUntilNextPurchase >= 7 && daysUntilNextPurchase < 30) {
+		urgencyObject.kindOfSoon.add(item);
+		return;
+	} else if (daysUntilNextPurchase >= 30) {
+		urgencyObject.notSoon.add(item);
+		return;
 	} else {
 		throw new Error(`Failed to place [${item.name}]`);
 	}
@@ -276,17 +287,23 @@ const getItemUrgency = (item) => {
 	);
 	// check how many days have passed since that date
 	const daysToToday = getDaysFromDate(itemDate);
+
 	// if more than 60 days have passed
 	if (daysToToday >= 60) {
 		// sort as inactive
-		sortByUrgency(item, 100);
-		return 100;
+		sortByUrgency(item, 1000);
+		return 1000;
 	} else {
 		// sort by the amount of days until next purchase date
 		const daysUntilNextPurchase = getDaysBetweenDates(
 			new Date(),
 			item.dateNextPurchased.toDate(),
 		);
+		if (item.name.includes('sun')) {
+			console.log(
+				`${item.name} days until next purchase is ${daysUntilNextPurchase}`,
+			);
+		}
 		sortByUrgency(item, daysUntilNextPurchase);
 
 		return daysUntilNextPurchase;
@@ -306,10 +323,10 @@ export function comparePurchaseUrgency(item1, item2) {
 	const item1UrgencyStatus = getItemUrgency(item1);
 	const item2UrgencyStatus = getItemUrgency(item2);
 
-	// compare by name if items were bought on the same day
-	if (item1UrgencyStatus - item2UrgencyStatus === 0) {
+	if (item1UrgencyStatus === item2UrgencyStatus) {
+		console.log(`Sorting alphabetically: ${item1.name} vs ${item2.name}`);
 		return item1.name.localeCompare(item2.name);
 	}
 	// otherwise sort in descending order
-	return item2UrgencyStatus - item1UrgencyStatus;
+	return item1UrgencyStatus - item2UrgencyStatus;
 }
