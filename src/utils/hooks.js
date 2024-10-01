@@ -35,8 +35,8 @@ export function useImportance(lists) {
 	);
 
 	useEffect(() => {
-		const sorted = [...lists].sort(sortByImportance);
-		setSortedLists(sorted);
+		const sortedByImportance = [...lists].sort(sortByImportance);
+		setSortedLists(sortedByImportance);
 	}, [lists, importantLists]);
 
 	const setImportantList = (listPath) => {
