@@ -14,15 +14,9 @@ export const List = React.memo(function List({ data, listPath }) {
 	const handleTextChange = (event) => {
 		setSearchItem(event.target.value);
 	};
-	console.log(sortedItems, 'sorted items');
-	console.log('----');
-	console.log(`before filter: ${data.map((d) => d.name)}`);
 	const filteredItems = sortedItems.filter((item) =>
 		item.name.toLowerCase().includes(searchItem.toLowerCase()),
 	);
-
-	console.log(`filter: ${filteredItems.map((d) => d.name)}`);
-	console.log('----');
 
 	return (
 		<>
@@ -50,9 +44,6 @@ export const List = React.memo(function List({ data, listPath }) {
 					<ul>
 						{filteredItems.map((item) => {
 							const itemUrgencyStatus = getUrgency(item.name);
-							console.log(
-								`${item.name}: class [${itemUrgencyStatus}], next purchase [${item.dateNextPurchased.toDate().toLocaleString()}]`,
-							);
 							return (
 								<ListItem
 									key={item.id}
