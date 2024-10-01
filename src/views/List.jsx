@@ -49,16 +49,16 @@ export const List = React.memo(function List({ data, listPath }) {
 					</form>
 					<ul>
 						{filteredItems.map((item) => {
-							const itemClassName = getUrgency(item.name);
+							const itemUrgencyStatus = getUrgency(item.name);
 							console.log(
-								`${item.name}: class [${itemClassName}], next purchase [${item.dateNextPurchased.toDate().toLocaleString()}]`,
+								`${item.name}: class [${itemUrgencyStatus}], next purchase [${item.dateNextPurchased.toDate().toLocaleString()}]`,
 							);
 							return (
 								<ListItem
 									key={item.id}
 									item={item}
 									listPath={listPath}
-									className={itemClassName}
+									itemUrgencyStatus={itemUrgencyStatus}
 								/>
 							);
 						})}
