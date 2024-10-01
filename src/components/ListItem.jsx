@@ -47,12 +47,13 @@ export function ListItem({ item, listPath }) {
 	};
 
 	const handleDeleteItem = async () => {
-		try {
-			await deleteItem(listPath, id);
-		} catch (error) {
-			toast.error('Item was not deleted');
+		if (confirm(`Are you sure you want to delete this item?`)) {
+			try {
+				await deleteItem(listPath, id);
+			} catch (error) {
+				toast.error('Item was not deleted');
+			}
 		}
-
 		return;
 	};
 
