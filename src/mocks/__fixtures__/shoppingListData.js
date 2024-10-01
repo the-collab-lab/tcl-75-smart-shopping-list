@@ -1,9 +1,9 @@
 // This file contains mock data for shopping lists with Firestore-like timestamps that include a toDate() method.
 export const mockUrgencyObject = {
 	overdue: [],
-	soon: [],
+	soon: ['nutella', 'Jam'],
 	kindOfSoon: [],
-	notSoon: [],
+	notSoon: ['Cheese'],
 	inactive: [],
 };
 

@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react';
 import { vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
 import { List } from '../src/views/List';
 import {
 	mockShoppingListData,
@@ -26,12 +26,34 @@ vi.mock('../src/utils', () => ({
 	}),
 }));
 
+vi.mock('../src/api/firebase', () => ({
+	addDoc: vi.fn(),
+	setDoc: vi.fn(),
+	getDoc: vi.fn(),
+	onSnapshot: vi.fn(),
+	collection: vi.fn(),
+	doc: vi.fn(),
+}));
+
 beforeEach(() => {
 	useStateWithStorage.mockReturnValue(['/groceries']);
 	getDateLastPurchasedOrDateCreated.mockReturnValue(new Date());
 	getDaysFromDate.mockReturnValue(10);
 	comparePurchaseUrgency.mockReturnValue(1);
 	getDaysBetweenDates.mockReturnValue(5);
+
+	vi.do('../src/components/ListItem', async () => {
+		const actual = await import('../src/components/ListItem');
+		return {
+			...actual,
+			ListItem: vi.fn(),
+		};
+	});
+});
+
+test('ListItem is being initialized', () => {
+	ListItem();
+	expect(ListItem).toHaveBeenCalled();
 });
 
 describe('List Component', () => {

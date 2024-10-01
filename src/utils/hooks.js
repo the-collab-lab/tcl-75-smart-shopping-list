@@ -51,7 +51,7 @@ export function useUrgency(items) {
 	const sortByUrgency = (item, daysUntilNextPurchase) => {
 		if (daysUntilNextPurchase < 0) {
 			return 'overdue';
-		} else if (daysUntilNextPurchase < 7) {
+		} else if (daysUntilNextPurchase >= 0 && daysUntilNextPurchase < 7) {
 			return 'soon';
 		} else if (daysUntilNextPurchase >= 7 && daysUntilNextPurchase < 30) {
 			return 'kindOfSoon';

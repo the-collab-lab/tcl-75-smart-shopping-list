@@ -1,21 +1,11 @@
 import { useState } from 'react';
 import './ListItem.css';
 import { updateItem, deleteItem } from '../api';
-import { calculateDateNextPurchased, ONE_DAY_IN_MILLISECONDS } from '../utils';
-
-const currentDate = new Date();
-
-const calculateIsPurchased = (dateLastPurchased) => {
-	if (!dateLastPurchased) {
-		return false;
-	}
-	const purchaseDate = dateLastPurchased.toDate();
-	const oneDayLater = new Date(
-		purchaseDate.getTime() + ONE_DAY_IN_MILLISECONDS,
-	);
-
-	return currentDate < oneDayLater;
-};
+import {
+	calculateDateNextPurchased,
+	currentDate,
+	calculateIsPurchased,
+} from '../utils';
 
 export function ListItem({ item, listPath, className }) {
 	const [isPurchased, setIsPurchased] = useState(() =>
