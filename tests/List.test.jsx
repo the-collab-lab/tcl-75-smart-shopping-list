@@ -42,7 +42,7 @@ beforeEach(() => {
 	comparePurchaseUrgency.mockReturnValue(1);
 	getDaysBetweenDates.mockReturnValue(5);
 
-	vi.do('../src/components/ListItem', async () => {
+	vi.mock('../src/components/ListItem', async () => {
 		const actual = await import('../src/components/ListItem');
 		return {
 			...actual,
