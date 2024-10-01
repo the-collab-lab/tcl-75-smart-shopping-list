@@ -1,6 +1,8 @@
 import { shareList, useAuth } from '../api';
 import { useStateWithStorage } from '../utils';
 import TextInputElement from './TextInputElement';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export function ShareList() {
 	const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
@@ -13,11 +15,11 @@ export function ShareList() {
 		const listShared = await shareList(listPath, userId, emailData);
 
 		if (listShared === '!owner') {
-			alert('You cannot share the list you do not own.');
+			toast.error('You cannot share the list you do not own.');
 		} else if (listShared === 'shared') {
-			alert('List was shared with recipient.');
+			toast.success('List was shared with recipient.');
 		} else {
-			alert(
+			toast.error(
 				"The list was not shared because the recipient's email address does not exist in the system.",
 			);
 		}
@@ -29,7 +31,7 @@ export function ShareList() {
 		const emailData = event.target['email-input'].value;
 
 		if (userEmail === emailData) {
-			alert('You cannot share the list with yourself.');
+			toast.error('You cannot share the list with yourself.');
 		} else {
 			shareCurrentList(emailData);
 		}

@@ -3,6 +3,8 @@ import { SingleList } from '../components';
 import { useNavigate } from 'react-router-dom';
 import { createList } from '../api';
 import TextInputElement from '../components/TextInputElement';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export function Home({ data, setListPath, userId, userEmail }) {
 	const navigate = useNavigate();
@@ -16,17 +18,20 @@ export function Home({ data, setListPath, userId, userEmail }) {
 
 		try {
 			if (currentLists.includes(listName.toLowerCase())) {
-				alert('The list already exists. Please enter a different name.');
+				toast.error(
+					'The list already exists. Please enter a different name.',
+					{},
+				);
 				return;
 			}
 
 			const listPath = await createList(userId, userEmail, listName);
 			setListPath(listPath);
-			alert('List added');
+			toast.success('List added');
 			navigate('/list');
 		} catch (err) {
 			console.error(err);
-			alert('List not created');
+			toast.error('List not created');
 		} finally {
 			event.target.reset();
 		}
