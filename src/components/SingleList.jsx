@@ -23,7 +23,6 @@ export function SingleList({
 	const { user } = useAuth();
 	const userId = user?.uid;
 	const userEmail = user?.email;
-	console.log(`Item: ${Object.entries(item).map((d) => d)}`);
 
 	const { name, path } = item;
 	const listPath = path.slice(0, path.indexOf('/'));
