@@ -2,10 +2,14 @@ import { ListItem } from '../components';
 import React, { useState } from 'react';
 import { AddItems } from '../components/AddItems';
 import TextInputElement from '../components/TextInputElement';
+import { useEnsureListPath } from '../hooks/useEnsureListPath';
 import { useUrgency } from '../utils';
 
 export const List = React.memo(function List({ data, listPath }) {
 	const [searchItem, setSearchItem] = useState('');
+
+	// Redirect to home if no list path is null
+	if (useEnsureListPath()) return <></>;
 	const { getUrgency, urgencyObject } = useUrgency(data);
 	const listName = listPath.slice(listPath.indexOf('/') + 1);
 

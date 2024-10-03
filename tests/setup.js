@@ -8,3 +8,5 @@ import { vi } from 'vitest';
 vi.mock('@the-collab-lab/shopping-list-utils', () => ({
 	calculateEstimate: vi.fn(),
 }));
+
+window.alert = vi.fn();
