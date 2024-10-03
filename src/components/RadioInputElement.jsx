@@ -1,4 +1,4 @@
-const RadioInputElement = ({ label, id, value, required }) => {
+export function RadioInputElement({ label, id, value, required }) {
 	return (
 		<>
 			<input
@@ -12,6 +12,4 @@ const RadioInputElement = ({ label, id, value, required }) => {
 			<br />
 		</>
 	);
-};
-
-export default RadioInputElement;
+}
