@@ -2,6 +2,36 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { List } from '../src/views/List';
 import { mockShoppingListData } from '../src/mocks/__fixtures__/shoppingListData';
+import {
+	useStateWithStorage,
+	getDateLastPurchasedOrDateCreated,
+	getDaysFromDate,
+	comparePurchaseUrgency,
+	getDaysBetweenDates,
+} from '../src/utils';
+
+vi.mock('../src/utils', () => ({
+	useStateWithStorage: vi.fn(),
+	ONE_DAY_IN_MILLISECONDS: 86400000,
+	getDateLastPurchasedOrDateCreated: vi.fn(),
+	getDaysFromDate: vi.fn(),
+	comparePurchaseUrgency: vi.fn(),
+	getDaysBetweenDates: vi.fn(),
+	useUrgency: vi.fn(() => ({
+		getUrgency: vi.fn((name) => {
+			if (name === 'nutella') return 'soon';
+			if (name === 'Cheese') return 'overdue';
+			return 'notSoon';
+		}),
+		urgencyObject: {
+			overdue: [{ name: 'nutella', id: '0T1ByXr8YJSOzujOlLMI' }],
+			soon: [{ name: 'Cheese', id: '1MFWOWMCzDtEHQboFZfR' }],
+			kindOfSoon: [],
+			notSoon: [{ name: 'Jam', id: 'MnUiYUmhg8iCzX1eMxW8' }],
+			inactive: [],
+		},
+	})),
+}));
 
 beforeEach(() => {
 	Object.defineProperty(window, 'localStorage', {
@@ -19,6 +49,11 @@ beforeEach(() => {
 	});
 
 	vi.spyOn(window, 'alert').mockImplementation(() => {});
+	useStateWithStorage.mockReturnValue(['/groceries']);
+	getDateLastPurchasedOrDateCreated.mockReturnValue(new Date());
+	getDaysFromDate.mockReturnValue(10);
+	comparePurchaseUrgency.mockReturnValue(1);
+	getDaysBetweenDates.mockReturnValue(5);
 });
 
 describe('List Component', () => {

@@ -2,8 +2,27 @@ import { useState } from 'react';
 import './ListItem.css';
 import { updateItem, deleteItem } from '../api';
 import { calculateDateNextPurchased, ONE_DAY_IN_MILLISECONDS } from '../utils';
+import {
+	Restore as OverdueIcon,
+	RestartAlt as SoonIcon,
+	RadioButtonUnchecked as KindOfSoonIcon,
+	RemoveCircle as NotSoonIcon,
+	RadioButtonChecked as InactiveIcon,
+} from '@mui/icons-material';
 
 const currentDate = new Date();
+
+const urgencyStatusIcons = {
+	overdue: OverdueIcon,
+	soon: SoonIcon,
+	kindOfSoon: KindOfSoonIcon,
+	notSoon: NotSoonIcon,
+	inactive: InactiveIcon,
+};
+
+const urgencyStatusWidth = {
+	fontSize: '1.5em',
+};
 
 const calculateIsPurchased = (dateLastPurchased) => {
 	if (!dateLastPurchased) {
@@ -17,7 +36,7 @@ const calculateIsPurchased = (dateLastPurchased) => {
 	return currentDate < oneDayLater;
 };
 
-export function ListItem({ item, listPath }) {
+export function ListItem({ item, listPath, itemUrgencyStatus }) {
 	const [isPurchased, setIsPurchased] = useState(() =>
 		calculateIsPurchased(item.dateLastPurchased),
 	);
@@ -55,8 +74,13 @@ export function ListItem({ item, listPath }) {
 		return;
 	};
 
+	const UrgencyStatusIcon = urgencyStatusIcons[itemUrgencyStatus];
+
 	return (
-		<li className="ListItem">
+		<li className={`ListItem`}>
+			{UrgencyStatusIcon && (
+				<UrgencyStatusIcon style={urgencyStatusWidth} fontSize="large" />
+			)}
 			<input
 				type="checkbox"
 				id={`checkbox-${id}`}

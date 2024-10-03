@@ -7,6 +7,8 @@
 		"npm": ">=8.19.0"
 	},
 	"dependencies": {
+		"@emotion/styled": "^11.13.0",
+		"@mui/icons-material": "^6.1.2",
 		"@the-collab-lab/shopping-list-utils": "^2.2.0",
 		"firebase": "^10.12.5",
 		"react": "^18.3.1",
