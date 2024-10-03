@@ -4,8 +4,8 @@
 	flex-direction: row;
 	align-items: center;
 	font-size: 1.2em;
-	height: inherit;
 	padding-inline-start: 0.3em;
+	cursor: pointer;
 }
 
 .SingleList-label {
