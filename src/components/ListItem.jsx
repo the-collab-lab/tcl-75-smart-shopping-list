@@ -20,6 +20,10 @@ const urgencyStatusIcons = {
 	inactive: InactiveIcon,
 };
 
+const urgencyStatusWidth = {
+	fontSize: '1.5em',
+};
+
 const calculateIsPurchased = (dateLastPurchased) => {
 	if (!dateLastPurchased) {
 		return false;
@@ -74,7 +78,9 @@ export function ListItem({ item, listPath, itemUrgencyStatus }) {
 
 	return (
 		<li className={`ListItem`}>
-			{UrgencyStatusIcon && <UrgencyStatusIcon fontSize="large" />}
+			{UrgencyStatusIcon && (
+				<UrgencyStatusIcon style={urgencyStatusWidth} fontSize="large" />
+			)}
 			<input
 				type="checkbox"
 				id={`checkbox-${id}`}
