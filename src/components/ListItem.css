@@ -12,32 +12,3 @@
 .ListItem-label {
 	margin-left: 0.2em;
 }
-
-.urgency-status {
-	width: 2vw;
-	height: 2vw;
-	border-radius: 50%;
-}
-
-.soon {
-	border: 1px solid green;
-	background-color: rgba(18, 105, 18, 0.94);
-}
-.kindOfSoon {
-	background-color: rgba(255, 192, 203, 0.2);
-	border: 8px solid rgba(231, 224, 116, 0.911);
-}
-
-.notSoon {
-	background-color: rgba(49, 49, 226, 0.2);
-	border: 5px solid rgb(49, 49, 226);
-}
-
-.inactive {
-	border: 3px dashed red;
-}
-
-.overdue {
-	background-color: rgba(255, 255, 255, 0.24);
-	border: 5px dotted white;
-}

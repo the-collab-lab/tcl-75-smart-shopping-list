@@ -72,7 +72,6 @@ export function ListItem({ item, listPath, itemUrgencyStatus }) {
 
 	return (
 		<li className={`ListItem`}>
-			<div className={`urgency-status`} />
 			{UrgencyStatusIcon && <UrgencyStatusIcon fontSize="large" />}
 			<input
 				type="checkbox"
