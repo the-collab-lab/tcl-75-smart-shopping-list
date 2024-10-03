@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import './SingleList.css';
 import { useState } from 'react';
 import PushPinIcon from '@mui/icons-material/PushPin';
@@ -10,9 +11,12 @@ export function SingleList({
 	isImportant,
 }) {
 	const [isHovered, setIsHovered] = useState(false);
-
+	const navigate = useNavigate();
 	const handleClick = () => {
 		setListPath(path);
+		setTimeout(() => {
+			navigate('/list');
+		}, 200);
 	};
 
 	const handleImportantList = () => {
