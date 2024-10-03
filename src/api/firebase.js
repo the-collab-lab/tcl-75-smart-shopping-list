@@ -176,7 +176,6 @@ export async function shareList(listPath, currentUserId, recipientEmail) {
  * @param {string} listPath - The path to the list document in Firestore.
  * @param {string} userId - The id of the user who owns the list.
  * @param {string} userEmail - The email of the user who has the list in their shared lists.
- * @param {string} listName - The name of the list to be deleted.
  * @returns {Promise<string>} A message indicating the result of the deletion operation.
  * @throws {Error} If something goes wrong during the deletion process.
  */
