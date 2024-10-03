@@ -1,9 +1,10 @@
 import './Home.css';
-import { SingleList } from '../components';
 import { useNavigate } from 'react-router-dom';
 import { createList } from '../api';
-import TextInputElement from '../components/TextInputElement';
 import { useImportance } from '../utils';
+import { SingleList, TextInputElement } from '../components';
+import { MaterialButton } from '../components/material-buttons';
+import ButtonGroup from '@mui/material/ButtonGroup';
 
 export function Home({ data, setListPath, userId, userEmail }) {
 	const { sortedLists, setImportantList, isListImportant } =
@@ -49,22 +50,23 @@ export function Home({ data, setListPath, userId, userEmail }) {
 					placeholder="New List Name"
 					required={true}
 				/>
-				<button type="submit">Add List</button>
+				<MaterialButton type="submit" buttonText="Add List" />
 			</form>
 
 			<ul>
-				{sortedLists.map((item, index) => {
-					return (
-						<SingleList
-							key={item.name + index}
-							name={item.name}
-							path={item.path}
-							setListPath={setListPath}
-							setImportantList={setImportantList}
-							isImportant={isListImportant(item.path)}
-						/>
-					);
-				})}
+				<ButtonGroup size="large" orientation="vertical">
+					{sortedLists.map((item, index) => {
+						return (
+							<SingleList
+								key={item.name + index}
+								item={item}
+								setListPath={setListPath}
+								setImportantList={setImportantList}
+								isImportant={isListImportant(item.path)}
+							/>
+						);
+					})}
+				</ButtonGroup>
 			</ul>
 		</div>
 	);
