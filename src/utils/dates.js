@@ -59,20 +59,14 @@ export function getDaysBetweenDates(earlierDate, laterDate) {
 
 // takes in a Date
 // calculates days since date that was passed and today
-export const getDaysFromDate = (pastDate) => {
-	const today = new Date();
-	const daysToToday = getDaysBetweenDates(pastDate, today);
-	return daysToToday;
-};
+export const getDaysFromDate = (pastDate) =>
+	getDaysBetweenDates(pastDate, new Date());
 
 // takes in Timestamps, returns a Date
 export const getDateLastPurchasedOrDateCreated = (
 	dateLastPurchased,
 	dateCreated,
-) => {
-	const lastPurchaseDate = dateLastPurchased?.toDate();
-	return lastPurchaseDate ?? dateCreated.toDate();
-};
+) => dateLastPurchased?.toDate() ?? dateCreated.toDate();
 
 /**
  * Calculate the purchase intervals between current, next, and last purchase dates.
