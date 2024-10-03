@@ -11,7 +11,9 @@ export function SingleList({
 	isImportant,
 }) {
 	const [isHovered, setIsHovered] = useState(false);
+
 	const navigate = useNavigate();
+
 	const handleClick = () => {
 		setListPath(path);
 		setTimeout(() => {
