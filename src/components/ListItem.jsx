@@ -2,20 +2,22 @@ import { useState } from 'react';
 import './ListItem.css';
 import { updateItem, deleteItem } from '../api';
 import { calculateDateNextPurchased, ONE_DAY_IN_MILLISECONDS } from '../utils';
-import RestoreIcon from '@mui/icons-material/Restore';
-import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
-import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
-import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
+import {
+	Restore as OverdueIcon,
+	RestartAlt as SoonIcon,
+	RadioButtonUnchecked as KindOfSoonIcon,
+	RemoveCircle as NotSoonIcon,
+	RadioButtonChecked as InactiveIcon,
+} from '@mui/icons-material';
 
 const currentDate = new Date();
 
 const urgencyStatusIcons = {
-	overdue: RestoreIcon,
-	soon: RestartAltIcon,
-	kindOfSoon: RadioButtonUncheckedIcon,
-	notSoon: RadioButtonCheckedIcon,
-	inactive: RemoveCircleIcon,
+	overdue: OverdueIcon,
+	soon: SoonIcon,
+	kindOfSoon: KindOfSoonIcon,
+	notSoon: NotSoonIcon,
+	inactive: InactiveIcon,
 };
 
 const calculateIsPurchased = (dateLastPurchased) => {
