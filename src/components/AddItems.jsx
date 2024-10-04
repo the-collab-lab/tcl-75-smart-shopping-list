@@ -1,8 +1,7 @@
 import { useCallback } from 'react';
 import { useStateWithStorage, normalizeItemName } from '../utils';
 import { addItem } from '../api';
-import TextInputElement from './TextInputElement';
-import RadioInputElement from './RadioInputElement';
+import { RadioInputElement, TextInputElement } from './index.js';
 
 const daysUntilPurchaseOptions = {
 	Soon: 7,

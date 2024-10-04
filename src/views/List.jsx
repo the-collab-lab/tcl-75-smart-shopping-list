@@ -1,7 +1,5 @@
-import { ListItem } from '../components';
 import { useState } from 'react';
-import { AddItems } from '../components/AddItems';
-import TextInputElement from '../components/TextInputElement';
+import { TextInputElement, AddItems, ListItem } from '../components';
 import { useEnsureListPath } from '../hooks/useEnsureListPath';
 
 export function List({ data, listPath }) {
