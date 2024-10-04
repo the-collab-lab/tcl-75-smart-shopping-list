@@ -1,26 +1,32 @@
 import Button from '@mui/material/Button';
 
-const defaultStyle = {
-	fontSize: '1.3rem',
+export const whiteColor = {
 	color: 'white',
 };
 
+const defaultSx = {
+	fontSize: '1.3rem',
+	...whiteColor,
+};
+
 export const MaterialButton = ({
-	type,
+	type = 'submit',
+	color,
 	onClick,
 	buttonText,
-	style = defaultStyle,
+	sx = defaultSx,
 	startIcon,
 	variant = 'outlined',
 }) => {
 	return (
 		<Button
+			color={color}
 			fontSize="large"
 			variant={variant}
 			type={type}
 			onClick={onClick}
 			startIcon={startIcon}
-			style={style}
+			sx={sx}
 		>
 			{buttonText}
 		</Button>

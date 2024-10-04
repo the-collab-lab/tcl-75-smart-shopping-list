@@ -1,15 +1,19 @@
 import { MaterialButton } from './MaterialButton';
 
-export const MaterialListButton = ({ buttonText, onClick }) => {
-	const buttonStyle = {
-		width: '15em',
-		fontSize: '1.5rem',
-		color: 'white',
-	};
+export const whiteFontColor = {
+	color: 'white',
+};
 
+export const buttonStyle = {
+	width: '15em',
+	fontSize: '1.5rem',
+	...whiteFontColor,
+};
+
+export const MaterialListButton = ({ buttonText, onClick }) => {
 	return (
 		<MaterialButton
-			style={buttonStyle}
+			sx={buttonStyle}
 			type="button"
 			onClick={onClick}
 			buttonText={buttonText}
