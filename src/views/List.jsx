@@ -3,6 +3,11 @@ import { ListItem, AddItems, TextInputElement } from '../components';
 import { useEnsureListPath, useUrgency } from '../hooks';
 import { getUrgency } from '../utils/urgencyUtils';
 
+// React.memo is needed to prevent unnecessary re-renders of the List component
+// when the props (data and listPath) haven't changed,
+// optimizing performance by avoiding re-computation of expensive
+// operations like filtering and sorting items.
+
 export const List = React.memo(function List({ data, listPath }) {
 	const [searchItem, setSearchItem] = useState('');
 	const { urgencyObject } = useUrgency(data);
