@@ -77,7 +77,7 @@ export function ListItem({ item, listPath, itemUrgencyStatus }) {
 	const UrgencyStatusIcon = urgencyStatusIcons[itemUrgencyStatus];
 
 	return (
-		<li className={`ListItem`}>
+		<li className="ListItem">
 			{UrgencyStatusIcon && (
 				<UrgencyStatusIcon style={urgencyStatusWidth} fontSize="large" />
 			)}
