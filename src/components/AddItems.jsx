@@ -3,7 +3,7 @@ import { normalizeItemName } from '../utils';
 import { addItem } from '../api';
 import { useStateWithStorage } from '../hooks';
 import { TextInputElement } from './TextInputElement';
-import RadioInputElement from './RadioInputElement';
+import { RadioInputElement } from './RadioInputElement';
 
 const daysUntilPurchaseOptions = {
 	Soon: 7,
