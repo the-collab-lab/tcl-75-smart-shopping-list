@@ -9,12 +9,8 @@ import {
 	getDaysBetweenDates,
 } from '../src/utils';
 
-vi.mock('../src/utils', () => ({
+vi.mock('../src/hooks', () => ({
 	useStateWithStorage: vi.fn(),
-	ONE_DAY_IN_MILLISECONDS: 86400000,
-	getDateLastPurchasedOrDateCreated: vi.fn(),
-	getDaysFromDate: vi.fn(),
-	getDaysBetweenDates: vi.fn(),
 	useUrgency: vi.fn(() => ({
 		getUrgency: vi.fn((name) => {
 			if (name === 'nutella') return 'soon';
@@ -29,6 +25,13 @@ vi.mock('../src/utils', () => ({
 			inactive: [],
 		},
 	})),
+}));
+
+vi.mock('../src/utils', () => ({
+	ONE_DAY_IN_MILLISECONDS: 86400000,
+	getDateLastPurchasedOrDateCreated: vi.fn(),
+	getDaysFromDate: vi.fn(),
+	getDaysBetweenDates: vi.fn(),
 }));
 
 beforeEach(() => {
