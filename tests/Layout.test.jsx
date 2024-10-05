@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { Layout } from '../src/views/Layout';
-import { useAuth } from '../src/api/useAuth';
+import { useAuth } from '../src/hooks/useAuth';
 import { mockUser } from '../src/mocks/__fixtures__/auth';
 
-vi.mock('../src/api/useAuth', () => ({
+vi.mock('../src/hooks/useAuth', () => ({
 	useAuth: vi.fn(),
 	SignInButton: () => <button>Sign In</button>,
 	SignOutButton: () => <button>Sign Out</button>,
