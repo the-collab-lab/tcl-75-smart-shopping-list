@@ -1,9 +1,6 @@
-import { ListItem } from '../components';
 import React, { useState } from 'react';
-import { AddItems } from '../components/AddItems';
-import TextInputElement from '../components/TextInputElement';
-import { useEnsureListPath } from '../hooks/useEnsureListPath';
-import { useUrgency } from '../utils';
+import { ListItem, AddItems, TextInputElement } from '../components';
+import { useEnsureListPath, useUrgency } from '../hooks';
 
 export const List = React.memo(function List({ data, listPath }) {
 	const [searchItem, setSearchItem] = useState('');

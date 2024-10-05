@@ -2,11 +2,10 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { List } from '../src/views/List';
 import { mockShoppingListData } from '../src/mocks/__fixtures__/shoppingListData';
+import { useStateWithStorage } from '../src/hooks';
 import {
-	useStateWithStorage,
 	getDateLastPurchasedOrDateCreated,
 	getDaysFromDate,
-	comparePurchaseUrgency,
 	getDaysBetweenDates,
 } from '../src/utils';
 
@@ -15,7 +14,6 @@ vi.mock('../src/utils', () => ({
 	ONE_DAY_IN_MILLISECONDS: 86400000,
 	getDateLastPurchasedOrDateCreated: vi.fn(),
 	getDaysFromDate: vi.fn(),
-	comparePurchaseUrgency: vi.fn(),
 	getDaysBetweenDates: vi.fn(),
 	useUrgency: vi.fn(() => ({
 		getUrgency: vi.fn((name) => {

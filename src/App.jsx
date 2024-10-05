@@ -2,9 +2,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import { Home, Layout, List, ManageList } from './views';
 
-import { useAuth, useShoppingListData, useShoppingLists } from './api';
+import { useShoppingListData, useShoppingLists } from './api';
 
-import { useStateWithStorage } from './utils';
+import { useAuth, useStateWithStorage } from './hooks';
 
 export function App() {
 	/**
