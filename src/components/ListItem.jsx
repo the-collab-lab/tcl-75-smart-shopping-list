@@ -20,7 +20,7 @@ const urgencyStatusIcons = {
 	inactive: InactiveIcon,
 };
 
-const urgencyStatusWidth = {
+const urgencyStatusFontSize = {
 	fontSize: '1.5em',
 };
 
@@ -79,7 +79,7 @@ export function ListItem({ item, listPath, itemUrgencyStatus }) {
 	return (
 		<li className="ListItem">
 			{UrgencyStatusIcon && (
-				<UrgencyStatusIcon style={urgencyStatusWidth} fontSize="large" />
+				<UrgencyStatusIcon style={urgencyStatusFontSize} fontSize="large" />
 			)}
 			<input
 				type="checkbox"
