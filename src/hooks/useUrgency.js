@@ -2,27 +2,13 @@ import { useEffect, useState } from 'react';
 import { calculateUrgency } from '../utils';
 
 export function useUrgency(items) {
-	const [urgencyObject, setUrgecyObject] = useState({
+	const [urgencyObject, setUrgencyObject] = useState({
 		overdue: [],
 		soon: [],
 		kindOfSoon: [],
 		notSoon: [],
 		inactive: [],
 	});
-
-	const getUrgency = (name) => {
-		const statusArray = Object.entries(urgencyObject).find(
-			([status, items]) => {
-				if (items.some((item) => item.name === name)) {
-					return status;
-				}
-			},
-		);
-		if (!statusArray) {
-			throw new Error(`Failed to get class name of ${name}`);
-		}
-		return statusArray[0];
-	};
 
 	useEffect(() => {
 		if (items.length === 0) return;
@@ -47,8 +33,8 @@ export function useUrgency(items) {
 			]),
 		);
 
-		setUrgecyObject(sortedUrgencyState);
+		setUrgencyObject(sortedUrgencyState);
 	}, [items]);
 
-	return { getUrgency, urgencyObject };
+	return { urgencyObject };
 }

@@ -36,3 +36,15 @@ export const calculateUrgency = (item) => {
 		return sortByUrgency(item, daysUntilNextPurchase);
 	}
 };
+
+export const getUrgency = (name, urgencyObject) => {
+	const statusArray = Object.entries(urgencyObject).find(([status, items]) => {
+		if (items.some((item) => item.name === name)) {
+			return status;
+		}
+	});
+	if (!statusArray) {
+		throw new Error(`Failed to get class name of ${name}`);
+	}
+	return statusArray[0];
+};

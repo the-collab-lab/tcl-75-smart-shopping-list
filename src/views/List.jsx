@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { ListItem, AddItems, TextInputElement } from '../components';
 import { useEnsureListPath, useUrgency } from '../hooks';
+import { getUrgency } from '../utils/urgencyUtils';
 
 export const List = React.memo(function List({ data, listPath }) {
 	const [searchItem, setSearchItem] = useState('');
-	const { getUrgency, urgencyObject } = useUrgency(data);
+	const { urgencyObject } = useUrgency(data);
 
 	// Redirect to home if no list path is null
 	if (useEnsureListPath()) return <></>;
@@ -46,7 +47,7 @@ export const List = React.memo(function List({ data, listPath }) {
 					</form>
 					<ul>
 						{filteredItems.map((item) => {
-							const itemUrgencyStatus = getUrgency(item.name);
+							const itemUrgencyStatus = getUrgency(item.name, urgencyObject);
 							return (
 								<ListItem
 									key={item.id}
