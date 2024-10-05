@@ -1,6 +1,6 @@
-import { shareList, useAuth } from '../api';
-import { useStateWithStorage } from '../utils';
-import TextInputElement from './TextInputElement';
+import { shareList } from '../api';
+import { useStateWithStorage, useAuth } from '../hooks';
+import { TextInputElement } from './TextInputElement';
 
 export function ShareList() {
 	const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);

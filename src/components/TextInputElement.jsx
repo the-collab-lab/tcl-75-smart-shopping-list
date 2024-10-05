@@ -1,4 +1,4 @@
-const TextInputElement = ({
+export const TextInputElement = ({
 	label,
 	type,
 	id,
@@ -22,5 +22,3 @@ const TextInputElement = ({
 		</>
 	);
 };
-
-export default TextInputElement;
