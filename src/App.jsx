@@ -44,7 +44,7 @@ export function App() {
 	return (
 		<Router>
 			<ToastContainer
-				position="top-right"
+				position="top-center"
 				autoClose={4000}
 				hideProgressBar={false}
 				newestOnTop={false}
