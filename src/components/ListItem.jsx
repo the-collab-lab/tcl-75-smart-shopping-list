@@ -3,7 +3,6 @@ import './ListItem.css';
 import { updateItem, deleteItem } from '../api';
 import { calculateDateNextPurchased, ONE_DAY_IN_MILLISECONDS } from '../utils';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 const currentDate = new Date();
 

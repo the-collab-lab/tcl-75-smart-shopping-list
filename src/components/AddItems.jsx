@@ -4,7 +4,6 @@ import { addItem } from '../api';
 import TextInputElement from './TextInputElement';
 import RadioInputElement from './RadioInputElement';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 const daysUntilPurchaseOptions = {
 	Soon: 7,

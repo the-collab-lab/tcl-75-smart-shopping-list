@@ -2,7 +2,6 @@ import { shareList, useAuth } from '../api';
 import { useStateWithStorage } from '../utils';
 import TextInputElement from './TextInputElement';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 export function ShareList() {
 	const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);

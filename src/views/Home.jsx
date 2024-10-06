@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { createList } from '../api';
 import TextInputElement from '../components/TextInputElement';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 export function Home({ data, setListPath, userId, userEmail }) {
 	const navigate = useNavigate();

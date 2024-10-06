@@ -6,6 +6,7 @@ import { useAuth, useShoppingListData, useShoppingLists } from './api';
 
 import { useStateWithStorage } from './utils';
 import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export function App() {
 	/**
