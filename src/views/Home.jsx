@@ -17,10 +17,7 @@ export function Home({ data, setListPath, userId, userEmail }) {
 
 		try {
 			if (currentLists.includes(listName.toLowerCase())) {
-				toast.error(
-					'The list already exists. Please enter a different name.',
-					{},
-				);
+				toast.error('The list already exists. Please enter a different name.');
 				return;
 			}
 
