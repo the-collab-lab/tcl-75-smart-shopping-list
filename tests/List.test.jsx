@@ -3,6 +3,22 @@ import { MemoryRouter } from 'react-router-dom';
 import { List } from '../src/views/List';
 import { mockShoppingListData } from '../src/mocks/__fixtures__/shoppingListData';
 
+beforeEach(() => {
+	Object.defineProperty(window, 'localStorage', {
+		value: {
+			getItem: vi.fn((key) => {
+				if (key === 'tcl-shopping-list-path') {
+					return '/groceries';
+				}
+				return null;
+			}),
+			setItem: vi.fn(),
+			clear: vi.fn(),
+		},
+		writable: true,
+	});
+});
+
 describe('List Component', () => {
 	test('renders the shopping list name, search field, and all list items from the data prop', () => {
 		render(

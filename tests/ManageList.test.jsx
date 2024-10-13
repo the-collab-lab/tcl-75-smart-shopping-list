@@ -2,6 +2,22 @@ import { render, screen } from '@testing-library/react';
 import { ManageList } from '../src/views/ManageList';
 import { MemoryRouter } from 'react-router-dom';
 
+beforeEach(() => {
+	Object.defineProperty(window, 'localStorage', {
+		value: {
+			getItem: vi.fn((key) => {
+				if (key === 'tcl-shopping-list-path') {
+					return '/groceries';
+				}
+				return null;
+			}),
+			setItem: vi.fn(),
+			clear: vi.fn(),
+		},
+		writable: true,
+	});
+});
+
 describe('ManageList Component', () => {
 	test('renders AddItems component with submit button and radio buttons', () => {
 		render(
