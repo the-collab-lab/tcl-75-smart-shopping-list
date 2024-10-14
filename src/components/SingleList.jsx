@@ -43,7 +43,7 @@ export function SingleList({
 	const userEmail = user?.email;
 	const { name, path } = item;
 
-	const listPath = path.slice(0, path.indexOf('/'));
+	const listPathUserId = path.slice(0, path.indexOf('/'));
 
 	const handleNavigate = () => {
 		setListPath(path);
@@ -61,7 +61,7 @@ export function SingleList({
 	};
 
 	const handleDelete = async () => {
-		const deletionType = listPath === userId ? 'hard' : 'soft';
+		const deletionType = listPathUserId === userId ? 'hard' : 'soft';
 
 		try {
 			await deleteList(deletionType, path, userId, userEmail);
