@@ -1,5 +1,5 @@
 import { shareList, useAuth } from '../api';
-import { useStateWithStorage } from '../utils';
+import { useStateWithStorage } from '../hooks';
 import { TextInputElement } from './index.js';
 
 export function ShareList() {

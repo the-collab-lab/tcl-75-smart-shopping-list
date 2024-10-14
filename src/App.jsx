@@ -4,7 +4,7 @@ import { Home, Layout, List, ManageList } from './views';
 
 import { useAuth, useShoppingListData, useShoppingLists } from './api';
 
-import { useStateWithStorage } from './utils';
+import { useStateWithStorage } from './hooks';
 
 export function App() {
 	/**

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { createList } from '../api';
-import { useImportance } from '../utils';
+import { useImportance } from '../hooks';
 import { SingleList, TextInputElement } from '../components';
 import { ButtonGroup, Button } from '@mui/material';
 import './Home.css';

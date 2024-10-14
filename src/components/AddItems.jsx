@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
-import { useStateWithStorage, normalizeItemName } from '../utils';
+import { normalizeItemName } from '../utils';
+import { useStateWithStorage } from '../hooks';
 import { addItem } from '../api';
 import { RadioInputElement, TextInputElement } from './index.js';
 
