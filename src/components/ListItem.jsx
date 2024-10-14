@@ -93,7 +93,7 @@ export function ListItem({ item, listPath, itemUrgencyStatus }) {
 					placement="left"
 					arrow
 				>
-					<IconButton>
+					<IconButton aria-label={itemUrgencyStatus}>
 						<UrgencyStatusIcon sx={urgencyStatusStyle} fontSize="large" />
 					</IconButton>
 				</Tooltip>
