@@ -2,6 +2,8 @@ import { useState } from 'react';
 import './ListItem.css';
 import { updateItem, deleteItem } from '../api';
 import { calculateDateNextPurchased, ONE_DAY_IN_MILLISECONDS } from '../utils';
+
+import { IconButton, Tooltip } from '@mui/material';
 import {
 	Restore as OverdueIcon,
 	RestartAlt as SoonIcon,
@@ -20,8 +22,15 @@ const urgencyStatusIcons = {
 	inactive: InactiveIcon,
 };
 
-const urgencyStatusFontSize = {
-	fontSize: '1.5em',
+const urgencyStatusStyle = {
+	fontSize: '2.5rem',
+	color: 'white',
+};
+
+const toolTipStyle = {
+	fontSize: '1.5rem',
+	marginBlockStart: '0',
+	marginBlockEnd: '0',
 };
 
 const calculateIsPurchased = (dateLastPurchased) => {
@@ -79,7 +88,15 @@ export function ListItem({ item, listPath, itemUrgencyStatus }) {
 	return (
 		<li className="ListItem">
 			{UrgencyStatusIcon && (
-				<UrgencyStatusIcon style={urgencyStatusFontSize} fontSize="large" />
+				<Tooltip
+					title={<p style={toolTipStyle}>{itemUrgencyStatus}</p>}
+					placement="left"
+					arrow
+				>
+					<IconButton>
+						<UrgencyStatusIcon sx={urgencyStatusStyle} fontSize="large" />
+					</IconButton>
+				</Tooltip>
 			)}
 			<input
 				type="checkbox"
