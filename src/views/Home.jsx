@@ -1,7 +1,7 @@
-import './Home.css';
 import { SingleList, TextInputElement } from '../components';
 import { useNavigate } from 'react-router-dom';
 import { createList } from '../api';
+import './Home.css';
 
 export function Home({ data, setListPath, userId, userEmail }) {
 	const navigate = useNavigate();

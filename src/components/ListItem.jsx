@@ -1,8 +1,6 @@
 import { useState } from 'react';
-import './ListItem.css';
 import { updateItem, deleteItem } from '../api';
 import { calculateDateNextPurchased, ONE_DAY_IN_MILLISECONDS } from '../utils';
-
 import { IconButton, Tooltip } from '@mui/material';
 import {
 	Restore as OverdueIcon,
@@ -11,6 +9,7 @@ import {
 	RemoveCircle as NotSoonIcon,
 	RadioButtonChecked as InactiveIcon,
 } from '@mui/icons-material';
+import './ListItem.css';
 
 const currentDate = new Date();
 
