@@ -188,7 +188,9 @@ export async function deleteList(deletionType, listPath, userId, userEmail) {
 			sharedLists: arrayRemove(listDocRef),
 		});
 
-		deletionType === 'hard' && (await deleteDoc(listDocRef));
+		if (deletionType === 'hard') {
+			await deleteDoc(listDocRef);
+		}
 	} catch (error) {
 		throw new Error(`Something went wrong: ${error.message ?? error}`);
 	}
