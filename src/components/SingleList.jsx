@@ -1,18 +1,30 @@
-import './SingleList.css';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import PushPinIcon from '@mui/icons-material/PushPin';
-import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined';
-import { Tooltip, IconButton } from '@mui/material';
-import './SingleList.css';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { MaterialListButton, MaterialButton } from './material-buttons';
+import {
+	PushPin,
+	PushPinOutlined,
+	DeleteOutlineOutlined,
+} from '@mui/icons-material';
+import { Tooltip, IconButton, Button } from '@mui/material';
 import { useAuth, deleteList } from '../api';
 import { ConfirmDialog } from './ConfirmDialog';
+import './SingleList.css';
 
-export const deletionResponse = {
+const deletionResponse = {
 	hard: `List deleted permanently.`,
 	soft: `List removed from user view.`,
+};
+
+const tooltipStyle = {
+	fontSize: '1.5rem',
+	marginBlockStart: '0',
+	marginBlockEnd: '0',
+};
+
+export const buttonStyle = {
+	color: 'white',
+	width: '15em',
+	fontSize: '1.5rem',
 };
 
 export function SingleList({
@@ -21,15 +33,16 @@ export function SingleList({
 	setImportantList,
 	isImportant,
 }) {
+	const navigate = useNavigate();
+	const { user } = useAuth();
+
 	const [isHovered, setIsHovered] = useState(false);
 	const [open, isOpen] = useState(false);
 
-	const navigate = useNavigate();
-	const { user } = useAuth();
 	const userId = user?.uid;
 	const userEmail = user?.email;
-
 	const { name, path } = item;
+
 	const listPath = path.slice(0, path.indexOf('/'));
 
 	const handleNavigate = () => {
@@ -62,20 +75,16 @@ export function SingleList({
 		return;
 	};
 
-	const pinStyle = {
-		visibility: isImportant || isHovered ? 'visible' : 'hidden',
-	};
-
-	const deleteStyle = {
-		visibility: isHovered ? 'visible' : 'hidden',
-	};
-
 	const props = {
 		handleDelete,
 		title: `Are you sure you want to delete ${name}?`,
 		setOpen: isOpen,
 		open: open,
 	};
+
+	const tooltipTitle = isImportant ? 'Pinned' : 'Not pinned';
+
+	const iconButtonAreaLabel = isImportant ? 'Pin list' : 'Unpin list';
 
 	return (
 		<>
@@ -85,20 +94,37 @@ export function SingleList({
 				onMouseEnter={() => setIsHovered(true)}
 				onMouseLeave={() => setIsHovered(false)}
 			>
-				<MaterialButton
-					variant="text"
-					sx={pinStyle}
-					onClick={handleImportantList}
-					startIcon={<PushPinIcon />}
-				/>
+				<Tooltip
+					title={<p style={tooltipStyle}>{tooltipTitle}</p>}
+					placement="left"
+					arrow
+				>
+					<IconButton
+						onClick={handleImportantList}
+						sx={{ color: 'white' }}
+						aria-label={iconButtonAreaLabel}
+					>
+						{isImportant ? (
+							<PushPin fontSize="large" />
+						) : (
+							<PushPinOutlined fontSize="large" />
+						)}
+					</IconButton>
+				</Tooltip>
 
-				<MaterialListButton onClick={handleNavigate} buttonText={name} />
-				<MaterialButton
-					variant="text"
-					onClick={toggleDialog}
-					sx={deleteStyle}
-					startIcon={<DeleteIcon />}
-				/>
+				<Button sx={buttonStyle} onClick={handleNavigate}>
+					{name}
+				</Button>
+
+				<Tooltip
+					title={<p style={tooltipStyle}>Delete</p>}
+					placement="right"
+					arrow
+				>
+					<IconButton onClick={toggleDialog} aria-label="Delete list">
+						<DeleteOutlineOutlined sx={{ color: 'white' }} fontSize="large" />
+					</IconButton>
+				</Tooltip>
 			</li>
 		</>
 	);

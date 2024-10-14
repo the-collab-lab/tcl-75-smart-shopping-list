@@ -1,10 +1,14 @@
-import './Home.css';
 import { useNavigate } from 'react-router-dom';
 import { createList } from '../api';
 import { useImportance } from '../utils';
 import { SingleList, TextInputElement } from '../components';
-import { MaterialButton } from '../components/material-buttons';
-import ButtonGroup from '@mui/material/ButtonGroup';
+import { ButtonGroup, Button } from '@mui/material';
+import './Home.css';
+
+export const buttonStyle = {
+	color: 'white',
+	fontSize: '1.5rem',
+};
 
 export function Home({ data, setListPath, userId, userEmail }) {
 	const { sortedLists, setImportantList, isListImportant } =
@@ -50,7 +54,9 @@ export function Home({ data, setListPath, userId, userEmail }) {
 					placeholder="New List Name"
 					required={true}
 				/>
-				<MaterialButton type="submit" buttonText="Add List" />
+				<Button sx={buttonStyle} variant="outlined" type="submit">
+					Add List
+				</Button>
 			</form>
 
 			<ul>
