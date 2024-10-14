@@ -10,6 +10,7 @@ import {
 } from '../src/utils';
 
 vi.mock('../src/hooks', () => ({
+	useEnsureListPath: vi.fn(),
 	useStateWithStorage: vi.fn(),
 	useUrgency: vi.fn(() => ({
 		getUrgency: vi.fn((name) => {
@@ -53,7 +54,6 @@ beforeEach(() => {
 	useStateWithStorage.mockReturnValue(['/groceries']);
 	getDateLastPurchasedOrDateCreated.mockReturnValue(new Date());
 	getDaysFromDate.mockReturnValue(10);
-	comparePurchaseUrgency.mockReturnValue(1);
 	getDaysBetweenDates.mockReturnValue(5);
 });
 
