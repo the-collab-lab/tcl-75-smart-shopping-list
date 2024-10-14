@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { sortByImportance, isListImportant } from '../utils';
 
 /**
  * A custom hook that manages the importance of lists and sorts them accordingly.
@@ -15,52 +16,43 @@ export function useImportance(lists) {
 	);
 
 	useEffect(() => {
-		const sortedByImportance = [...lists].sort(sortByImportance);
+		const sortedByImportance = [...lists].sort((a, b) =>
+			sortByImportance(a, b, importantLists),
+		);
 		setSortedLists(sortedByImportance);
 	}, [lists, importantLists]);
 
+	// This function updates the list of important lists:
+	// it adds the list to local storage if marked as important,
+	// or removes the list from local storage if unmarked as important.
 	const setImportantList = (listPath) => {
-		const found = isListImportant(listPath);
+		// check if the list is already marked as important
+		const found = isListImportant(listPath, importantLists);
+		// initialize an array that will store new important lists
 		let newLists = [];
 
+		// if the list is already marked as important
 		if (found) {
+			// filter out the selected list to unmark it as important
 			newLists = [...importantLists].filter((list) => list.path !== listPath);
+			// if the list was not marked as important
 		} else {
+			// push the new important list with the current date to the beginning of the array
 			newLists = [
 				{ datePinned: new Date(), path: listPath },
 				...importantLists,
 			];
 		}
 
+		// update state with new important lists
 		setImportantLists(newLists);
+		// save updated important lists to local storage
 		localStorage.setItem('importantLists', JSON.stringify(newLists));
 	};
 
-	const getDatePinned = (listPath) => {
-		const importantList = importantLists.find((list) => list.path === listPath);
-		return importantList?.datePinned;
+	return {
+		sortedLists,
+		setImportantList,
+		isListImportant: (path) => isListImportant(path, importantLists),
 	};
-
-	const sortByImportance = (a, b) => {
-		const aIsImportant = isListImportant(a.path);
-		const bIsImportant = isListImportant(b.path);
-
-		if (aIsImportant === bIsImportant) {
-			// find relevant object in important lists
-			const aDate = getDatePinned(a.path);
-			const bDate = getDatePinned(b.path);
-
-			return bDate - aDate;
-		} else if (aIsImportant) {
-			return -1;
-		} else if (bIsImportant) {
-			return 1;
-		}
-	};
-
-	const isListImportant = (listPath) => {
-		return importantLists.some((list) => list.path === listPath);
-	};
-
-	return { sortedLists, setImportantList, isListImportant };
 }
