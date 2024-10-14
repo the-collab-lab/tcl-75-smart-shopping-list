@@ -1,18 +1,15 @@
-import './ConfirmDialog.css';
 import React from 'react';
-import {
-	MaterialButton,
-	buttonStyle,
-	whiteFontColor,
-} from './material-buttons';
 import {
 	Typography,
 	IconButton,
 	Slide,
 	Dialog,
 	DialogTitle,
+	Button,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import { buttonStyle } from './SingleList';
+import './ConfirmDialog.css';
 
 // MUI's Dialog already comes with built-in focus management and accessibility features.
 // It automatically traps focus inside the modal, moves focus to the modal when it opens,
@@ -25,13 +22,13 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const dialogStyle = {
 	backgroundColor: 'rgb(20, 20, 20, 0.8)',
 	position: 'absolute',
-	top: 20,
-	right: 20,
+	top: '1rem',
+	right: '1rem',
 };
 
 const typographyStyle = {
 	padding: '1em',
-	...whiteFontColor,
+	color: 'white',
 };
 
 export function ConfirmDialog({ props }) {
@@ -42,24 +39,26 @@ export function ConfirmDialog({ props }) {
 		event.target.type === 'submit' && handleDelete();
 	};
 
+	const dialogProps = {
+		open: open,
+		TransitionComponent: Transition,
+		onClose: handleClose,
+		PaperProps: {
+			style: dialogStyle,
+		},
+		BackdropProps: {
+			invisible: true,
+		},
+		sx: {
+			'& .MuiDialog-container': {
+				justifyContent: 'flex-end',
+				alignItems: 'flex-start',
+			},
+		},
+	};
+
 	return (
-		<Dialog
-			open={open}
-			TransitionComponent={Transition}
-			onClose={handleClose}
-			PaperProps={{
-				style: dialogStyle,
-			}}
-			BackdropProps={{
-				invisible: true,
-			}}
-			sx={{
-				'& .MuiDialog-container': {
-					justifyContent: 'flex-end',
-					alignItems: 'flex-start',
-				},
-			}}
-		>
+		<Dialog {...dialogProps}>
 			<DialogTitle
 				sx={(theme) => ({
 					color: theme.palette.grey[400],
@@ -92,21 +91,24 @@ export function ConfirmDialog({ props }) {
 			</Typography>
 
 			<div className="ConfirmDialog-ButtonGroup">
-				<MaterialButton
+				<Button
 					type="button"
 					color="error"
 					sx={buttonStyle}
 					onClick={handleClose}
-					buttonText="Cancel"
-				/>
+				>
+					Cancel
+				</Button>
 
-				<MaterialButton
+				<Button
 					type="submit"
 					color="success"
+					fontSize="large"
 					sx={buttonStyle}
 					onClick={handleClose}
-					buttonText="Confirm"
-				/>
+				>
+					Confirm
+				</Button>
 			</div>
 		</Dialog>
 	);
