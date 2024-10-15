@@ -24,7 +24,7 @@ export const List = React.memo(function List({ data, listPath }) {
 	};
 
 	const filteredItems = sortedItems.filter((item) =>
-		item.name.toLowerCase().includes(searchItem.toLowerCase()),
+		item?.name?.toLowerCase().includes(searchItem.toLowerCase()),
 	);
 
 	return (

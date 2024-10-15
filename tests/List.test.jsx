@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { List } from '../src/views/List';
 import { mockShoppingListData } from '../src/mocks/__fixtures__/shoppingListData';
-import { useStateWithStorage } from '../src/hooks';
+import { useStateWithStorage, useEnsureListPath } from '../src/hooks';
 import {
 	getDateLastPurchasedOrDateCreated,
 	getDaysFromDate,
@@ -90,6 +90,13 @@ describe('List Component', () => {
 
 	test('triggers alert and redirects when no list path is found in localStorage', () => {
 		window.localStorage.getItem.mockReturnValueOnce(null);
+
+		useEnsureListPath.mockImplementation(() => {
+			window.alert(
+				'It seems like you landed here without first creating a list or selecting an existing one. Please select or create a new list first. Redirecting to Home.',
+			);
+			return true;
+		});
 
 		render(
 			<MemoryRouter>
