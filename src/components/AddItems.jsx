@@ -3,6 +3,7 @@ import { useStateWithStorage, normalizeItemName } from '../utils';
 import { addItem } from '../api';
 import TextInputElement from './TextInputElement';
 import RadioInputElement from './RadioInputElement';
+import { toast } from 'react-toastify';
 
 const daysUntilPurchaseOptions = {
 	Soon: 7,
@@ -24,7 +25,7 @@ export function AddItems({ items }) {
 
 			try {
 				if (itemName.trim() === '') {
-					alert('Please add an item name.');
+					toast.error('Please add an item name.');
 					return;
 				}
 				// normalize the name by removing all punctuation and spaces to check if the normalized item is already in the list
@@ -35,7 +36,7 @@ export function AddItems({ items }) {
 						normalizeItemName(item.name),
 					);
 					if (currentItems.includes(normalizedItemName)) {
-						alert('This item already exists in the list');
+						toast.error('This item already exists in the list');
 						return;
 					}
 				}
@@ -43,11 +44,13 @@ export function AddItems({ items }) {
 					itemName,
 					daysUntilNextPurchase,
 				});
-				alert(
+				toast.success(
 					`${itemName} was added to the list! The next purchase date is set to ${daysUntilNextPurchase} days from now.`,
 				);
 			} catch (error) {
-				alert(`Item was not added to the database, Error: ${error.message}`);
+				toast.error(
+					`Item was not added to the database, Error: ${error.message}`,
+				);
 			} finally {
 				event.target.reset();
 			}

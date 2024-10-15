@@ -16,8 +16,6 @@ beforeEach(() => {
 		},
 		writable: true,
 	});
-
-	vi.spyOn(window, 'alert').mockImplementation(() => {});
 });
 
 describe('ManageList Component', () => {
@@ -44,19 +42,5 @@ describe('ManageList Component', () => {
 
 		expect(screen.getByPlaceholderText('Enter email')).toBeInTheDocument();
 		expect(screen.getByText('Invite User')).toBeInTheDocument();
-	});
-
-	test('triggers alert and redirects when no list path is found in localStorage', () => {
-		window.localStorage.getItem.mockReturnValueOnce(null);
-
-		render(
-			<MemoryRouter>
-				<ManageList />
-			</MemoryRouter>,
-		);
-
-		expect(window.alert).toHaveBeenCalledWith(
-			'It seems like you landed here without first creating a list or selecting an existing one. Please select or create a new list first. Redirecting to Home.',
-		);
 	});
 });

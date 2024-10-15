@@ -5,6 +5,8 @@ import { Home, Layout, List, ManageList } from './views';
 import { useAuth, useShoppingListData, useShoppingLists } from './api';
 
 import { useStateWithStorage } from './utils';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export function App() {
 	/**
@@ -42,6 +44,16 @@ export function App() {
 
 	return (
 		<Router>
+			<ToastContainer
+				position="top-center"
+				autoClose={4000}
+				hideProgressBar={false}
+				newestOnTop={false}
+				closeOnClick
+				draggable
+				pauseOnHover
+				theme="dark"
+			/>
 			<Routes>
 				<Route path="/" element={<Layout />}>
 					<Route
