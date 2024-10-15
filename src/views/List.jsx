@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { TextInputElement, AddItems, ListItem } from '../components';
 import { useEnsureListPath } from '../hooks/useEnsureListPath';
+import { List as UnorderedList } from '@mui/material';
+import { TextInputElement, AddItems, ListItem } from '../components';
 
 export function List({ data, listPath }) {
 	const [searchItem, setSearchItem] = useState('');
@@ -41,11 +42,11 @@ export function List({ data, listPath }) {
 							label="Search Item:"
 						/>
 					</form>
-					<ul>
+					<UnorderedList>
 						{filteredItems.map((item) => {
 							return <ListItem key={item.id} item={item} listPath={listPath} />;
 						})}
-					</ul>
+					</UnorderedList>
 				</>
 			)}
 		</>
