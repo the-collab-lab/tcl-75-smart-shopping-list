@@ -16,14 +16,11 @@ import './ConfirmDialog.css';
 // and returns it to the previously focused element when it closes.
 
 const Transition = React.forwardRef(function Transition(props, ref) {
-	return <Slide direction="left" ref={ref} {...props} />;
+	return <Slide direction="down" ref={ref} {...props} />;
 });
 
 const dialogStyle = {
-	backgroundColor: 'rgb(20, 20, 20, 0.8)',
-	position: 'absolute',
-	top: '1rem',
-	right: '1rem',
+	backgroundColor: 'rgb(20, 20, 20)',
 };
 
 const typographyStyle = {
@@ -51,7 +48,7 @@ export function ConfirmDialog({ props }) {
 		},
 		sx: {
 			'& .MuiDialog-container': {
-				justifyContent: 'flex-end',
+				justifyContent: 'flex-center',
 				alignItems: 'flex-start',
 			},
 		},
@@ -94,6 +91,7 @@ export function ConfirmDialog({ props }) {
 				<Button
 					type="button"
 					color="error"
+					variant="outlined"
 					sx={buttonStyle}
 					onClick={handleClose}
 				>
@@ -103,6 +101,7 @@ export function ConfirmDialog({ props }) {
 				<Button
 					type="submit"
 					color="success"
+					variant="outlined"
 					fontSize="large"
 					sx={buttonStyle}
 					onClick={handleClose}
