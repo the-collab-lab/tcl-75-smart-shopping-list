@@ -82,9 +82,7 @@ export function SingleList({
 		open: open,
 	};
 
-	const tooltipTitle = isImportant ? 'Pinned' : 'Not pinned';
-
-	const iconButtonAreaLabel = isImportant ? 'Pin list' : 'Unpin list';
+	const importantStatusLabel = isImportant ? 'Unpin list' : 'Pin list';
 
 	return (
 		<>
@@ -95,14 +93,14 @@ export function SingleList({
 				onMouseLeave={() => setIsHovered(false)}
 			>
 				<Tooltip
-					title={<p style={tooltipStyle}>{tooltipTitle}</p>}
+					title={<p style={tooltipStyle}>{importantStatusLabel}</p>}
 					placement="left"
 					arrow
 				>
 					<IconButton
 						onClick={handleImportantList}
 						sx={{ color: 'white' }}
-						aria-label={iconButtonAreaLabel}
+						aria-label={importantStatusLabel}
 					>
 						{isImportant ? (
 							<PushPin fontSize="large" />
