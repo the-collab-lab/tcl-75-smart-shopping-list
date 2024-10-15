@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import PushPinIcon from '@mui/icons-material/PushPin';
-import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined';
+import { PushPin, PushPinOutlined } from '@mui/icons-material';
 import { Tooltip, IconButton } from '@mui/material';
 import './SingleList.css';
 
@@ -27,9 +26,7 @@ export function SingleList({
 		marginBlockEnd: '0',
 	};
 
-	const tooltipTitle = isImportant ? 'Pinned' : 'Not pinned';
-
-	const iconButtonAreaLabel = isImportant ? 'Pin list' : 'Unpin list';
+	const importantStatusLabel = isImportant ? 'Unpin list' : 'Pin list';
 
 	return (
 		<>
@@ -39,19 +36,19 @@ export function SingleList({
 				onMouseLeave={() => setIsHovered(false)}
 			>
 				<Tooltip
-					title={<p style={tooltipStyle}>{tooltipTitle}</p>}
+					title={<p style={tooltipStyle}>{importantStatusLabel}</p>}
 					placement="left"
 					arrow
 				>
 					<IconButton
 						onClick={handleImportantList}
 						sx={{ color: 'white' }}
-						aria-label={iconButtonAreaLabel}
+						aria-label={importantStatusLabel}
 					>
 						{isImportant ? (
-							<PushPinIcon fontSize="large" />
+							<PushPin fontSize="large" />
 						) : (
-							<PushPinOutlinedIcon fontSize="large" />
+							<PushPinOutlined fontSize="large" />
 						)}
 					</IconButton>
 				</Tooltip>
