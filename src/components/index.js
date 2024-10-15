@@ -4,3 +4,4 @@ export * from './AddItems';
 export * from './TextInputElement';
 export * from './RadioInputElement';
 export * from './ConfirmDialog';
+export * from './DeleteIconWithTooltip';
