@@ -1,8 +1,19 @@
 import { useState } from 'react';
-import './ListItem.css';
 import { updateItem, deleteItem } from '../api';
 import { calculateDateNextPurchased, ONE_DAY_IN_MILLISECONDS } from '../utils';
 import { toast } from 'react-toastify';
+import { useConfirmDialog } from '../hooks/useConfirmDialog';
+import { ConfirmDialog } from './ConfirmDialog';
+import { DeleteIconWithTooltip } from './DeleteIconWithTooltip';
+import {
+	ListItem as MaterialListItem,
+	ListItemButton,
+	ListItemIcon,
+	ListItemText,
+	Checkbox,
+} from '@mui/material';
+
+import './ListItem.css';
 
 const currentDate = new Date();
 
@@ -19,6 +30,7 @@ const calculateIsPurchased = (dateLastPurchased) => {
 };
 
 export function ListItem({ item, listPath }) {
+	const { open, isOpen, toggleDialog } = useConfirmDialog();
 	const [isPurchased, setIsPurchased] = useState(() =>
 		calculateIsPurchased(item.dateLastPurchased),
 	);
@@ -46,26 +58,49 @@ export function ListItem({ item, listPath }) {
 	};
 
 	const handleDeleteItem = async () => {
-		if (confirm(`Are you sure you want to delete this item?`)) {
-			try {
-				await deleteItem(listPath, id);
-			} catch (error) {
-				toast.error('Item was not deleted');
-			}
+		console.log('attempting item deletion');
+		try {
+			await deleteItem(listPath, id);
+			toast.success('Item deleted');
+		} catch (error) {
+			toast.error('Item was not deleted');
 		}
 		return;
 	};
 
+	const props = {
+		handleDelete: handleDeleteItem,
+		title: `Are you sure you want to delete ${name}?`,
+		setOpen: isOpen,
+		open: open,
+	};
+
 	return (
-		<li className="ListItem">
-			<input
-				type="checkbox"
-				id={`checkbox-${id}`}
-				checked={isPurchased}
-				onChange={handleChange}
-			/>
-			<label htmlFor={`checkbox-${id}`}>{name}</label>
-			<button onClick={handleDeleteItem}>Delete Item</button>
-		</li>
+		<>
+			{open && <ConfirmDialog props={props} />}
+			<MaterialListItem className="ListItem">
+				<ListItemButton role={undefined} onClick={handleChange} dense>
+					<ListItemIcon>
+						<Checkbox
+							edge="start"
+							checked={isPurchased}
+							tabIndex={-1}
+							disableRipple
+							inputProps={{ 'aria-labelledby': `checkbox-label-${id}` }}
+						/>
+					</ListItemIcon>
+					<ListItemText
+						id={`checkbox-label-${id}`}
+						primary={name}
+						primaryTypographyProps={{ fontSize: '2rem' }}
+					/>
+				</ListItemButton>
+
+				<DeleteIconWithTooltip
+					toggleDialog={toggleDialog}
+					aria-label="Delete item"
+				/>
+			</MaterialListItem>
+		</>
 	);
 }

@@ -1,24 +1,17 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import {
-	PushPin,
-	PushPinOutlined,
-	DeleteOutlineOutlined,
-} from '@mui/icons-material';
+import { toast } from 'react-toastify';
+import { PushPin, PushPinOutlined } from '@mui/icons-material';
 import { Tooltip, IconButton, Button } from '@mui/material';
 import { useAuth, deleteList } from '../api';
+import { useConfirmDialog } from '../hooks/useConfirmDialog';
 import { ConfirmDialog } from './ConfirmDialog';
+import { tooltipStyle, DeleteIconWithTooltip } from './DeleteIconWithTooltip';
 import './SingleList.css';
 
 const deletionResponse = {
 	hard: `List deleted permanently.`,
 	soft: `List removed from user view.`,
-};
-
-const tooltipStyle = {
-	fontSize: '1.5rem',
-	marginBlockStart: '0',
-	marginBlockEnd: '0',
 };
 
 export const buttonStyle = {
@@ -35,9 +28,9 @@ export function SingleList({
 }) {
 	const navigate = useNavigate();
 	const { user } = useAuth();
+	const { open, isOpen, toggleDialog } = useConfirmDialog();
 
 	const [isHovered, setIsHovered] = useState(false);
-	const [open, isOpen] = useState(false);
 
 	const userId = user?.uid;
 	const userEmail = user?.email;
@@ -56,18 +49,14 @@ export function SingleList({
 		setImportantList(path);
 	};
 
-	const toggleDialog = () => {
-		isOpen((prev) => !prev);
-	};
-
 	const handleDelete = async () => {
 		const deletionType = listPathUserId === userId ? 'hard' : 'soft';
 
 		try {
 			await deleteList(deletionType, path, userId, userEmail);
-			alert(deletionResponse[deletionType]);
+			toast.success(deletionResponse[deletionType]);
 		} catch (error) {
-			alert(
+			toast.error(
 				`List was not deleted. Error: ${error.message ? error.message : error}`,
 			);
 		}
@@ -114,15 +103,10 @@ export function SingleList({
 					{name}
 				</Button>
 
-				<Tooltip
-					title={<p style={tooltipStyle}>Delete</p>}
-					placement="right"
-					arrow
-				>
-					<IconButton onClick={toggleDialog} aria-label="Delete list">
-						<DeleteOutlineOutlined sx={{ color: 'white' }} fontSize="large" />
-					</IconButton>
-				</Tooltip>
+				<DeleteIconWithTooltip
+					ariaLabel="Delete list"
+					toggleDialog={toggleDialog}
+				/>
 			</li>
 		</>
 	);
