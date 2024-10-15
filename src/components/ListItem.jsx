@@ -4,9 +4,10 @@ import { calculateDateNextPurchased, ONE_DAY_IN_MILLISECONDS } from '../utils';
 import { toast } from 'react-toastify';
 import { useConfirmDialog } from '../hooks/useConfirmDialog';
 import { ConfirmDialog } from './ConfirmDialog';
-import { DeleteIconWithTooltip } from './DeleteIconWithTooltip';
+import { DeleteIconWithTooltip, tooltipStyle } from './DeleteIconWithTooltip';
 import {
 	ListItem as MaterialListItem,
+	Tooltip,
 	ListItemButton,
 	ListItemIcon,
 	ListItemText,
@@ -75,19 +76,29 @@ export function ListItem({ item, listPath }) {
 		open: open,
 	};
 
+	const tooltipTitle = isPurchased
+		? 'Mark as not purchased'
+		: 'Mark as purchased';
+
 	return (
 		<>
 			{open && <ConfirmDialog props={props} />}
 			<MaterialListItem className="ListItem">
 				<ListItemButton role={undefined} onClick={handleChange} dense>
 					<ListItemIcon>
-						<Checkbox
-							edge="start"
-							checked={isPurchased}
-							tabIndex={-1}
-							disableRipple
-							inputProps={{ 'aria-labelledby': `checkbox-label-${id}` }}
-						/>
+						<Tooltip
+							title={<p style={tooltipStyle}>{tooltipTitle}</p>}
+							placement="left"
+							arrow
+						>
+							<Checkbox
+								edge="start"
+								checked={isPurchased}
+								tabIndex={-1}
+								disableRipple
+								inputProps={{ 'aria-labelledby': `checkbox-label-${id}` }}
+							/>
+						</Tooltip>
 					</ListItemIcon>
 					<ListItemText
 						id={`checkbox-label-${id}`}
