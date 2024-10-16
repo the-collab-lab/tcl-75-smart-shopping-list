@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import { useEnsureListPath, useUrgency } from '../hooks';
 import { getUrgency } from '../utils/urgencyUtils';
-import { List as UnorderedList } from '@mui/material';
+import { List as UnorderedList, Paper, Typography } from '@mui/material';
 import { ListItem, AddItems, TextInputElement } from '../components';
+
+const paperStyle = {
+	bgcolor: 'var(--color-gray-dark)',
+	color: 'white',
+	p: '1rem',
+};
 
 // React.memo is needed to prevent unnecessary re-renders of the List component
 // when the props (data and listPath) haven't changed,
@@ -29,26 +35,32 @@ export const List = React.memo(function List({ data, listPath }) {
 	);
 
 	return (
-		<>
+		<Paper elevation={2} sx={paperStyle}>
 			{!data?.length ? (
 				<>
-					<p>Welcome to {listName}!</p>
-					<p>Ready to add your first item? Start adding below!</p>
+					<Typography variant="h3" my="2rem">
+						Welcome to {listName}!
+					</Typography>
+					<Typography variant="h4" my="3rem">
+						Ready to add your first item? Start adding below!
+					</Typography>
 
 					<AddItems items={data} />
 				</>
 			) : (
 				<>
-					<p>{listName}</p>
+					<Typography variant="h3" my="2rem">
+						{listName}
+					</Typography>
 
 					<form onSubmit={(event) => event.preventDefault()}>
 						<TextInputElement
 							id="search-item"
 							type="search"
-							placeholder="Search Item..."
+							placeholder="Search item..."
 							required={true}
 							onChange={handleTextChange}
-							label="Search Item:"
+							label="Search item:"
 						/>
 					</form>
 					<UnorderedList>
@@ -66,6 +78,6 @@ export const List = React.memo(function List({ data, listPath }) {
 					</UnorderedList>
 				</>
 			)}
-		</>
+		</Paper>
 	);
 });
