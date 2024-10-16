@@ -49,4 +49,18 @@ describe('List Component', () => {
 		expect(screen.getByLabelText('Not soon')).toBeInTheDocument();
 		expect(screen.getByText('Submit')).toBeInTheDocument();
 	});
+
+	test('shows AddItems component with existing items', () => {
+		render(
+			<MemoryRouter>
+				<List data={mockShoppingListData} listPath={'/groceries'} />
+			</MemoryRouter>,
+		);
+
+		expect(screen.getByLabelText('Item Name:')).toBeInTheDocument();
+		expect(screen.getByLabelText('Soon')).toBeInTheDocument();
+		expect(screen.getByLabelText('Kind of soon')).toBeInTheDocument();
+		expect(screen.getByLabelText('Not soon')).toBeInTheDocument();
+		expect(screen.getByText('Submit')).toBeInTheDocument();
+	});
 });
