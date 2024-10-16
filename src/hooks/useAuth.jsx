@@ -3,7 +3,7 @@ import { auth } from '../api/config.js';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { addUserToDatabase } from '../api/firebase.js';
 import { Button } from '@mui/material';
-import { buttonStyle } from '../components/SingleList.jsx';
+import { buttonStyle } from '../views/Home.jsx';
 
 /**
  * A button that signs the user in using Google OAuth. When clicked,
