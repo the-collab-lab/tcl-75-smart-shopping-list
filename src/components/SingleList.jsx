@@ -1,24 +1,23 @@
-import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { PushPin, PushPinOutlined } from '@mui/icons-material';
-import { Tooltip, IconButton, Button } from '@mui/material';
 import { deleteList } from '../api';
-import { useAuth } from '../hooks';
-import { useConfirmDialog } from '../hooks/useConfirmDialog';
-import { ConfirmDialog } from './ConfirmDialog';
-import { tooltipStyle, DeleteIconWithTooltip } from './DeleteIconWithTooltip';
+import { useAuth, useConfirmDialog } from '../hooks';
+import { tooltipStyle, DeleteIconWithTooltip, ConfirmDialog } from './index';
+import { PushPin, PushPinOutlined } from '@mui/icons-material';
+import {
+	Tooltip,
+	ListItemIcon,
+	Button,
+	ListItem,
+	ListItemButton,
+} from '@mui/material';
+import { buttonStyle } from '../views';
 import './SingleList.css';
 
 const deletionResponse = {
 	hard: `List deleted permanently.`,
 	soft: `List removed from user view.`,
-};
-
-export const buttonStyle = {
-	color: 'white',
-	width: '15em',
-	fontSize: '1.5rem',
 };
 
 export function SingleList({
@@ -69,7 +68,7 @@ export function SingleList({
 		handleDelete,
 		title: `Are you sure you want to delete ${name}?`,
 		setOpen: isOpen,
-		open: open,
+		open,
 	};
 
 	const importantStatusLabel = isImportant ? 'Unpin list' : 'Pin list';
@@ -77,38 +76,41 @@ export function SingleList({
 	return (
 		<>
 			{open && <ConfirmDialog props={props} />}
-			<li
+			<ListItem
 				className={`SingleList ${isHovered && 'hovered'}`}
 				onMouseEnter={() => setIsHovered(true)}
 				onMouseLeave={() => setIsHovered(false)}
+				secondaryAction={
+					<DeleteIconWithTooltip
+						ariaLabel="Delete list"
+						toggleDialog={toggleDialog}
+					/>
+				}
 			>
-				<Tooltip
-					title={<p style={tooltipStyle}>{importantStatusLabel}</p>}
-					placement="left"
-					arrow
-				>
-					<IconButton
-						onClick={handleImportantList}
-						sx={{ color: 'white' }}
-						aria-label={importantStatusLabel}
+				<ListItemButton>
+					<Tooltip
+						title={<p style={tooltipStyle}>{importantStatusLabel}</p>}
+						placement="left"
+						arrow
 					>
-						{isImportant ? (
-							<PushPin fontSize="large" />
-						) : (
-							<PushPinOutlined fontSize="large" />
-						)}
-					</IconButton>
-				</Tooltip>
+						<ListItemIcon
+							onClick={handleImportantList}
+							sx={{ color: 'white' }}
+							aria-label={importantStatusLabel}
+						>
+							{isImportant ? (
+								<PushPin fontSize="large" />
+							) : (
+								<PushPinOutlined fontSize="large" />
+							)}
+						</ListItemIcon>
+					</Tooltip>
+				</ListItemButton>
 
-				<Button sx={buttonStyle} onClick={handleNavigate}>
+				<Button sx={buttonStyle} onClick={handleNavigate} fullWidth>
 					{name}
 				</Button>
-
-				<DeleteIconWithTooltip
-					ariaLabel="Delete list"
-					toggleDialog={toggleDialog}
-				/>
-			</li>
+			</ListItem>
 		</>
 	);
 }
