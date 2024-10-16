@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { auth } from '../api/config.js';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { addUserToDatabase } from '../api/firebase.js';
+import { Button } from '@mui/material';
+import { buttonStyle } from '../components/SingleList.jsx';
 
 /**
  * A button that signs the user in using Google OAuth. When clicked,
@@ -9,21 +11,28 @@ import { addUserToDatabase } from '../api/firebase.js';
  * After the user signs in through the popup, it closes and the user becomes signed in.
  */
 export const SignInButton = () => (
-	<button
+	<Button
+		sx={buttonStyle}
+		variant="outlined"
 		type="button"
 		onClick={() => signInWithPopup(auth, new GoogleAuthProvider())}
 	>
 		Sign In
-	</button>
+	</Button>
 );
 
 /**
  * A button that signs the user out of the app using Firebase Auth.
  */
 export const SignOutButton = () => (
-	<button type="button" onClick={() => auth.signOut()}>
+	<Button
+		sx={buttonStyle}
+		variant="outlined"
+		type="button"
+		onClick={() => auth.signOut()}
+	>
 		Sign Out
-	</button>
+	</Button>
 );
 
 /**
