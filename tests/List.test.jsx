@@ -66,7 +66,7 @@ describe('List Component', () => {
 		);
 
 		expect(screen.getByText('groceries')).toBeInTheDocument();
-		expect(screen.getByLabelText('Search Item:')).toBeInTheDocument();
+		expect(screen.getByLabelText('Search item:')).toBeInTheDocument();
 
 		mockShoppingListData.forEach((item) => {
 			expect(screen.getByText(item.name)).toBeInTheDocument();
@@ -81,7 +81,7 @@ describe('List Component', () => {
 		);
 
 		expect(screen.getByText('Welcome to groceries!')).toBeInTheDocument();
-		expect(screen.getByLabelText('Item Name:')).toBeInTheDocument();
+		expect(screen.getByLabelText('Add item:')).toBeInTheDocument();
 		expect(screen.getByLabelText('Soon')).toBeInTheDocument();
 		expect(screen.getByLabelText('Kind of soon')).toBeInTheDocument();
 		expect(screen.getByLabelText('Not soon')).toBeInTheDocument();
