@@ -11,6 +11,7 @@
 	display: flex;
 	flex-direction: column;
 	height: 100dvh;
+	padding-top: 80px;
 }
 
 .Layout > * {
@@ -31,7 +32,7 @@
 .Layout-main {
 	margin: 0 auto;
 	padding-block: 0;
-	padding-block-start: 6rem;
+	padding-block-start: 4rem;
 	width: min(72ch, 100%);
 }
 
