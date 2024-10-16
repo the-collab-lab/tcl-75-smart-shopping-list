@@ -12,6 +12,9 @@ import { mockUser } from '../src/mocks/__fixtures__/auth';
 
 vi.mock('../src/api', () => ({
 	deleteList: vi.fn(),
+}));
+
+vi.mock('../src/hooks', () => ({
 	useAuth: () => ({
 		user: { uid: mockUser.uid, email: mockUser.email },
 	}),

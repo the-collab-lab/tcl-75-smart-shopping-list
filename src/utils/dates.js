@@ -51,11 +51,22 @@ export const calculateDateNextPurchased = (currentDate, item) => {
  * @param {Date} laterDate The ending date.
  * @returns {number} The number of days between the two dates.
  */
-function getDaysBetweenDates(earlierDate, laterDate) {
+export function getDaysBetweenDates(earlierDate, laterDate) {
 	return Math.floor(
 		(laterDate.getTime() - earlierDate.getTime()) / ONE_DAY_IN_MILLISECONDS,
 	);
 }
+
+// takes in a Date
+// calculates days since date that was passed and today
+export const getDaysFromDate = (pastDate) =>
+	getDaysBetweenDates(pastDate, new Date());
+
+// takes in Timestamps, returns a Date
+export const getDateLastPurchasedOrDateCreated = (
+	dateLastPurchased,
+	dateCreated,
+) => dateLastPurchased?.toDate() ?? dateCreated.toDate();
 
 /**
  * Calculate the purchase intervals between current, next, and last purchase dates.
@@ -70,10 +81,10 @@ function calculatePurchaseIntervals(
 	dateNextPurchased,
 	dateLastPurchased,
 ) {
-	const lastPurchaseDate = dateLastPurchased?.toDate();
-
-	const lastEstimatedIntervalStartDate =
-		lastPurchaseDate ?? dateCreated.toDate();
+	const lastEstimatedIntervalStartDate = getDateLastPurchasedOrDateCreated(
+		dateLastPurchased,
+		dateCreated,
+	);
 
 	const lastEstimatedInterval = getDaysBetweenDates(
 		lastEstimatedIntervalStartDate,
@@ -81,9 +92,9 @@ function calculatePurchaseIntervals(
 	);
 
 	const daysSinceLastPurchase =
-		lastPurchaseDate === undefined
+		dateLastPurchased?.toDate() === undefined
 			? 0
-			: getDaysBetweenDates(lastPurchaseDate, currentDate);
+			: getDaysBetweenDates(dateLastPurchased.toDate(), currentDate);
 
 	return { lastEstimatedInterval, daysSinceLastPurchase };
 }

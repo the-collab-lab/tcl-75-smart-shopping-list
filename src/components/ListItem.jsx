@@ -8,15 +8,42 @@ import { DeleteIconWithTooltip, tooltipStyle } from './DeleteIconWithTooltip';
 import {
 	ListItem as MaterialListItem,
 	Tooltip,
+	IconButton,
 	ListItemButton,
 	ListItemIcon,
 	ListItemText,
 	Checkbox,
 } from '@mui/material';
+import {
+	Restore as OverdueIcon,
+	RestartAlt as SoonIcon,
+	RadioButtonUnchecked as KindOfSoonIcon,
+	RemoveCircle as NotSoonIcon,
+	RadioButtonChecked as InactiveIcon,
+} from '@mui/icons-material';
 
 import './ListItem.css';
 
 const currentDate = new Date();
+
+const urgencyStatusIcons = {
+	overdue: OverdueIcon,
+	soon: SoonIcon,
+	kindOfSoon: KindOfSoonIcon,
+	notSoon: NotSoonIcon,
+	inactive: InactiveIcon,
+};
+
+const urgencyStatusStyle = {
+	fontSize: '2.5rem',
+	color: 'white',
+};
+
+const toolTipStyle = {
+	fontSize: '1.5rem',
+	marginBlockStart: '0',
+	marginBlockEnd: '0',
+};
 
 const calculateIsPurchased = (dateLastPurchased) => {
 	if (!dateLastPurchased) {
@@ -30,7 +57,7 @@ const calculateIsPurchased = (dateLastPurchased) => {
 	return currentDate < oneDayLater;
 };
 
-export function ListItem({ item, listPath }) {
+export function ListItem({ item, listPath, itemUrgencyStatus }) {
 	const { open, isOpen, toggleDialog } = useConfirmDialog();
 	const [isPurchased, setIsPurchased] = useState(() =>
 		calculateIsPurchased(item.dateLastPurchased),
@@ -69,6 +96,8 @@ export function ListItem({ item, listPath }) {
 		return;
 	};
 
+	const UrgencyStatusIcon = urgencyStatusIcons[itemUrgencyStatus];
+
 	const props = {
 		handleDelete: handleDeleteItem,
 		title: `Are you sure you want to delete ${name}?`,
@@ -84,6 +113,17 @@ export function ListItem({ item, listPath }) {
 		<>
 			{open && <ConfirmDialog props={props} />}
 			<MaterialListItem className="ListItem">
+				{UrgencyStatusIcon && (
+					<Tooltip
+						title={<p style={toolTipStyle}>{itemUrgencyStatus}</p>}
+						placement="left"
+						arrow
+					>
+						<IconButton aria-label={itemUrgencyStatus}>
+							<UrgencyStatusIcon sx={urgencyStatusStyle} fontSize="large" />
+						</IconButton>
+					</Tooltip>
+				)}
 				<ListItemButton role={undefined} onClick={handleChange} dense>
 					<ListItemIcon>
 						<Tooltip
