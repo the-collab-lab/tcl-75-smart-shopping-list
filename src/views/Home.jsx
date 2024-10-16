@@ -1,14 +1,24 @@
+import { Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createList } from '../api';
 import { toast } from 'react-toastify';
 import { useImportance } from '../hooks';
-import { ButtonGroup, Button } from '@mui/material';
+import { Divider, Button, List as UnorderedList } from '@mui/material';
 import { SingleList, TextInputElement } from '../components';
 import './Home.css';
 
 export const buttonStyle = {
 	color: 'white',
 	fontSize: '1.5rem',
+};
+
+export const buttonWithTopMarginStyle = {
+	...buttonStyle,
+	marginTop: '0.5rem',
+};
+
+const dividerStyle = {
+	borderColor: 'primary.main',
 };
 
 export function Home({ data, setListPath, userId, userEmail }) {
@@ -46,32 +56,32 @@ export function Home({ data, setListPath, userId, userEmail }) {
 			<form id="list-form" onSubmit={handleSubmit}>
 				<TextInputElement
 					key="list-name"
-					label="Enter New List:"
+					label="Start your new list here:"
 					type="text"
 					id="list-name"
-					placeholder="New List Name"
+					placeholder="What's the name of your list?"
 					required={true}
 				/>
-				<Button sx={buttonStyle} variant="outlined" type="submit">
+				<Button sx={buttonWithTopMarginStyle} variant="outlined" type="submit">
 					Add List
 				</Button>
 			</form>
 
-			<ul>
-				<ButtonGroup size="large" orientation="vertical">
-					{sortedLists.map((item, index) => {
-						return (
+			<UnorderedList>
+				{sortedLists.map((item, index) => {
+					return (
+						<Fragment key={item.name + index}>
 							<SingleList
-								key={item.name + index}
 								item={item}
 								setListPath={setListPath}
 								setImportantList={setImportantList}
 								isImportant={isListImportant(item.path)}
 							/>
-						);
-					})}
-				</ButtonGroup>
-			</ul>
+							<Divider variant="inset" sx={dividerStyle} component="li" />
+						</Fragment>
+					);
+				})}
+			</UnorderedList>
 		</div>
 	);
 }
