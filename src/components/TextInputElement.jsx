@@ -1,11 +1,11 @@
-export const TextInputElement = ({
+export function TextInputElement({
 	label,
 	type,
 	id,
 	placeholder,
 	onChange,
 	required,
-}) => {
+}) {
 	return (
 		<>
 			<label htmlFor={id}>{label}</label>
@@ -21,4 +21,4 @@ export const TextInputElement = ({
 			<br />
 		</>
 	);
-};
+}

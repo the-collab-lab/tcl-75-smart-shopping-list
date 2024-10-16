@@ -22,7 +22,6 @@ describe('Layout Component', () => {
 			</MemoryRouter>,
 		);
 
-		expect(screen.getByText('Smart shopping list')).toBeInTheDocument();
 		expect(screen.getByText('Home')).toBeInTheDocument();
 		expect(screen.getByText('List')).toBeInTheDocument();
 		expect(screen.getByText('Manage List')).toBeInTheDocument();

@@ -19,15 +19,13 @@ export function Layout() {
 	return (
 		<>
 			<div className="Layout">
-				<header className="Layout-header">
-					<h1>Smart shopping list</h1>
-				</header>
 				<a>{user ? <SignOutButton /> : <SignInButton />}</a>
 				<main className="Layout-main">
 					<Outlet />
 				</main>
 				<nav className="Nav">
 					<div className="Nav-container">
+						<div className="App-title">Shopping List</div>
 						<NavLink to="/" end className="Nav-link">
 							Home
 						</NavLink>

@@ -2,9 +2,26 @@
 	align-items: baseline;
 	display: flex;
 	flex-direction: row;
+	align-items: center;
 	font-size: 1.2em;
+	padding-inline-start: 0.3em;
+	cursor: pointer;
+	padding: 0.05em;
 }
 
 .SingleList-label {
 	margin-left: 0.2em;
+}
+
+.hovered {
+	background-color: rgba(83, 43, 226, 0.281);
+	border-radius: 2em;
+}
+
+.hidden {
+	visibility: hidden;
+}
+
+.visible {
+	visibility: visible;
 }

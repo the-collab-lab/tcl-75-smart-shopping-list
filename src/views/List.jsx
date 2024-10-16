@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { ListItem, AddItems, TextInputElement } from '../components';
 import { useEnsureListPath, useUrgency } from '../hooks';
 import { getUrgency } from '../utils/urgencyUtils';
+import { List as UnorderedList } from '@mui/material';
+import { ListItem, AddItems, TextInputElement } from '../components';
 
 // React.memo is needed to prevent unnecessary re-renders of the List component
 // when the props (data and listPath) haven't changed,
@@ -50,7 +51,7 @@ export const List = React.memo(function List({ data, listPath }) {
 							label="Search Item:"
 						/>
 					</form>
-					<ul>
+					<UnorderedList>
 						{filteredItems.map((item) => {
 							const itemUrgencyStatus = getUrgency(item.name, urgencyObject);
 							return (
@@ -62,7 +63,7 @@ export const List = React.memo(function List({ data, listPath }) {
 								/>
 							);
 						})}
-					</ul>
+					</UnorderedList>
 				</>
 			)}
 		</>

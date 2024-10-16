@@ -1,5 +1,6 @@
 import {
 	arrayUnion,
+	arrayRemove,
 	getDoc,
 	setDoc,
 	addDoc,
@@ -45,46 +46,6 @@ export function useShoppingLists(userId, userEmail) {
 		});
 	}, [userId, userEmail]);
 
-	return data;
-}
-
-/**
- * A custom hook that subscribes to a shopping list in our Firestore database
- * and returns new data whenever the list changes.
- * @param {string | null} listPath
- * @see https://firebase.google.com/docs/firestore/query-data/listen
- */
-export function useShoppingListData(listPath) {
-	// Start with an empty array for our data.
-	/** @type {import('firebase/firestore').DocumentData[]} */
-	const initialState = [];
-	const [data, setData] = useState(initialState);
-
-	useEffect(() => {
-		if (!listPath) return;
-
-		// When we get a listPath, we use it to subscribe to real-time updates
-		// from Firestore.
-		return onSnapshot(collection(db, listPath, 'items'), (snapshot) => {
-			// The snapshot is a real-time update. We iterate over the documents in it
-			// to get the data.
-			const nextData = snapshot.docs.map((docSnapshot) => {
-				// Extract the document's data from the snapshot.
-				const item = docSnapshot.data();
-
-				// The document's id is not in the data,
-				// but it is very useful, so we add it to the data ourselves.
-				item.id = docSnapshot.id;
-
-				return item;
-			});
-
-			// Update our React state with the new data.
-			setData(nextData);
-		});
-	}, [listPath]);
-
-	// Return the data so it can be used by our React components.
 	return data;
 }
 
@@ -159,6 +120,35 @@ export async function shareList(listPath, currentUserId, recipientEmail) {
 		return 'shared';
 	} catch {
 		return;
+	}
+}
+
+/**
+ * Delete a list from a user's lists in Firestore.
+ * - If the deletion type is 'soft', the list will be removed from the user's view but not deleted from Firestore.
+ * - If the deletion type is 'hard', the list will be permanently deleted from Firestore and removed from the user's view.
+ *
+ * @param {string} deletionType - The type of deletion ('soft' or 'hard').
+ * @param {string} listPath - The path to the list document in Firestore.
+ * @param {string} userId - The id of the user who owns the list.
+ * @param {string} userEmail - The email of the user who has the list in their shared lists.
+ * @returns {Promise<string>} A message indicating the result of the deletion operation.
+ * @throws {Error} If something goes wrong during the deletion process.
+ */
+export async function deleteList(deletionType, listPath, userId, userEmail) {
+	const listDocRef = doc(db, listPath);
+	const userDocRef = doc(db, 'users', userEmail);
+
+	try {
+		await updateDoc(userDocRef, {
+			sharedLists: arrayRemove(listDocRef),
+		});
+
+		if (deletionType === 'hard') {
+			await deleteDoc(listDocRef);
+		}
+	} catch (error) {
+		throw new Error(`Something went wrong: ${error.message ?? error}`);
 	}
 }
 
