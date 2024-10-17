@@ -5,8 +5,8 @@ export function useUrgency(items) {
 	const [urgencyObject, setUrgencyObject] = useState({
 		overdue: new Set(),
 		soon: new Set(),
-		kindOfSoon: new Set(),
-		notSoon: new Set(),
+		'kind of soon': new Set(),
+		'not soon': new Set(),
 		inactive: new Set(),
 	});
 
@@ -16,8 +16,8 @@ export function useUrgency(items) {
 		let initialUrgencyState = {
 			overdue: new Set(),
 			soon: new Set(),
-			kindOfSoon: new Set(),
-			notSoon: new Set(),
+			'kind of soon': new Set(),
+			'not soon': new Set(),
 			inactive: new Set(),
 		};
 

@@ -1,14 +1,17 @@
 import { useState } from 'react';
 import { updateItem, deleteItem } from '../api';
-import { calculateDateNextPurchased, ONE_DAY_IN_MILLISECONDS } from '../utils';
+import { calculateDateNextPurchased, calculateIsPurchased } from '../utils';
 import { toast } from 'react-toastify';
 import { useConfirmDialog } from '../hooks/useConfirmDialog';
-import { ConfirmDialog } from './ConfirmDialog';
-import { DeleteIconWithTooltip, tooltipStyle } from './DeleteIconWithTooltip';
+import {
+	IconWithTooltip,
+	tooltipStyle,
+	InfoCard,
+	ConfirmDialog,
+} from './index';
 import {
 	ListItem as MaterialListItem,
 	Tooltip,
-	IconButton,
 	ListItemButton,
 	ListItemIcon,
 	ListItemText,
@@ -20,55 +23,43 @@ import {
 	RadioButtonUnchecked as KindOfSoonIcon,
 	RemoveCircle as NotSoonIcon,
 	RadioButtonChecked as InactiveIcon,
+	MoreHoriz,
+	DeleteOutlineOutlined,
 } from '@mui/icons-material';
 
 import './ListItem.css';
 
-const currentDate = new Date();
-
 const urgencyStatusIcons = {
 	overdue: OverdueIcon,
 	soon: SoonIcon,
-	kindOfSoon: KindOfSoonIcon,
-	notSoon: NotSoonIcon,
+	'kind of soon': KindOfSoonIcon,
+	'not soon': NotSoonIcon,
 	inactive: InactiveIcon,
 };
 
-const urgencyStatusStyle = {
+const largeWhiteFontStyle = {
 	fontSize: '2.5rem',
 	color: 'white',
 };
 
-const toolTipStyle = {
-	fontSize: '1.5rem',
-	marginBlockStart: '0',
-	marginBlockEnd: '0',
-};
-
-const calculateIsPurchased = (dateLastPurchased) => {
-	if (!dateLastPurchased) {
-		return false;
-	}
-	const purchaseDate = dateLastPurchased.toDate();
-	const oneDayLater = new Date(
-		purchaseDate.getTime() + ONE_DAY_IN_MILLISECONDS,
-	);
-
-	return currentDate < oneDayLater;
-};
-
 export function ListItem({ item, listPath, itemUrgencyStatus }) {
 	const { open, isOpen, toggleDialog } = useConfirmDialog();
+	const [showCard, setShowCard] = useState(false);
+
+	const currentDate = new Date();
 	const [isPurchased, setIsPurchased] = useState(() =>
-		calculateIsPurchased(item.dateLastPurchased),
+		calculateIsPurchased(item.dateLastPurchased, currentDate),
 	);
 	const { name, id } = item;
 
 	const updateItemOnPurchase = () => {
+		const { nextPurchaseEstimate, averagePurchaseInterval } =
+			calculateDateNextPurchased(currentDate, item);
 		return {
 			dateLastPurchased: currentDate,
-			dateNextPurchased: calculateDateNextPurchased(currentDate, item),
+			dateNextPurchased: nextPurchaseEstimate,
 			totalPurchases: item.totalPurchases + 1,
+			averagePurchaseInterval,
 		};
 	};
 
@@ -86,7 +77,6 @@ export function ListItem({ item, listPath, itemUrgencyStatus }) {
 	};
 
 	const handleDeleteItem = async () => {
-		console.log('attempting item deletion');
 		try {
 			await deleteItem(listPath, id);
 			toast.success('Item deleted');
@@ -96,13 +86,33 @@ export function ListItem({ item, listPath, itemUrgencyStatus }) {
 		return;
 	};
 
+	const toggleMoreInformation = () => {
+		setShowCard((prev) => !prev);
+	};
+
 	const UrgencyStatusIcon = urgencyStatusIcons[itemUrgencyStatus];
 
-	const props = {
+	const deleteIconProps = {
+		icon: <DeleteOutlineOutlined sx={{ color: 'white' }} fontSize="large" />,
+		onClick: toggleDialog,
+		ariaLabel: 'Delete item',
+		title: 'Delete',
+		placement: 'left',
+	};
+
+	const moreInformationProps = {
+		icon: <MoreHoriz sx={largeWhiteFontStyle} />,
+		onClick: toggleMoreInformation,
+		ariaLabel: 'More information',
+		title: 'More information',
+		placement: 'right',
+	};
+
+	const confirmDialogProps = {
 		handleDelete: handleDeleteItem,
 		title: `Are you sure you want to delete ${name}?`,
 		setOpen: isOpen,
-		open: open,
+		open,
 	};
 
 	const tooltipTitle = isPurchased
@@ -111,46 +121,61 @@ export function ListItem({ item, listPath, itemUrgencyStatus }) {
 
 	return (
 		<>
-			{open && <ConfirmDialog props={props} />}
+			{open && <ConfirmDialog props={confirmDialogProps} />}
 			<MaterialListItem className="ListItem">
-				{UrgencyStatusIcon && (
-					<Tooltip
-						title={<p style={toolTipStyle}>{itemUrgencyStatus}</p>}
-						placement="left"
-						arrow
-					>
-						<IconButton aria-label={itemUrgencyStatus}>
-							<UrgencyStatusIcon sx={urgencyStatusStyle} fontSize="large" />
-						</IconButton>
-					</Tooltip>
-				)}
-				<ListItemButton role={undefined} onClick={handleChange} dense>
-					<ListItemIcon>
-						<Tooltip
-							title={<p style={tooltipStyle}>{tooltipTitle}</p>}
-							placement="left"
-							arrow
-						>
-							<Checkbox
-								edge="start"
-								checked={isPurchased}
-								tabIndex={-1}
-								disableRipple
-								inputProps={{ 'aria-labelledby': `checkbox-label-${id}` }}
-							/>
-						</Tooltip>
-					</ListItemIcon>
-					<ListItemText
-						id={`checkbox-label-${id}`}
-						primary={name}
-						primaryTypographyProps={{ fontSize: '2rem' }}
+				{showCard ? (
+					<InfoCard
+						item={item}
+						toggleCard={toggleMoreInformation}
+						show={showCard}
 					/>
-				</ListItemButton>
+				) : (
+					<>
+						{UrgencyStatusIcon && (
+							<Tooltip
+								title={<p style={tooltipStyle}>{itemUrgencyStatus}</p>}
+								placement="left"
+								arrow
+							>
+								<UrgencyStatusIcon
+									sx={largeWhiteFontStyle}
+									fontSize="large"
+									aria-label={itemUrgencyStatus}
+								/>
+							</Tooltip>
+						)}
 
-				<DeleteIconWithTooltip
-					toggleDialog={toggleDialog}
-					aria-label="Delete item"
-				/>
+						<ListItemButton role={undefined} onClick={handleChange} dense>
+							<ListItemIcon>
+								<Tooltip
+									title={<p style={tooltipStyle}>{tooltipTitle}</p>}
+									placement="left"
+									arrow
+								>
+									<Checkbox
+										edge="start"
+										checked={isPurchased}
+										tabIndex={-1}
+										disableRipple
+										inputProps={{ 'aria-labelledby': `checkbox-label-${id}` }}
+									/>
+								</Tooltip>
+							</ListItemIcon>
+
+							<ListItemText
+								id={`checkbox-label-${id}`}
+								primary={name}
+								primaryTypographyProps={{ fontSize: '2rem' }}
+							/>
+						</ListItemButton>
+
+						{/* delete icon */}
+						<IconWithTooltip {...deleteIconProps} />
+
+						{/* more information icon */}
+						<IconWithTooltip {...moreInformationProps} />
+					</>
+				)}
 			</MaterialListItem>
 		</>
 	);

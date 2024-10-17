@@ -167,6 +167,7 @@ export async function addItem(listPath, { itemName, daysUntilNextPurchase }) {
 		dateNextPurchased: addDaysFromToday(daysUntilNextPurchase),
 		name: itemName,
 		totalPurchases: 0,
+		averagePurchaseInterval: 0,
 	});
 }
 
@@ -178,13 +179,19 @@ export async function addItem(listPath, { itemName, daysUntilNextPurchase }) {
  * @param {Date} updatedData.dateLastPurchased The date the item was last purchased.
  * @param {Date} updatedData.dateNextPurchased The estimated date for the next purchase.
  * @param {number} updatedData.totalPurchases The total number of times the item has been purchased.
+ * @param {number} updatedData.averagePurchaseInterval The average purchase interval of the item that has been purchased.
  * @returns {Promise<string>} A message confirming the item was successfully updated.
  * @throws {Error} If the item update fails.
  */
 export async function updateItem(
 	listPath,
 	itemId,
-	{ dateLastPurchased, dateNextPurchased, totalPurchases },
+	{
+		dateLastPurchased,
+		dateNextPurchased,
+		totalPurchases,
+		averagePurchaseInterval,
+	},
 ) {
 	// reference the item path
 	const itemDocRef = doc(db, listPath, 'items', itemId);
@@ -194,6 +201,7 @@ export async function updateItem(
 			dateLastPurchased,
 			dateNextPurchased,
 			totalPurchases,
+			averagePurchaseInterval,
 		});
 		return 'item purchased';
 	} catch (error) {
