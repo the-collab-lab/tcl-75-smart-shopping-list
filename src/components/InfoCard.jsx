@@ -1,3 +1,4 @@
+import { describeAveragePurchaseInterval } from '../utils';
 import {
 	Box,
 	Card,
@@ -12,8 +13,13 @@ import CloseIcon from '@mui/icons-material/Close';
 export const InfoCard = ({ item, toggleCard, show }) => {
 	const typographyOptions = {
 		totalPurchases: `You've purchased this item ${item.totalPurchases} times`,
+		averagePurchaseInterval: describeAveragePurchaseInterval(
+			item.averagePurchaseInterval,
+		),
 		dateCreated: `Item added on: ${item.dateCreated?.toDate().toLocaleString()}`,
-		dateLastPurchased: `Last bought on: ${item.dateLastPurchased?.toDate().toLocaleString() ?? 'Not purchased yet'}`,
+		dateLastPurchased: item.dateLastPurchased
+			? `Last bought on: ${item.dateLastPurchased?.toDate().toLocaleString()}`
+			: 'Not purchased yet',
 		dateNextPurchased: `Expected to buy again by: ${item.dateNextPurchased?.toDate().toLocaleString() ?? 'No estimate yet'}`,
 	};
 
