@@ -110,4 +110,18 @@ describe('List Component', () => {
 			'It seems like you landed here without first creating a list or selecting an existing one. Please select or create a new list first. Redirecting to Home.',
 		);
 	});
+
+	test('shows AddItems component with existing items', () => {
+		render(
+			<MemoryRouter>
+				<List data={mockShoppingListData} listPath={'/groceries'} />
+			</MemoryRouter>,
+		);
+
+		expect(screen.getByLabelText('Item Name:')).toBeInTheDocument();
+		expect(screen.getByLabelText('Soon')).toBeInTheDocument();
+		expect(screen.getByLabelText('Kind of soon')).toBeInTheDocument();
+		expect(screen.getByLabelText('Not soon')).toBeInTheDocument();
+		expect(screen.getByText('Submit')).toBeInTheDocument();
+	});
 });
