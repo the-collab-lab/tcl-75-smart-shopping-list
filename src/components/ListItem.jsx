@@ -129,12 +129,18 @@ export function ListItem({ item, listPath, itemUrgencyStatus }) {
 				) : (
 					<>
 						{UrgencyStatusIcon && (
-							<UrgencyStatusIcon
-								sx={largeWhiteFontStyle}
-								fontSize="large"
-								aria-label={itemUrgencyStatus}
+							<Tooltip
 								title={<p style={tooltipStyle}>{itemUrgencyStatus}</p>}
-							/>
+								placement="left"
+								arrow
+							>
+								<UrgencyStatusIcon
+									sx={largeWhiteFontStyle}
+									fontSize="large"
+									aria-label={itemUrgencyStatus}
+									title={<p style={tooltipStyle}>{itemUrgencyStatus}</p>}
+								/>
+							</Tooltip>
 						)}
 
 						<ListItemButton role={undefined} onClick={handleChange} dense>
