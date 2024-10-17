@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useEnsureListPath, useUrgency } from '../hooks';
 import { getUrgency } from '../utils/urgencyUtils';
-import { List as UnorderedList } from '@mui/material';
+import { List as UnorderedList, Box, Grid } from '@mui/material';
 import { ListItem, AddItems, TextInputElement } from '../components';
 
 // React.memo is needed to prevent unnecessary re-renders of the List component
@@ -40,17 +40,31 @@ export const List = React.memo(function List({ data, listPath }) {
 			) : (
 				<>
 					<p>{listName}</p>
+					<Box sx={{ flexGrow: 1 }}>
+						<Grid
+							container
+							spacing={8}
+							columns={16}
+							justifyContent="space-between"
+						>
+							<Grid item size={{ xs: 2, sm: 4, md: 4 }}>
+								<AddItems items={data} />
+							</Grid>
+							<Grid item size={{ xs: 2, sm: 4, md: 4 }}>
+								<form onSubmit={(event) => event.preventDefault()}>
+									<TextInputElement
+										id="search-item"
+										type="search"
+										placeholder="Search Item..."
+										required={true}
+										onChange={handleTextChange}
+										label="Search Item:"
+									/>
+								</form>
+							</Grid>
+						</Grid>
+					</Box>
 
-					<form onSubmit={(event) => event.preventDefault()}>
-						<TextInputElement
-							id="search-item"
-							type="search"
-							placeholder="Search Item..."
-							required={true}
-							onChange={handleTextChange}
-							label="Search Item:"
-						/>
-					</form>
 					<UnorderedList>
 						{filteredItems.map((item) => {
 							const itemUrgencyStatus = getUrgency(item.name, urgencyObject);
