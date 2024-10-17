@@ -138,7 +138,6 @@ export function ListItem({ item, listPath, itemUrgencyStatus }) {
 									sx={largeWhiteFontStyle}
 									fontSize="large"
 									aria-label={itemUrgencyStatus}
-									title={<p style={tooltipStyle}>{itemUrgencyStatus}</p>}
 								/>
 							</Tooltip>
 						)}
