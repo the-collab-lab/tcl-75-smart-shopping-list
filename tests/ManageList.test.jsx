@@ -26,7 +26,7 @@ describe('ManageList Component', () => {
 			</MemoryRouter>,
 		);
 
-		expect(screen.getByLabelText('Item Name:')).toBeInTheDocument();
+		expect(screen.getByLabelText('Add item:')).toBeInTheDocument();
 		expect(screen.getByLabelText('Soon')).toBeInTheDocument();
 		expect(screen.getByLabelText('Kind of soon')).toBeInTheDocument();
 		expect(screen.getByLabelText('Not soon')).toBeInTheDocument();
@@ -41,6 +41,6 @@ describe('ManageList Component', () => {
 		);
 
 		expect(screen.getByPlaceholderText('Enter email')).toBeInTheDocument();
-		expect(screen.getByText('Invite User')).toBeInTheDocument();
+		expect(screen.getByText('Share')).toBeInTheDocument();
 	});
 });

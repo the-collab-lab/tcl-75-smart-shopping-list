@@ -1,14 +1,14 @@
-import { AddItems } from '../components/AddItems';
-import { ShareList } from '../components/ShareList';
 import { useEnsureListPath } from '../hooks/useEnsureListPath';
+import Box from '@mui/material/Box';
+import { AddItems, ShareList } from '../components';
 
 export function ManageList({ items }) {
 	// Redirect to home if no list path is null
 	if (useEnsureListPath()) return <></>;
 	return (
-		<div>
+		<Box>
 			<AddItems items={items} />
 			<ShareList />
-		</div>
+		</Box>
 	);
 }

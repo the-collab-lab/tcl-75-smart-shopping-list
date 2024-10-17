@@ -1,6 +1,7 @@
 .SingleList {
 	align-items: baseline;
 	display: flex;
+	width: inherit;
 	flex-direction: row;
 	align-items: center;
 	font-size: 1.2em;

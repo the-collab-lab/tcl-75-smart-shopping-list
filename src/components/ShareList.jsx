@@ -1,7 +1,9 @@
-import { shareList } from '../api';
 import { useStateWithStorage, useAuth } from '../hooks';
-import { TextInputElement } from './index.js';
+import { shareList } from '../api';
 import { toast } from 'react-toastify';
+import { Box, Button } from '@mui/material';
+import { TextInputElement } from './index.js';
+import { buttonWithTopMarginStyle } from '../views/Home';
 
 export function ShareList() {
 	const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
@@ -39,17 +41,29 @@ export function ShareList() {
 	};
 
 	return (
-		<div>
-			<form onSubmit={handleEmailInputSubmit}>
+		<Box component="section" my={10}>
+			<Box
+				component="form"
+				noValidate
+				autoComplete="off"
+				onSubmit={handleEmailInputSubmit}
+			>
 				<TextInputElement
 					type="email"
 					id="email-input"
 					placeholder="Enter email"
-					label="Enter Email:"
+					label="Share this list with a friend by entering their email:"
 					required={true}
 				/>
-				<button type="submit">Invite User</button>
-			</form>
-		</div>
+				<Button
+					sx={buttonWithTopMarginStyle}
+					fullWidth
+					variant="outlined"
+					type="submit"
+				>
+					Share
+				</Button>
+			</Box>
+		</Box>
 	);
 }
