@@ -7,7 +7,10 @@ import {
 	Grid,
 	Paper,
 	Typography,
+	Collapse,
+	Button,
 } from '@mui/material';
+import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
 import { ListItem, AddItems, TextInputElement } from '../components';
 
 const paperStyle = {
@@ -23,6 +26,7 @@ const paperStyle = {
 
 export const List = React.memo(function List({ data, listPath }) {
 	const [searchItem, setSearchItem] = useState('');
+	const [showAddItems, setShowAddItems] = useState(false);
 	const { urgencyObject } = useUrgency(data);
 
 	// Redirect to home if no list path is null
@@ -40,6 +44,10 @@ export const List = React.memo(function List({ data, listPath }) {
 		item?.name?.toLowerCase().includes(searchItem.toLowerCase()),
 	);
 
+	const handleAddItems = () => {
+		setShowAddItems((prev) => !prev);
+	};
+
 	return (
 		<Paper elevation={2} sx={paperStyle}>
 			{!data?.length ? (
@@ -55,32 +63,45 @@ export const List = React.memo(function List({ data, listPath }) {
 				</>
 			) : (
 				<>
-					<Typography variant="h3" my="2rem">
-						{listName}
-					</Typography>
-					<Box sx={{ flexGrow: 1 }}>
+					<Box sx={{ flexGrow: 1, margin: '2.5rem 2rem' }}>
 						<Grid
 							container
-							spacing={8}
+							spacing={4}
 							columns={16}
 							justifyContent="space-between"
 						>
-							<Grid item size={{ xs: 2, sm: 4, md: 4 }}>
-								<AddItems items={data} />
+							<Grid item>
+								<Typography variant="h3">{listName}</Typography>
 							</Grid>
-							<Grid item size={{ xs: 2, sm: 4, md: 4 }}>
-								<form onSubmit={(event) => event.preventDefault()}>
-									<TextInputElement
-										id="search-item"
-										type="search"
-										placeholder="Search item..."
-										required={true}
-										onChange={handleTextChange}
-										label="Search item:"
-									/>
-								</form>
+							<Grid item>
+								<Button
+									variant="outlined"
+									onClick={handleAddItems}
+									endIcon={showAddItems ? <ArrowDropUp /> : <ArrowDropDown />}
+								>
+									<Typography variant="h4">New item</Typography>
+								</Button>
 							</Grid>
 						</Grid>
+					</Box>
+
+					{showAddItems && (
+						<Box>
+							<Collapse in={showAddItems}>
+								<AddItems items={data} />
+							</Collapse>
+						</Box>
+					)}
+
+					<Box component="form" onSubmit={(event) => event.preventDefault()}>
+						<TextInputElement
+							id="search-item"
+							type="search"
+							placeholder="Search item..."
+							required={true}
+							onChange={handleTextChange}
+							label="Search item:"
+						/>
 					</Box>
 
 					<UnorderedList>
