@@ -20,7 +20,7 @@ export function AddItems({ items }) {
 
 			const daysUntilNextPurchase =
 				event.target.elements['purchase-date'].value;
-
+			console.log(daysUntilNextPurchase, 'days until next purchase');
 			const itemName = event.target.elements['item-name'].value;
 
 			try {
@@ -69,13 +69,13 @@ export function AddItems({ items }) {
 					required={true}
 				/>
 
-				{Object.entries(daysUntilPurchaseOptions).map(([key, value]) => (
+				{Object.entries(daysUntilPurchaseOptions).map(([status, days]) => (
 					<RadioInputElement
-						key={key}
-						label={key}
-						id={key}
-						value={value}
-						required={true}
+						key={status}
+						label={status}
+						id={status}
+						value={days}
+						required={status}
 					/>
 				))}
 				<button type="submit">Submit</button>
