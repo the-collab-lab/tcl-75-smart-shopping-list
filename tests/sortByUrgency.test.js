@@ -16,18 +16,18 @@ describe('sortByUrgency', () => {
 		expect(result).toBe('soon');
 	});
 
-	it('should return "kindOfSoon" if daysUntilNextPurchase is between 7 and 30', () => {
+	it('should return "kind of soon" if daysUntilNextPurchase is between 7 and 30', () => {
 		const item = { name: 'Jam' };
 		const daysUntilNextPurchase = 15;
 		const result = sortByUrgency(item, daysUntilNextPurchase);
-		expect(result).toBe('kindOfSoon');
+		expect(result).toBe('kind of soon');
 	});
 
-	it('should return "notSoon" if daysUntilNextPurchase is 30 or more', () => {
+	it('should return "not soon" if daysUntilNextPurchase is 30 or more', () => {
 		const item = { name: 'Nutella' };
 		const daysUntilNextPurchase = 30;
 		const result = sortByUrgency(item, daysUntilNextPurchase);
-		expect(result).toBe('notSoon');
+		expect(result).toBe('not soon');
 	});
 
 	it('should throw an error if daysUntilNextPurchase cannot be classified', () => {

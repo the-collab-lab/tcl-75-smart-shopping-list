@@ -22,8 +22,8 @@ vi.mock('../src/hooks', () => ({
 		urgencyObject: {
 			overdue: [{ name: 'nutella', id: '0T1ByXr8YJSOzujOlLMI' }],
 			soon: [{ name: 'Cheese', id: '1MFWOWMCzDtEHQboFZfR' }],
-			kindOfSoon: [],
-			notSoon: [{ name: 'Jam', id: 'MnUiYUmhg8iCzX1eMxW8' }],
+			'kind of soon': [],
+			'not soon': [{ name: 'Jam', id: 'MnUiYUmhg8iCzX1eMxW8' }],
 			inactive: [],
 		},
 	})),

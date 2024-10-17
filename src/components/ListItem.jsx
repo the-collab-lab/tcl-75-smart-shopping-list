@@ -28,8 +28,8 @@ const currentDate = new Date();
 const urgencyStatusIcons = {
 	overdue: OverdueIcon,
 	soon: SoonIcon,
-	kindOfSoon: KindOfSoonIcon,
-	notSoon: NotSoonIcon,
+	'kind of soon': KindOfSoonIcon,
+	'not soon': NotSoonIcon,
 	inactive: InactiveIcon,
 };
 
