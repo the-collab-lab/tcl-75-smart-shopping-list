@@ -34,6 +34,7 @@ vi.mock('../src/utils', () => ({
 	getDateLastPurchasedOrDateCreated: vi.fn(),
 	getDaysFromDate: vi.fn(),
 	getDaysBetweenDates: vi.fn(),
+	calculateIsPurchased: vi.fn(),
 }));
 
 beforeEach(() => {
