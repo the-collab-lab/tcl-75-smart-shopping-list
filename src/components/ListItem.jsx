@@ -4,11 +4,11 @@ import { calculateDateNextPurchased, ONE_DAY_IN_MILLISECONDS } from '../utils';
 import { toast } from 'react-toastify';
 import { useConfirmDialog } from '../hooks/useConfirmDialog';
 import { ConfirmDialog } from './ConfirmDialog';
-import { DeleteIconWithTooltip, tooltipStyle } from './DeleteIconWithTooltip';
+import { InfoCard } from './InfoCard';
+import { IconWithTooltip, tooltipStyle } from './IconWithTooltip';
 import {
 	ListItem as MaterialListItem,
 	Tooltip,
-	IconButton,
 	ListItemButton,
 	ListItemIcon,
 	ListItemText,
@@ -20,6 +20,8 @@ import {
 	RadioButtonUnchecked as KindOfSoonIcon,
 	RemoveCircle as NotSoonIcon,
 	RadioButtonChecked as InactiveIcon,
+	MoreHoriz,
+	DeleteOutlineOutlined,
 } from '@mui/icons-material';
 
 import './ListItem.css';
@@ -34,7 +36,7 @@ const urgencyStatusIcons = {
 	inactive: InactiveIcon,
 };
 
-const urgencyStatusStyle = {
+const largeWhiteFontStyle = {
 	fontSize: '2.5rem',
 	color: 'white',
 };
@@ -59,6 +61,7 @@ const calculateIsPurchased = (dateLastPurchased) => {
 
 export function ListItem({ item, listPath, itemUrgencyStatus }) {
 	const { open, isOpen, toggleDialog } = useConfirmDialog();
+	const [showCard, setShowCard] = useState(false);
 	const [isPurchased, setIsPurchased] = useState(() =>
 		calculateIsPurchased(item.dateLastPurchased),
 	);
@@ -86,7 +89,6 @@ export function ListItem({ item, listPath, itemUrgencyStatus }) {
 	};
 
 	const handleDeleteItem = async () => {
-		console.log('attempting item deletion');
 		try {
 			await deleteItem(listPath, id);
 			toast.success('Item deleted');
@@ -96,13 +98,40 @@ export function ListItem({ item, listPath, itemUrgencyStatus }) {
 		return;
 	};
 
+	const toggleMoreInformation = () => {
+		setShowCard((prev) => !prev);
+	};
+
 	const UrgencyStatusIcon = urgencyStatusIcons[itemUrgencyStatus];
 
-	const props = {
+	const urgencyIconProps = {
+		icon: <UrgencyStatusIcon sx={largeWhiteFontStyle} fontSize="large" />,
+		ariaLabel: { itemUrgencyStatus },
+		title: <p style={toolTipStyle}>{itemUrgencyStatus}</p>,
+		placement: 'left',
+	};
+
+	const deleteIconProps = {
+		icon: <DeleteOutlineOutlined sx={{ color: 'white' }} fontSize="large" />,
+		onClick: toggleDialog,
+		ariaLabel: 'Delete item',
+		title: 'Delete',
+		placement: 'left',
+	};
+
+	const moreInformationProps = {
+		icon: <MoreHoriz sx={largeWhiteFontStyle} />,
+		onClick: toggleMoreInformation,
+		ariaLabel: 'More information',
+		title: 'More information',
+		placement: 'right',
+	};
+
+	const confirmDialogProps = {
 		handleDelete: handleDeleteItem,
 		title: `Are you sure you want to delete ${name}?`,
 		setOpen: isOpen,
-		open: open,
+		open,
 	};
 
 	const tooltipTitle = isPurchased
@@ -111,46 +140,49 @@ export function ListItem({ item, listPath, itemUrgencyStatus }) {
 
 	return (
 		<>
-			{open && <ConfirmDialog props={props} />}
+			{open && <ConfirmDialog props={confirmDialogProps} />}
 			<MaterialListItem className="ListItem">
-				{UrgencyStatusIcon && (
-					<Tooltip
-						title={<p style={toolTipStyle}>{itemUrgencyStatus}</p>}
-						placement="left"
-						arrow
-					>
-						<IconButton aria-label={itemUrgencyStatus}>
-							<UrgencyStatusIcon sx={urgencyStatusStyle} fontSize="large" />
-						</IconButton>
-					</Tooltip>
-				)}
-				<ListItemButton role={undefined} onClick={handleChange} dense>
-					<ListItemIcon>
-						<Tooltip
-							title={<p style={tooltipStyle}>{tooltipTitle}</p>}
-							placement="left"
-							arrow
-						>
-							<Checkbox
-								edge="start"
-								checked={isPurchased}
-								tabIndex={-1}
-								disableRipple
-								inputProps={{ 'aria-labelledby': `checkbox-label-${id}` }}
-							/>
-						</Tooltip>
-					</ListItemIcon>
-					<ListItemText
-						id={`checkbox-label-${id}`}
-						primary={name}
-						primaryTypographyProps={{ fontSize: '2rem' }}
+				{showCard ? (
+					<InfoCard
+						item={item}
+						toggleCard={toggleMoreInformation}
+						show={showCard}
 					/>
-				</ListItemButton>
+				) : (
+					<>
+						{UrgencyStatusIcon && <IconWithTooltip {...urgencyIconProps} />}
 
-				<DeleteIconWithTooltip
-					toggleDialog={toggleDialog}
-					aria-label="Delete item"
-				/>
+						<ListItemButton role={undefined} onClick={handleChange} dense>
+							<ListItemIcon>
+								<Tooltip
+									title={<p style={tooltipStyle}>{tooltipTitle}</p>}
+									placement="left"
+									arrow
+								>
+									<Checkbox
+										edge="start"
+										checked={isPurchased}
+										tabIndex={-1}
+										disableRipple
+										inputProps={{ 'aria-labelledby': `checkbox-label-${id}` }}
+									/>
+								</Tooltip>
+							</ListItemIcon>
+
+							<ListItemText
+								id={`checkbox-label-${id}`}
+								primary={name}
+								primaryTypographyProps={{ fontSize: '2rem' }}
+							/>
+						</ListItemButton>
+
+						{/* delete icon */}
+						<IconWithTooltip {...deleteIconProps} />
+
+						{/* more information icon */}
+						<IconWithTooltip {...moreInformationProps} />
+					</>
+				)}
 			</MaterialListItem>
 		</>
 	);
