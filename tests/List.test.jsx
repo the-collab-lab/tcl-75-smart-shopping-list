@@ -12,6 +12,7 @@ import {
 vi.mock('../src/hooks', () => ({
 	useEnsureListPath: vi.fn(),
 	useStateWithStorage: vi.fn(),
+	useEnsureListPath: vi.fn(),
 	useUrgency: vi.fn(() => ({
 		getUrgency: vi.fn((name) => {
 			if (name === 'nutella') return 'soon';
