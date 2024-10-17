@@ -1,13 +1,17 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { PushPin, PushPinOutlined } from '@mui/icons-material';
+import {
+	PushPin,
+	PushPinOutlined,
+	DeleteOutlineOutlined,
+} from '@mui/icons-material';
 import { Tooltip, IconButton, Button } from '@mui/material';
 import { deleteList } from '../api';
 import { useAuth } from '../hooks';
 import { useConfirmDialog } from '../hooks/useConfirmDialog';
 import { ConfirmDialog } from './ConfirmDialog';
-import { tooltipStyle, DeleteIconWithTooltip } from './DeleteIconWithTooltip';
+import { tooltipStyle, IconWithTooltip } from './IconWithTooltip';
 import './SingleList.css';
 
 const deletionResponse = {
@@ -69,7 +73,7 @@ export function SingleList({
 		handleDelete,
 		title: `Are you sure you want to delete ${name}?`,
 		setOpen: isOpen,
-		open: open,
+		open,
 	};
 
 	const importantStatusLabel = isImportant ? 'Unpin list' : 'Pin list';
@@ -104,9 +108,14 @@ export function SingleList({
 					{name}
 				</Button>
 
-				<DeleteIconWithTooltip
+				<IconWithTooltip
+					icon={
+						<DeleteOutlineOutlined sx={{ color: 'white' }} fontSize="large" />
+					}
 					ariaLabel="Delete list"
-					toggleDialog={toggleDialog}
+					onClick={toggleDialog}
+					title="Delete"
+					placement="right"
 				/>
 			</li>
 		</>
