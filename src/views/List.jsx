@@ -75,6 +75,7 @@ export const List = React.memo(function List({ data, listPath }) {
 							</Grid>
 							<Grid item>
 								<Button
+									data-testid="new-item-button"
 									variant="outlined"
 									onClick={handleAddItems}
 									endIcon={showAddItems ? <ArrowDropUp /> : <ArrowDropDown />}
