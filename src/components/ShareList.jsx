@@ -41,7 +41,7 @@ export function ShareList() {
 	};
 
 	return (
-		<Box component="section" my={10}>
+		<Box component="section">
 			<Box
 				component="form"
 				noValidate

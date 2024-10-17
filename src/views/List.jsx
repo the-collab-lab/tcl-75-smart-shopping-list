@@ -13,12 +13,6 @@ import {
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
 import { ListItem, AddItems, TextInputElement } from '../components';
 
-const paperStyle = {
-	bgcolor: 'var(--color-gray-dark)',
-	color: 'white',
-	p: '1rem',
-};
-
 // React.memo is needed to prevent unnecessary re-renders of the List component
 // when the props (data and listPath) haven't changed,
 // optimizing performance by avoiding re-computation of expensive
@@ -49,7 +43,7 @@ export const List = React.memo(function List({ data, listPath }) {
 	};
 
 	return (
-		<Paper elevation={2} sx={paperStyle}>
+		<Paper elevation={2} sx={darkPaperStyle}>
 			{!data?.length ? (
 				<>
 					<Typography variant="h3" my="2rem">
@@ -87,23 +81,30 @@ export const List = React.memo(function List({ data, listPath }) {
 					</Box>
 
 					{showAddItems && (
-						<Box>
-							<Collapse in={showAddItems}>
-								<AddItems items={data} />
-							</Collapse>
-						</Box>
+						<Paper elevation={3} sx={lightPaperStyle}>
+							<Box>
+								<Collapse in={showAddItems}>
+									<AddItems items={data} />
+								</Collapse>
+							</Box>
+						</Paper>
 					)}
 
-					<Box component="form" onSubmit={(event) => event.preventDefault()}>
-						<TextInputElement
-							id="search-item"
-							type="search"
-							placeholder="Search item..."
-							required={true}
-							onChange={handleTextChange}
-							label="Search item:"
-						/>
-					</Box>
+					<Paper
+						elevation={3}
+						sx={{ ...lightPaperStyle, marginBlockStart: '2rem' }}
+					>
+						<Box component="form" onSubmit={(event) => event.preventDefault()}>
+							<TextInputElement
+								id="search-item"
+								type="search"
+								placeholder="Search for item..."
+								required={true}
+								onChange={handleTextChange}
+								label="Search for item:"
+							/>
+						</Box>
+					</Paper>
 
 					<UnorderedList>
 						{filteredItems.map((item) => {

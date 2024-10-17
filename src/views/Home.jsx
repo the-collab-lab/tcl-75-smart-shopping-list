@@ -3,8 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { createList } from '../api';
 import { toast } from 'react-toastify';
 import { useImportance } from '../hooks';
-import { Divider, Button, List as UnorderedList } from '@mui/material';
+import {
+	Paper,
+	Box,
+	Divider,
+	Button,
+	List as UnorderedList,
+} from '@mui/material';
 import { SingleList, TextInputElement } from '../components';
+import { lightPaperStyle, darkPaperStyle } from '../App';
 import './Home.css';
 
 export const buttonStyle = {
@@ -52,36 +59,44 @@ export function Home({ data, setListPath, userId, userEmail }) {
 	};
 
 	return (
-		<div className="Home">
-			<form id="list-form" onSubmit={handleSubmit}>
-				<TextInputElement
-					key="list-name"
-					label="Start your new list here:"
-					type="text"
-					id="list-name"
-					placeholder="What's the name of your list?"
-					required={true}
-				/>
-				<Button sx={buttonWithTopMarginStyle} variant="outlined" type="submit">
-					Add List
-				</Button>
-			</form>
+		<Paper elevation={2} sx={darkPaperStyle}>
+			<div className="Home">
+				<Paper elevation={3} sx={lightPaperStyle}>
+					<Box component="form" id="list-form" onSubmit={handleSubmit}>
+						<TextInputElement
+							key="list-name"
+							label="Start your new list here:"
+							type="text"
+							id="list-name"
+							placeholder="What's the name of your list?"
+							required={true}
+						/>
+						<Button
+							sx={buttonWithTopMarginStyle}
+							variant="outlined"
+							type="submit"
+						>
+							Add List
+						</Button>
+					</Box>
+				</Paper>
 
-			<UnorderedList>
-				{sortedLists.map((item, index) => {
-					return (
-						<Fragment key={item.name + index}>
-							<SingleList
-								item={item}
-								setListPath={setListPath}
-								setImportantList={setImportantList}
-								isImportant={isListImportant(item.path)}
-							/>
-							<Divider variant="inset" sx={dividerStyle} component="li" />
-						</Fragment>
-					);
-				})}
-			</UnorderedList>
-		</div>
+				<UnorderedList>
+					{sortedLists.map((item, index) => {
+						return (
+							<Fragment key={item.name + index}>
+								<SingleList
+									item={item}
+									setListPath={setListPath}
+									setImportantList={setImportantList}
+									isImportant={isListImportant(item.path)}
+								/>
+								<Divider variant="inset" sx={dividerStyle} component="li" />
+							</Fragment>
+						);
+					})}
+				</UnorderedList>
+			</div>
+		</Paper>
 	);
 }

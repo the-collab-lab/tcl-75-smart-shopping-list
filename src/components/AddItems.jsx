@@ -66,7 +66,7 @@ export function AddItems({ items }) {
 	);
 
 	return (
-		<Box component="section" sx={{ paddingBlockEnd: '1rem' }}>
+		<Box component="section">
 			<Box
 				component="form"
 				noValidate
