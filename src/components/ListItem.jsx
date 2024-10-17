@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import { updateItem, deleteItem } from '../api';
-import { calculateDateNextPurchased, ONE_DAY_IN_MILLISECONDS } from '../utils';
+import { calculateDateNextPurchased, calculateIsPurchased } from '../utils';
 import { toast } from 'react-toastify';
 import { useConfirmDialog } from '../hooks/useConfirmDialog';
-import { ConfirmDialog } from './ConfirmDialog';
-import { InfoCard } from './InfoCard';
-import { IconWithTooltip, tooltipStyle } from './IconWithTooltip';
+import {
+	IconWithTooltip,
+	tooltipStyle,
+	InfoCard,
+	ConfirmDialog,
+} from './index';
 import {
 	ListItem as MaterialListItem,
 	Tooltip,
@@ -26,13 +29,11 @@ import {
 
 import './ListItem.css';
 
-const currentDate = new Date();
-
 const urgencyStatusIcons = {
 	overdue: OverdueIcon,
 	soon: SoonIcon,
-	kindOfSoon: KindOfSoonIcon,
-	notSoon: NotSoonIcon,
+	'kind of soon': KindOfSoonIcon,
+	'not soon': NotSoonIcon,
 	inactive: InactiveIcon,
 };
 
@@ -41,29 +42,13 @@ const largeWhiteFontStyle = {
 	color: 'white',
 };
 
-const toolTipStyle = {
-	fontSize: '1.5rem',
-	marginBlockStart: '0',
-	marginBlockEnd: '0',
-};
-
-const calculateIsPurchased = (dateLastPurchased) => {
-	if (!dateLastPurchased) {
-		return false;
-	}
-	const purchaseDate = dateLastPurchased.toDate();
-	const oneDayLater = new Date(
-		purchaseDate.getTime() + ONE_DAY_IN_MILLISECONDS,
-	);
-
-	return currentDate < oneDayLater;
-};
-
 export function ListItem({ item, listPath, itemUrgencyStatus }) {
 	const { open, isOpen, toggleDialog } = useConfirmDialog();
 	const [showCard, setShowCard] = useState(false);
+
+	const currentDate = new Date();
 	const [isPurchased, setIsPurchased] = useState(() =>
-		calculateIsPurchased(item.dateLastPurchased),
+		calculateIsPurchased(item.dateLastPurchased, currentDate),
 	);
 	const { name, id } = item;
 
@@ -104,13 +89,6 @@ export function ListItem({ item, listPath, itemUrgencyStatus }) {
 
 	const UrgencyStatusIcon = urgencyStatusIcons[itemUrgencyStatus];
 
-	const urgencyIconProps = {
-		icon: <UrgencyStatusIcon sx={largeWhiteFontStyle} fontSize="large" />,
-		ariaLabel: { itemUrgencyStatus },
-		title: <p style={toolTipStyle}>{itemUrgencyStatus}</p>,
-		placement: 'left',
-	};
-
 	const deleteIconProps = {
 		icon: <DeleteOutlineOutlined sx={{ color: 'white' }} fontSize="large" />,
 		onClick: toggleDialog,
@@ -150,7 +128,14 @@ export function ListItem({ item, listPath, itemUrgencyStatus }) {
 					/>
 				) : (
 					<>
-						{UrgencyStatusIcon && <IconWithTooltip {...urgencyIconProps} />}
+						{UrgencyStatusIcon && (
+							<UrgencyStatusIcon
+								sx={largeWhiteFontStyle}
+								fontSize="large"
+								aria-label={itemUrgencyStatus}
+								title={<p style={tooltipStyle}>{itemUrgencyStatus}</p>}
+							/>
+						)}
 
 						<ListItemButton role={undefined} onClick={handleChange} dense>
 							<ListItemIcon>
