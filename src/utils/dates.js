@@ -142,7 +142,7 @@ function getNextPurchaseEstimate(purchaseIntervals, totalPurchases) {
  * @param {number} estimatedDaysUntilPurchase - The estimated number of days until the next purchase.
  * @returns {number} The average purchase interval calculated from the provided intervals.
  */
-function getAveragePurchaseInterval(
+export function getAveragePurchaseInterval(
 	purchaseIntervals,
 	estimatedDaysUntilPurchase,
 ) {
