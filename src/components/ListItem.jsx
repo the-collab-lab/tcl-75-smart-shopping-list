@@ -53,10 +53,13 @@ export function ListItem({ item, listPath, itemUrgencyStatus }) {
 	const { name, id } = item;
 
 	const updateItemOnPurchase = () => {
+		const { nextPurchaseEstimate, averagePurchaseInterval } =
+			calculateDateNextPurchased(currentDate, item);
 		return {
 			dateLastPurchased: currentDate,
-			dateNextPurchased: calculateDateNextPurchased(currentDate, item),
+			dateNextPurchased: nextPurchaseEstimate,
 			totalPurchases: item.totalPurchases + 1,
+			averagePurchaseInterval,
 		};
 	};
 
