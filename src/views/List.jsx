@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import { useEnsureListPath, useUrgency } from '../hooks';
 import { getUrgency } from '../utils/urgencyUtils';
-import { List as UnorderedList, Paper, Typography } from '@mui/material';
+import {
+	List as UnorderedList,
+	Box,
+	Grid,
+	Paper,
+	Typography,
+} from '@mui/material';
 import { ListItem, AddItems, TextInputElement } from '../components';
 
 const paperStyle = {
@@ -52,17 +58,31 @@ export const List = React.memo(function List({ data, listPath }) {
 					<Typography variant="h3" my="2rem">
 						{listName}
 					</Typography>
+					<Box sx={{ flexGrow: 1 }}>
+						<Grid
+							container
+							spacing={8}
+							columns={16}
+							justifyContent="space-between"
+						>
+							<Grid item size={{ xs: 2, sm: 4, md: 4 }}>
+								<AddItems items={data} />
+							</Grid>
+							<Grid item size={{ xs: 2, sm: 4, md: 4 }}>
+								<form onSubmit={(event) => event.preventDefault()}>
+									<TextInputElement
+										id="search-item"
+										type="search"
+										placeholder="Search item..."
+										required={true}
+										onChange={handleTextChange}
+										label="Search item:"
+									/>
+								</form>
+							</Grid>
+						</Grid>
+					</Box>
 
-					<form onSubmit={(event) => event.preventDefault()}>
-						<TextInputElement
-							id="search-item"
-							type="search"
-							placeholder="Search item..."
-							required={true}
-							onChange={handleTextChange}
-							label="Search item:"
-						/>
-					</form>
 					<UnorderedList>
 						{filteredItems.map((item) => {
 							const itemUrgencyStatus = getUrgency(item.name, urgencyObject);
