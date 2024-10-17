@@ -6,13 +6,13 @@ export const tooltipStyle = {
 	marginBlockEnd: '0',
 };
 
-export const IconWithTooltip = ({
+export function IconWithTooltip({
 	icon,
 	onClick,
 	ariaLabel,
 	title,
 	placement,
-}) => {
+}) {
 	return (
 		<Tooltip
 			title={<Box style={tooltipStyle}>{title}</Box>}
@@ -24,4 +24,4 @@ export const IconWithTooltip = ({
 			</IconButton>
 		</Tooltip>
 	);
-};
+}

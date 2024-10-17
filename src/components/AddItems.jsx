@@ -20,7 +20,7 @@ export function AddItems({ items }) {
 
 			const daysUntilNextPurchase =
 				event.target.elements['purchase-date'].value;
-			console.log(daysUntilNextPurchase, 'days until next purchase');
+
 			const itemName = event.target.elements['item-name'].value;
 
 			try {
