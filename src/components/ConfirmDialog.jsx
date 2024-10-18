@@ -8,7 +8,7 @@ import {
 	Button,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { buttonStyle } from './SingleList';
+import { buttonStyle } from '../App';
 import './ConfirmDialog.css';
 
 // MUI's Dialog already comes with built-in focus management and accessibility features.
