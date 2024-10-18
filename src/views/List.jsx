@@ -11,11 +11,11 @@ import { ListItem, AddItems, TextInputElement } from '../components';
 // operations like filtering and sorting items.
 
 export const List = React.memo(function List({ data, listPath }) {
-	// Redirect to home if no list path is null
-	if (useEnsureListPath()) return <></>;
 	const { urgencyObject } = useUrgency(data);
 	const [searchItem, setSearchItem] = useState('');
 
+	// Redirect to home if no list path is nulls
+	if (useEnsureListPath()) return <></>;
 	const listName = listPath.slice(listPath.indexOf('/') + 1);
 
 	const sortedItems = Object.values(urgencyObject).flat();
@@ -47,11 +47,14 @@ export const List = React.memo(function List({ data, listPath }) {
 							columns={16}
 							justifyContent="space-between"
 						>
-							<Grid item size={{ xs: 2, sm: 4, md: 4 }}>
+							<Grid size={{ xs: 2, sm: 4, md: 4 }}>
 								<AddItems items={data} />
 							</Grid>
-							<Grid item size={{ xs: 2, sm: 4, md: 4 }}>
-								<form onSubmit={(event) => event.preventDefault()}>
+							<Grid size={{ xs: 2, sm: 4, md: 4 }}>
+								<form
+									id="search-item-form"
+									onSubmit={(event) => event.preventDefault()}
+								>
 									<TextInputElement
 										id="search-item"
 										type="search"
