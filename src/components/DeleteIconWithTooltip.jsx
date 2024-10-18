@@ -1,11 +1,11 @@
 import { DeleteOutlineOutlined } from '@mui/icons-material';
 import { Tooltip, IconButton } from '@mui/material';
-
-export const tooltipStyle = {
-	fontSize: '1.5rem',
-	marginBlockStart: '0',
-	marginBlockEnd: '0',
-};
+// this is the cause of the issue
+// export const tooltipStyle = {
+// 	fontSize: '1.5rem',
+// 	marginBlockStart: '0',
+// 	marginBlockEnd: '0',
+// };
 
 export const DeleteIconWithTooltip = ({ ariaLabel, toggleDialog }) => {
 	return (
