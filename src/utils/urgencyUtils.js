@@ -10,9 +10,9 @@ export const sortByUrgency = (item, daysUntilNextPurchase) => {
 	} else if (daysUntilNextPurchase < 7) {
 		return 'soon';
 	} else if (daysUntilNextPurchase >= 7 && daysUntilNextPurchase < 30) {
-		return 'kindOfSoon';
+		return 'kind of soon';
 	} else if (daysUntilNextPurchase >= 30) {
-		return 'notSoon';
+		return 'not soon';
 	} else {
 		throw new Error(`Failed to place [${item.name}]`);
 	}

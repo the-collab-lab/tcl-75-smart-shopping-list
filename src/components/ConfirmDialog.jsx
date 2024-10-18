@@ -8,7 +8,7 @@ import {
 	Button,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { buttonStyle } from './SingleList';
+import { buttonStyle } from '../views';
 import './ConfirmDialog.css';
 
 // MUI's Dialog already comes with built-in focus management and accessibility features.
@@ -23,7 +23,7 @@ const dialogStyle = {
 	backgroundColor: 'rgb(20, 20, 20)',
 };
 
-const typographyStyle = {
+export const typographyStyle = {
 	padding: '1em',
 	color: 'white',
 };
