@@ -1,21 +1,21 @@
 import { useNavigate } from 'react-router-dom';
 import { createList } from '../api';
 import { toast } from 'react-toastify';
-import { useImportance } from '../hooks';
-import { ButtonGroup, Button } from '@mui/material';
+// import { useImportance } from '../hooks';
+// import { ButtonGroup, Button } from '@mui/material';
 import { SingleList, TextInputElement } from '../components';
-import { buttonStyle } from '../App';
+// import { buttonStyle } from '../App';
 import './Home.css';
 
 export function Home({ data, setListPath, userId, userEmail }) {
-	const { sortedLists, setImportantList, isListImportant } =
-		useImportance(data);
+	// const { sortedLists, setImportantList, isListImportant } =
+	// 	useImportance(data);
 	const navigate = useNavigate();
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		const listName = event.target['list-name'].value;
-		const currentLists = sortedLists.map((list) => {
+		const currentLists = data.map((list) => {
 			return list.name.toLowerCase();
 		});
 
@@ -48,25 +48,23 @@ export function Home({ data, setListPath, userId, userEmail }) {
 					placeholder="New List Name"
 					required={true}
 				/>
-				<Button sx={buttonStyle} variant="outlined" type="submit">
-					Add List
-				</Button>
+				<button type="submit">Add List</button>
 			</form>
 
 			<ul>
-				<ButtonGroup size="large" orientation="vertical">
-					{sortedLists.map((item, index) => {
-						return (
-							<SingleList
-								key={item.name + index}
-								item={item}
-								setListPath={setListPath}
-								setImportantList={setImportantList}
-								isImportant={isListImportant(item.path)}
-							/>
-						);
-					})}
-				</ButtonGroup>
+				{/* <ButtonGroup size="large" orientation="vertical"> */}
+				{data.map((item, index) => {
+					return (
+						<SingleList
+							key={item.name + index}
+							item={item}
+							setListPath={setListPath}
+							// setImportantList={setImportantList}
+							// isImportant={isListImportant(item.path)}
+						/>
+					);
+				})}
+				{/* </ButtonGroup> */}
 			</ul>
 		</div>
 	);
