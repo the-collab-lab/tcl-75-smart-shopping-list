@@ -11,11 +11,10 @@ import { ListItem, AddItems, TextInputElement } from '../components';
 // operations like filtering and sorting items.
 
 export const List = React.memo(function List({ data, listPath }) {
-	const [searchItem, setSearchItem] = useState('');
-	const { urgencyObject } = useUrgency(data);
-
 	// Redirect to home if no list path is null
 	if (useEnsureListPath()) return <></>;
+	const { urgencyObject } = useUrgency(data);
+	const [searchItem, setSearchItem] = useState('');
 
 	const listName = listPath.slice(listPath.indexOf('/') + 1);
 
