@@ -34,12 +34,15 @@ export const calculateDateNextPurchased = (currentDate, item) => {
 			item.dateNextPurchased,
 			item.dateLastPurchased,
 		);
-		const estimatedNextPurchaseDate = getNextPurchaseEstimate(
-			purchaseIntervals,
-			item.totalPurchases + 1,
-		);
+		const { estimatedDaysUntilPurchase, nextPurchaseEstimate } =
+			getNextPurchaseEstimate(purchaseIntervals, item.totalPurchases + 1);
 
-		return estimatedNextPurchaseDate;
+		const averagePurchaseInterval = getAveragePurchaseInterval(
+			purchaseIntervals,
+			estimatedDaysUntilPurchase,
+		).toFixed(1);
+
+		return { nextPurchaseEstimate, averagePurchaseInterval };
 	} catch (error) {
 		throw new Error(`Failed getting next purchase date: ${error}`);
 	}
@@ -120,8 +123,38 @@ function getNextPurchaseEstimate(purchaseIntervals, totalPurchases) {
 
 		const nextPurchaseEstimate = addDaysFromToday(estimatedDaysUntilPurchase);
 
-		return nextPurchaseEstimate;
+		return { estimatedDaysUntilPurchase, nextPurchaseEstimate };
 	} catch (error) {
 		throw new Error(`Failed updaing date next purchased: ${error}`);
 	}
+}
+
+/**
+ * Calculates the average purchase interval based on known purchase intervals.
+ *
+ * This function takes into account the last estimated purchase interval,
+ * the number of days since the last purchase, and the estimated days until the next purchase.
+ * It computes the average of these intervals by summing them up and dividing by the total count.
+ *
+ * @param {Object} purchaseIntervals - An object containing the purchase interval data.
+ * @param {number} purchaseIntervals.lastEstimatedInterval - The last estimated interval in days.
+ * @param {number} purchaseIntervals.daysSinceLastPurchase - The number of days since the last purchase.
+ * @param {number} estimatedDaysUntilPurchase - The estimated number of days until the next purchase.
+ * @returns {number} The average purchase interval calculated from the provided intervals.
+ */
+export function getAveragePurchaseInterval(
+	purchaseIntervals,
+	estimatedDaysUntilPurchase,
+) {
+	const { lastEstimatedInterval, daysSinceLastPurchase } = purchaseIntervals;
+	const knownIntervals = [
+		lastEstimatedInterval,
+		daysSinceLastPurchase,
+		estimatedDaysUntilPurchase,
+	];
+
+	return (
+		knownIntervals.reduce((sum, interval) => sum + interval, 0) /
+		knownIntervals.length
+	);
 }
