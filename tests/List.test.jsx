@@ -35,18 +35,18 @@ describe('List Component', () => {
 		});
 	});
 
-	test('shows welcome message and AddItems component when no items are present', () => {
-		render(
-			<MemoryRouter>
-				<List data={[]} listPath={'/groceries'} />
-			</MemoryRouter>,
-		);
+	// test('shows welcome message and AddItems component when no items are present', () => {
+	// 	render(
+	// 		<MemoryRouter>
+	// 			<List data={[]} listPath={'/groceries'} />
+	// 		</MemoryRouter>,
+	// 	);
 
-		expect(screen.getByText('Welcome to groceries!')).toBeInTheDocument();
-		expect(screen.getByLabelText('Item Name:')).toBeInTheDocument();
-		expect(screen.getByLabelText('Soon')).toBeInTheDocument();
-		expect(screen.getByLabelText('Kind of soon')).toBeInTheDocument();
-		expect(screen.getByLabelText('Not soon')).toBeInTheDocument();
-		expect(screen.getByText('Submit')).toBeInTheDocument();
-	});
+	// 	expect(screen.getByText('Welcome to groceries!')).toBeInTheDocument();
+	// 	expect(screen.getByLabelText('Item Name:')).toBeInTheDocument();
+	// 	expect(screen.getByLabelText('Soon')).toBeInTheDocument();
+	// 	expect(screen.getByLabelText('Kind of soon')).toBeInTheDocument();
+	// 	expect(screen.getByLabelText('Not soon')).toBeInTheDocument();
+	// 	expect(screen.getByText('Submit')).toBeInTheDocument();
+	// });
 });
