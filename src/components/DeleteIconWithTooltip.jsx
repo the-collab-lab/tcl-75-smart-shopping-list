@@ -1,5 +1,5 @@
-import { DeleteOutlineOutlined } from '@mui/icons-material';
-import { Tooltip, IconButton } from '@mui/material';
+// import { DeleteOutlineOutlined } from '@mui/icons-material';
+// import { Tooltip, IconButton } from '@mui/material';
 // this is the cause of the issue
 // export const tooltipStyle = {
 // 	fontSize: '1.5rem',
@@ -9,10 +9,11 @@ import { Tooltip, IconButton } from '@mui/material';
 
 export const DeleteIconWithTooltip = ({ ariaLabel, toggleDialog }) => {
 	return (
-		<Tooltip title={<p style={tooltipStyle}>Delete</p>} placement="right" arrow>
-			<IconButton onClick={toggleDialog} aria-label={ariaLabel}>
-				<DeleteOutlineOutlined sx={{ color: 'white' }} fontSize="large" />
-			</IconButton>
-		</Tooltip>
+		<button onClick={toggleDialog}>{ariaLabel}</button>
+		// <Tooltip title={<p style={tooltipStyle}>Delete</p>} placement="right" arrow>
+		// 	<IconButton onClick={toggleDialog} aria-label={ariaLabel}>
+		// 		<DeleteOutlineOutlined sx={{ color: 'white' }} fontSize="large" />
+		// 	</IconButton>
+		// </Tooltip>
 	);
 };
