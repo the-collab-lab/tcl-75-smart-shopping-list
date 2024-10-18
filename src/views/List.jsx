@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useEnsureListPath, useUrgency } from '../hooks';
 import { getUrgency } from '../utils/urgencyUtils';
-import { List as UnorderedList, Box, Grid } from '@mui/material';
+import { List as UnorderedList, Box } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { ListItem, AddItems, TextInputElement } from '../components';
 
 // React.memo is needed to prevent unnecessary re-renders of the List component
@@ -47,10 +48,10 @@ export const List = React.memo(function List({ data, listPath }) {
 							columns={16}
 							justifyContent="space-between"
 						>
-							<Grid item size={{ xs: 2, sm: 4, md: 4 }}>
+							<Grid size={{ xs: 2, sm: 4, md: 4 }}>
 								<AddItems items={data} />
 							</Grid>
-							<Grid item size={{ xs: 2, sm: 4, md: 4 }}>
+							<Grid size={{ xs: 2, sm: 4, md: 4 }}>
 								<form onSubmit={(event) => event.preventDefault()}>
 									<TextInputElement
 										id="search-item"
