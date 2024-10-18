@@ -3,11 +3,11 @@ import { calculateUrgency } from '../utils';
 
 export function useUrgency(items) {
 	const [urgencyObject, setUrgencyObject] = useState({
-		overdue: new Set(),
-		soon: new Set(),
-		kindOfSoon: new Set(),
-		notSoon: new Set(),
-		inactive: new Set(),
+		overdue: [],
+		soon: [],
+		kindOfSoon: [],
+		notSoon: [],
+		inactive: [],
 	});
 
 	useEffect(() => {
