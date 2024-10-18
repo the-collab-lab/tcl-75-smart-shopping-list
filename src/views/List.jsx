@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useEnsureListPath, useUrgency } from '../hooks';
 import { getUrgency } from '../utils/urgencyUtils';
-import { List as UnorderedList, Box } from '@mui/material';
-import Grid from '@mui/material/Grid2';
+// import { List as UnorderedList, Box } from '@mui/material';
+// import Grid from '@mui/material/Grid2';
 import { ListItem, AddItems, TextInputElement } from '../components';
 
 // React.memo is needed to prevent unnecessary re-renders of the List component
@@ -40,35 +40,35 @@ export const List = React.memo(function List({ data, listPath }) {
 			) : (
 				<>
 					<p>{listName}</p>
-					<Box sx={{ flexGrow: 1 }}>
+					{/* <Box sx={{ flexGrow: 1 }}>
 						<Grid
 							container
 							spacing={8}
 							columns={16}
 							justifyContent="space-between"
 						>
-							<Grid size={{ xs: 2, sm: 4, md: 4 }}>
-								<AddItems items={data} />
-							</Grid>
-							<Grid size={{ xs: 2, sm: 4, md: 4 }}>
-								<form
-									id="search-item-form"
-									onSubmit={(event) => event.preventDefault()}
-								>
-									<TextInputElement
-										id="search-item"
-										type="search"
-										placeholder="Search Item..."
-										required={true}
-										onChange={handleTextChange}
-										label="Search Item:"
-									/>
-								</form>
-							</Grid>
+							<Grid size={{ xs: 2, sm: 4, md: 4 }}> */}
+					<AddItems items={data} />
+					{/* </Grid>
+							<Grid size={{ xs: 2, sm: 4, md: 4 }}> */}
+					<form
+						id="search-item-form"
+						onSubmit={(event) => event.preventDefault()}
+					>
+						<TextInputElement
+							id="search-item"
+							type="search"
+							placeholder="Search Item..."
+							required={true}
+							onChange={handleTextChange}
+							label="Search Item:"
+						/>
+					</form>
+					{/* </Grid>
 						</Grid>
-					</Box>
+					</Box> */}
 
-					<UnorderedList>
+					<ul>
 						{filteredItems.map((item) => {
 							const itemUrgencyStatus = getUrgency(item.name, urgencyObject);
 							return (
@@ -80,7 +80,7 @@ export const List = React.memo(function List({ data, listPath }) {
 								/>
 							);
 						})}
-					</UnorderedList>
+					</ul>
 				</>
 			)}
 		</>
