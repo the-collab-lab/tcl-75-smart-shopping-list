@@ -1,23 +1,32 @@
-import { useState } from 'react';
-import { useEnsureListPath } from '../hooks/useEnsureListPath';
+import React, { useState } from 'react';
+import { useEnsureListPath, useUrgency } from '../hooks';
+import { getUrgency } from '../utils/urgencyUtils';
 import { List as UnorderedList, Box, Grid } from '@mui/material';
-import { TextInputElement, AddItems, ListItem } from '../components';
+import { ListItem, AddItems, TextInputElement } from '../components';
 
-export function List({ data, listPath }) {
+// React.memo is needed to prevent unnecessary re-renders of the List component
+// when the props (data and listPath) haven't changed,
+// optimizing performance by avoiding re-computation of expensive
+// operations like filtering and sorting items.
+
+export const List = React.memo(function List({ data, listPath }) {
 	const [searchItem, setSearchItem] = useState('');
+	const { urgencyObject } = useUrgency(data);
 
 	// Redirect to home if no list path is null
 	if (useEnsureListPath()) return <></>;
+
+	const listName = listPath.slice(listPath.indexOf('/') + 1);
+
+	const sortedItems = Object.values(urgencyObject).flat();
 
 	const handleTextChange = (event) => {
 		setSearchItem(event.target.value);
 	};
 
-	const filteredItems = data.filter((item) =>
-		item.name.toLowerCase().includes(searchItem.toLowerCase()),
+	const filteredItems = sortedItems.filter((item) =>
+		item?.name?.toLowerCase().includes(searchItem.toLowerCase()),
 	);
-
-	const listName = listPath.slice(listPath.indexOf('/') + 1);
 
 	return (
 		<>
@@ -58,11 +67,19 @@ export function List({ data, listPath }) {
 
 					<UnorderedList>
 						{filteredItems.map((item) => {
-							return <ListItem key={item.id} item={item} listPath={listPath} />;
+							const itemUrgencyStatus = getUrgency(item.name, urgencyObject);
+							return (
+								<ListItem
+									key={item.id}
+									item={item}
+									listPath={listPath}
+									itemUrgencyStatus={itemUrgencyStatus}
+								/>
+							);
 						})}
 					</UnorderedList>
 				</>
 			)}
 		</>
 	);
-}
+});
