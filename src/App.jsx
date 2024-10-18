@@ -10,7 +10,6 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export const buttonStyle = {
 	color: 'white',
-	width: '15em',
 	fontSize: '1.5rem',
 };
 
