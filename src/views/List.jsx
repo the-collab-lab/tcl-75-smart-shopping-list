@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useEnsureListPath, useUrgency } from '../hooks';
 import { getUrgency } from '../utils/urgencyUtils';
-import { List as UnorderedList, Box, Grid } from '@mui/material';
+// import { List as UnorderedList, Box } from '@mui/material';
+// import Grid from '@mui/material/Grid2';
 import { ListItem, AddItems, TextInputElement } from '../components';
 
 // React.memo is needed to prevent unnecessary re-renders of the List component
@@ -10,12 +11,11 @@ import { ListItem, AddItems, TextInputElement } from '../components';
 // operations like filtering and sorting items.
 
 export const List = React.memo(function List({ data, listPath }) {
-	const [searchItem, setSearchItem] = useState('');
 	const { urgencyObject } = useUrgency(data);
+	const [searchItem, setSearchItem] = useState('');
 
-	// Redirect to home if no list path is null
+	// Redirect to home if no list path is nulls
 	if (useEnsureListPath()) return <></>;
-
 	const listName = listPath.slice(listPath.indexOf('/') + 1);
 
 	const sortedItems = Object.values(urgencyObject).flat();
@@ -40,32 +40,35 @@ export const List = React.memo(function List({ data, listPath }) {
 			) : (
 				<>
 					<p>{listName}</p>
-					<Box sx={{ flexGrow: 1 }}>
+					{/* <Box sx={{ flexGrow: 1 }}>
 						<Grid
 							container
 							spacing={8}
 							columns={16}
 							justifyContent="space-between"
 						>
-							<Grid item size={{ xs: 2, sm: 4, md: 4 }}>
-								<AddItems items={data} />
-							</Grid>
-							<Grid item size={{ xs: 2, sm: 4, md: 4 }}>
-								<form onSubmit={(event) => event.preventDefault()}>
-									<TextInputElement
-										id="search-item"
-										type="search"
-										placeholder="Search Item..."
-										required={true}
-										onChange={handleTextChange}
-										label="Search Item:"
-									/>
-								</form>
-							</Grid>
+							<Grid size={{ xs: 2, sm: 4, md: 4 }}> */}
+					<AddItems items={data} />
+					{/* </Grid>
+							<Grid size={{ xs: 2, sm: 4, md: 4 }}> */}
+					<form
+						id="search-item-form"
+						onSubmit={(event) => event.preventDefault()}
+					>
+						<TextInputElement
+							id="search-item"
+							type="search"
+							placeholder="Search Item..."
+							required={true}
+							onChange={handleTextChange}
+							label="Search Item:"
+						/>
+					</form>
+					{/* </Grid>
 						</Grid>
-					</Box>
+					</Box> */}
 
-					<UnorderedList>
+					<ul>
 						{filteredItems.map((item) => {
 							const itemUrgencyStatus = getUrgency(item.name, urgencyObject);
 							return (
@@ -77,7 +80,7 @@ export const List = React.memo(function List({ data, listPath }) {
 								/>
 							);
 						})}
-					</UnorderedList>
+					</ul>
 				</>
 			)}
 		</>

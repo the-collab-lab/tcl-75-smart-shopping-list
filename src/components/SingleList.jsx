@@ -1,24 +1,17 @@
-import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { deleteList } from '../api';
+import { useAuth, useConfirmDialog } from '../hooks';
 import { PushPin, PushPinOutlined } from '@mui/icons-material';
 import { Tooltip, IconButton, Button } from '@mui/material';
-import { deleteList } from '../api';
-import { useAuth } from '../hooks';
-import { useConfirmDialog } from '../hooks/useConfirmDialog';
-import { ConfirmDialog } from './ConfirmDialog';
-import { tooltipStyle, DeleteIconWithTooltip } from './DeleteIconWithTooltip';
+import { tooltipStyle, DeleteIconWithTooltip, ConfirmDialog } from './index';
+import { buttonStyle } from '../App';
 import './SingleList.css';
 
 const deletionResponse = {
 	hard: `List deleted permanently.`,
 	soft: `List removed from user view.`,
-};
-
-export const buttonStyle = {
-	color: 'white',
-	width: '15em',
-	fontSize: '1.5rem',
 };
 
 export function SingleList({

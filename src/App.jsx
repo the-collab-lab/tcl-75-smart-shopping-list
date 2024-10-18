@@ -8,6 +8,11 @@ import { useShoppingLists } from './api';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+export const buttonStyle = {
+	color: 'white',
+	fontSize: '1.5rem',
+};
+
 export function App() {
 	/**
 	 * This custom hook takes the path of a shopping list

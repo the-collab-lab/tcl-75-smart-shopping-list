@@ -4,12 +4,8 @@ import { toast } from 'react-toastify';
 import { useImportance } from '../hooks';
 import { ButtonGroup, Button } from '@mui/material';
 import { SingleList, TextInputElement } from '../components';
+import { buttonStyle } from '../App';
 import './Home.css';
-
-export const buttonStyle = {
-	color: 'white',
-	fontSize: '1.5rem',
-};
 
 export function Home({ data, setListPath, userId, userEmail }) {
 	const { sortedLists, setImportantList, isListImportant } =

@@ -132,6 +132,7 @@ export function ListItem({ item, listPath, itemUrgencyStatus }) {
 							arrow
 						>
 							<Checkbox
+								id={id}
 								edge="start"
 								checked={isPurchased}
 								tabIndex={-1}
