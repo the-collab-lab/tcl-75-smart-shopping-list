@@ -4,30 +4,35 @@ import { TextInputElement } from './index.js';
 import { toast } from 'react-toastify';
 
 export function ShareList() {
-	const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
+	const [listPath] = useStateWithStorage('tcl-shopping-list-path', '/');
 
 	const { user } = useAuth();
 	const userId = user?.uid;
 	const userEmail = user?.email;
 
-	const shareCurrentList = async (emailData) => {
-		const listShared = await shareList(listPath, userId, emailData);
+	const shareCurrentList = async (emailData: string) => {
+		if (!userId || !listPath) return;
+		try {
+			const listShared = await shareList(listPath, userId, emailData);
 
-		if (listShared === '!owner') {
-			toast.error('You cannot share the list you do not own.');
-		} else if (listShared === 'shared') {
-			toast.success('List was shared with recipient.');
-		} else {
+			if (listShared) {
+				toast.success('List was shared with recipient.');
+			}
+		} catch (error) {
 			toast.error(
-				"The list was not shared because the recipient's email address does not exist in the system.",
+				error instanceof Error
+					? error.message
+					: 'An error occurred while sharing the list.',
 			);
 		}
 	};
 
-	const handleEmailInputSubmit = (event) => {
+	const handleEmailInputSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-
-		const emailData = event.target['email-input'].value;
+		const form = event.target as HTMLFormElement;
+		const emailData = (
+			form.elements.namedItem('email-input') as HTMLInputElement
+		).value;
 
 		if (userEmail === emailData) {
 			toast.error('You cannot share the list with yourself.');
@@ -35,7 +40,7 @@ export function ShareList() {
 			shareCurrentList(emailData);
 		}
 
-		event.target.reset();
+		form.reset();
 	};
 
 	return (

@@ -1,4 +1,6 @@
 import { useNavigate } from 'react-router-dom';
+import { DocumentData } from 'firebase/firestore';
+import { Dispatch } from 'react';
 import { createList } from '../api';
 import { toast } from 'react-toastify';
 import { useImportance } from '../hooks';
@@ -11,14 +13,29 @@ export const buttonStyle = {
 	fontSize: '1.5rem',
 };
 
-export function Home({ data, setListPath, userId, userEmail }) {
+export function Home({
+	data,
+	setListPath,
+	userId,
+	userEmail,
+}: {
+	data: DocumentData[];
+	setListPath: Dispatch<string>;
+	userId?: string | null;
+	userEmail?: string | null;
+}) {
 	const { sortedLists, setImportantList, isListImportant } =
 		useImportance(data);
 	const navigate = useNavigate();
 
-	const handleSubmit = async (event) => {
+	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		const listName = event.target['list-name'].value;
+
+		if (!userId || !userEmail) return;
+
+		const form = event.target as HTMLFormElement;
+		const listName = (form.elements.namedItem('list-name') as HTMLInputElement)
+			.value;
 		const currentLists = sortedLists.map((list) => {
 			return list.name.toLowerCase();
 		});
@@ -28,8 +45,8 @@ export function Home({ data, setListPath, userId, userEmail }) {
 				toast.error('The list already exists. Please enter a different name.');
 				return;
 			}
-
 			const listPath = await createList(userId, userEmail, listName);
+
 			setListPath(listPath);
 			toast.success('List added');
 			navigate('/list');
@@ -37,7 +54,7 @@ export function Home({ data, setListPath, userId, userEmail }) {
 			console.error(err);
 			toast.error('List not created');
 		} finally {
-			event.target.reset();
+			form.reset();
 		}
 	};
 

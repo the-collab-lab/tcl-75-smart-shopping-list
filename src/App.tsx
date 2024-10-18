@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import { Home, Layout, List, ManageList } from './views';
@@ -19,7 +21,7 @@ export function App() {
 	 */
 	const [listPath, setListPath] = useStateWithStorage(
 		'tcl-shopping-list-path',
-		null,
+		'/',
 	);
 
 	/**
@@ -69,7 +71,7 @@ export function App() {
 					/>
 					<Route
 						path="/list"
-						element={<List data={data} listPath={listPath} />}
+						element={<List items={data} listPath={listPath} />}
 					/>
 					<Route path="/manage-list" element={<ManageList items={data} />} />
 				</Route>

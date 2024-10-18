@@ -1,3 +1,4 @@
+import { MouseEventHandler } from 'react';
 import { DeleteOutlineOutlined } from '@mui/icons-material';
 import { Tooltip, IconButton } from '@mui/material';
 
@@ -7,7 +8,13 @@ export const tooltipStyle = {
 	marginBlockEnd: '0',
 };
 
-export const DeleteIconWithTooltip = ({ ariaLabel, toggleDialog }) => {
+export const DeleteIconWithTooltip = ({
+	ariaLabel,
+	toggleDialog,
+}: {
+	ariaLabel: string;
+	toggleDialog: MouseEventHandler;
+}) => {
 	return (
 		<Tooltip title={<p style={tooltipStyle}>Delete</p>} placement="right" arrow>
 			<IconButton onClick={toggleDialog} aria-label={ariaLabel}>

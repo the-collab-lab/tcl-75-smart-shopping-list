@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { updateItem, deleteItem } from '../api';
 import { calculateDateNextPurchased, ONE_DAY_IN_MILLISECONDS } from '../utils';
+import { DocumentData, Timestamp } from 'firebase/firestore';
 import { toast } from 'react-toastify';
-import { useConfirmDialog } from '../hooks/useConfirmDialog';
-import { ConfirmDialog } from './ConfirmDialog';
-import { DeleteIconWithTooltip, tooltipStyle } from './DeleteIconWithTooltip';
+import { UrgencyStatus, useConfirmDialog } from '../hooks';
+import { DeleteIconWithTooltip, tooltipStyle, ConfirmDialog } from './index';
 import {
 	ListItem as MaterialListItem,
 	Tooltip,
@@ -13,6 +13,7 @@ import {
 	ListItemIcon,
 	ListItemText,
 	Checkbox,
+	SvgIconTypeMap,
 } from '@mui/material';
 import {
 	Restore as OverdueIcon,
@@ -21,16 +22,21 @@ import {
 	RemoveCircle as NotSoonIcon,
 	RadioButtonChecked as InactiveIcon,
 } from '@mui/icons-material';
+import { OverridableComponent } from '@mui/material/OverridableComponent';
 
 import './ListItem.css';
 
 const currentDate = new Date();
 
-const urgencyStatusIcons = {
+type UrgencyStatusIconsType = {
+	[key in UrgencyStatus]: OverridableComponent<SvgIconTypeMap>;
+};
+
+const urgencyStatusIcons: UrgencyStatusIconsType = {
 	overdue: OverdueIcon,
 	soon: SoonIcon,
-	kindOfSoon: KindOfSoonIcon,
-	notSoon: NotSoonIcon,
+	'kind of soon': KindOfSoonIcon,
+	'not soon': NotSoonIcon,
 	inactive: InactiveIcon,
 };
 
@@ -39,13 +45,7 @@ const urgencyStatusStyle = {
 	color: 'white',
 };
 
-const toolTipStyle = {
-	fontSize: '1.5rem',
-	marginBlockStart: '0',
-	marginBlockEnd: '0',
-};
-
-const calculateIsPurchased = (dateLastPurchased) => {
+const calculateIsPurchased = (dateLastPurchased: Timestamp) => {
 	if (!dateLastPurchased) {
 		return false;
 	}
@@ -57,7 +57,15 @@ const calculateIsPurchased = (dateLastPurchased) => {
 	return currentDate < oneDayLater;
 };
 
-export function ListItem({ item, listPath, itemUrgencyStatus }) {
+export function ListItem({
+	item,
+	listPath,
+	itemUrgencyStatus,
+}: {
+	item: DocumentData;
+	listPath: string;
+	itemUrgencyStatus: string;
+}) {
 	const { open, isOpen, toggleDialog } = useConfirmDialog();
 	const [isPurchased, setIsPurchased] = useState(() =>
 		calculateIsPurchased(item.dateLastPurchased),
@@ -74,35 +82,39 @@ export function ListItem({ item, listPath, itemUrgencyStatus }) {
 
 	const handleChange = async () => {
 		setIsPurchased(!isPurchased);
+
 		if (!isPurchased) {
 			try {
 				const updatedItem = updateItemOnPurchase();
-
 				await updateItem(listPath, id, { ...updatedItem });
 			} catch (error) {
-				toast.error(`Item was not marked as purchased`, error.message);
+				toast.error(
+					`Item was not marked as purchased. Error: ${error instanceof Error ? error.message : error}`,
+				);
 			}
 		}
 	};
 
 	const handleDeleteItem = async () => {
-		console.log('attempting item deletion');
 		try {
 			await deleteItem(listPath, id);
 			toast.success('Item deleted');
 		} catch (error) {
-			toast.error('Item was not deleted');
+			toast.error(
+				`Item was not deleted. Error: ${error instanceof Error ? error.message : error}`,
+			);
 		}
 		return;
 	};
 
-	const UrgencyStatusIcon = urgencyStatusIcons[itemUrgencyStatus];
+	const UrgencyStatusIcon =
+		urgencyStatusIcons[itemUrgencyStatus as UrgencyStatus];
 
 	const props = {
 		handleDelete: handleDeleteItem,
 		title: `Are you sure you want to delete ${name}?`,
 		setOpen: isOpen,
-		open: open,
+		open,
 	};
 
 	const tooltipTitle = isPurchased
@@ -115,7 +127,7 @@ export function ListItem({ item, listPath, itemUrgencyStatus }) {
 			<MaterialListItem className="ListItem">
 				{UrgencyStatusIcon && (
 					<Tooltip
-						title={<p style={toolTipStyle}>{itemUrgencyStatus}</p>}
+						title={<p style={tooltipStyle}>{itemUrgencyStatus}</p>}
 						placement="left"
 						arrow
 					>
@@ -149,7 +161,7 @@ export function ListItem({ item, listPath, itemUrgencyStatus }) {
 
 				<DeleteIconWithTooltip
 					toggleDialog={toggleDialog}
-					aria-label="Delete item"
+					ariaLabel="Delete item"
 				/>
 			</MaterialListItem>
 		</>

@@ -1,13 +1,12 @@
+import { useState, Dispatch } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { deleteList } from '../api';
+import { DocumentData } from 'firebase/firestore';
+import { useAuth, useConfirmDialog } from '../hooks';
 import { toast } from 'react-toastify';
 import { PushPin, PushPinOutlined } from '@mui/icons-material';
 import { Tooltip, IconButton, Button } from '@mui/material';
-import { deleteList } from '../api';
-import { useAuth } from '../hooks';
-import { useConfirmDialog } from '../hooks/useConfirmDialog';
-import { ConfirmDialog } from './ConfirmDialog';
-import { tooltipStyle, DeleteIconWithTooltip } from './DeleteIconWithTooltip';
+import { tooltipStyle, DeleteIconWithTooltip, ConfirmDialog } from './index';
 import './SingleList.css';
 
 const deletionResponse = {
@@ -26,6 +25,11 @@ export function SingleList({
 	setListPath,
 	setImportantList,
 	isImportant,
+}: {
+	item: DocumentData;
+	setListPath: Dispatch<string>;
+	setImportantList: Dispatch<string>;
+	isImportant: string;
 }) {
 	const navigate = useNavigate();
 	const { user } = useAuth();
@@ -58,7 +62,7 @@ export function SingleList({
 			toast.success(deletionResponse[deletionType]);
 		} catch (error) {
 			toast.error(
-				`List was not deleted. Error: ${error.message ? error.message : error}`,
+				`List was not deleted. Error: ${error instanceof Error ? error.message : error}`,
 			);
 		}
 

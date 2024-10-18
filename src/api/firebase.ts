@@ -8,23 +8,27 @@ import {
 	doc,
 	onSnapshot,
 	updateDoc,
+	DocumentData,
 	deleteDoc,
 } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { db } from './config';
 import { addDaysFromToday } from '../utils';
 
+export type ListPath = {
+	[key: string]: string | null;
+};
+
 /**
  * A custom hook that subscribes to the user's shopping lists in our Firestore
  * database and returns new data whenever the lists change.
- * @param {string | null} userId
- * @param {string | null} userEmail
- * @returns
  */
-export function useShoppingLists(userId, userEmail) {
+export const useShoppingLists = (
+	userId?: string | null,
+	userEmail?: string | null,
+): ListPath[] => {
 	// Start with an empty array for our data.
-	const initialState = [];
-	const [data, setData] = useState(initialState);
+	const [data, setData] = useState<ListPath[]>([]);
 
 	useEffect(() => {
 		// If we don't have a userId or userEmail (the user isn't signed in),
@@ -36,7 +40,8 @@ export function useShoppingLists(userId, userEmail) {
 
 		onSnapshot(userDocRef, (docSnap) => {
 			if (docSnap.exists()) {
-				const listRefs = docSnap.data().sharedLists;
+				const listRefs: ListPath[] = docSnap.data().sharedLists;
+
 				const newData = listRefs.map((listRef) => {
 					// We keep the list's id and path so we can use them later.
 					return { name: listRef.id, path: listRef.path };
@@ -47,13 +52,12 @@ export function useShoppingLists(userId, userEmail) {
 	}, [userId, userEmail]);
 
 	return data;
-}
+};
 
 /**
  * Add a new user to the users collection in Firestore.
- * @param {Object} user The user object from Firebase Auth.
  */
-export async function addUserToDatabase(user) {
+export const addUserToDatabase = async (user: DocumentData): Promise<void> => {
 	// Check if the user already exists in the database.
 	const userDoc = await getDoc(doc(db, 'users', user.email));
 	// If the user already exists, we don't need to do anything.
@@ -70,15 +74,16 @@ export async function addUserToDatabase(user) {
 			uid: user.uid,
 		});
 	}
-}
+};
 
 /**
  * Create a new list and add it to a user's lists in Firestore.
- * @param {string} userId The id of the user who owns the list.
- * @param {string} userEmail The email of the user who owns the list.
- * @param {string} listName The name of the new list.
  */
-export async function createList(userId, userEmail, listName) {
+export const createList = async (
+	userId: string,
+	userEmail: string,
+	listName: string,
+): Promise<string> => {
 	const listDocRef = doc(db, userId, listName);
 
 	await setDoc(listDocRef, {
@@ -91,24 +96,28 @@ export async function createList(userId, userEmail, listName) {
 		sharedLists: arrayUnion(listDocRef),
 	});
 	return listDocRef.path;
-}
+};
 
 /**
  * Shares a list with another user.
- * @param {string} listPath The path to the list to share.
- * @param {string} recipientEmail The email of the user to share the list with.
  */
-export async function shareList(listPath, currentUserId, recipientEmail) {
+export const shareList = async (
+	listPath: string,
+	currentUserId: string,
+	recipientEmail: string,
+): Promise<boolean> => {
 	// Check if current user is owner.
-	if (!listPath.includes(currentUserId)) {
-		return '!owner';
+	if (!listPath?.includes(currentUserId)) {
+		throw new Error('You cannot share the list you do not own.');
 	}
 	// Get the document for the recipient user.
 	const usersCollectionRef = collection(db, 'users');
 	const recipientDoc = await getDoc(doc(usersCollectionRef, recipientEmail));
 	// If the recipient user doesn't exist, we can't share the list.
 	if (!recipientDoc.exists()) {
-		return;
+		throw new Error(
+			"The list was not shared because the recipient's email address does not exist in the system.",
+		);
 	}
 	// Add the list to the recipient user's sharedLists array.
 	const listDocumentRef = doc(db, listPath);
@@ -117,11 +126,13 @@ export async function shareList(listPath, currentUserId, recipientEmail) {
 		updateDoc(userDocumentRef, {
 			sharedLists: arrayUnion(listDocumentRef),
 		});
-		return 'shared';
-	} catch {
-		return;
+		return true;
+	} catch (error) {
+		throw new Error(
+			`List was not shared: ${error instanceof Error ? error.message : error}`,
+		);
 	}
-}
+};
 
 /**
  * Delete a list from a user's lists in Firestore.
@@ -154,39 +165,43 @@ export async function deleteList(deletionType, listPath, userId, userEmail) {
 
 /**
  * Add a new item to the user's list in Firestore.
- * @param {string} listPath The path of the list we're adding to.
- * @param {Object} itemData Information about the new item.
- * @param {string} itemData.itemName The name of the item.
- * @param {number} itemData.daysUntilNextPurchase The number of days until the user thinks they'll need to buy the item again.
  */
-export async function addItem(listPath, { itemName, daysUntilNextPurchase }) {
+export const addItem = async (
+	listPath: string,
+	{
+		itemName,
+		daysUntilNextPurchase,
+	}: {
+		itemName: string;
+		daysUntilNextPurchase: string;
+	},
+): Promise<DocumentData> => {
 	const listCollectionRef = collection(db, listPath, 'items');
 	return addDoc(listCollectionRef, {
 		dateCreated: new Date(),
 		dateLastPurchased: null,
-		dateNextPurchased: addDaysFromToday(daysUntilNextPurchase),
+		dateNextPurchased: addDaysFromToday(parseInt(daysUntilNextPurchase)),
 		name: itemName,
 		totalPurchases: 0,
 	});
-}
+};
 
 /**
  * Update an item in the user's list in Firestore with new purchase information.
- * @param {string} listPath The path of the list the item belongs to.
- * @param {string} itemId The ID of the item being updated.
- * @param {Object} updatedData Object containing the updated item data.
- * @param {Date} updatedData.dateLastPurchased The date the item was last purchased.
- * @param {Date} updatedData.dateNextPurchased The estimated date for the next purchase.
- * @param {number} updatedData.totalPurchases The total number of times the item has been purchased.
- * @returns {Promise<string>} A message confirming the item was successfully updated.
- * @throws {Error} If the item update fails.
  */
-export async function updateItem(
-	listPath,
-	itemId,
-	{ dateLastPurchased, dateNextPurchased, totalPurchases },
-) {
-	// reference the item path
+export const updateItem = async (
+	listPath: string,
+	itemId: string,
+	{
+		dateLastPurchased,
+		dateNextPurchased,
+		totalPurchases,
+	}: {
+		dateLastPurchased: Date;
+		dateNextPurchased: Date;
+		totalPurchases: number;
+	},
+): Promise<string | Error> => {
 	const itemDocRef = doc(db, listPath, 'items', itemId);
 	// update the item with the purchase date and increment the total purchases made
 	try {
@@ -197,17 +212,24 @@ export async function updateItem(
 		});
 		return 'item purchased';
 	} catch (error) {
-		throw new Error(`Failed updating item: ${error.message}`);
+		throw new Error(
+			`Failed updating item: ${error instanceof Error ? error.message : error}`,
+		);
 	}
-}
+};
 
-export async function deleteItem(listPath, itemId) {
+/**
+ * Delete an item from the user's list in Firestore.
+ */
+export async function deleteItem(listPath: string, itemId: string) {
 	// reference the item path
 	const itemDocRef = doc(db, listPath, 'items', itemId);
 	try {
 		// delete the item from the database
 		await deleteDoc(itemDocRef);
 	} catch (error) {
-		throw new Error(`Failed updating item: ${error.message}`);
+		throw new Error(
+			`Failed updating item: ${error instanceof Error ? error.message : error}`,
+		);
 	}
 }

@@ -6,16 +6,21 @@ import {
 	Dialog,
 	DialogTitle,
 	Button,
+	SlideProps,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { buttonStyle } from './SingleList';
 import './ConfirmDialog.css';
+import { ReactJSXElement } from '@emotion/react/types/jsx-namespace';
 
 // MUI's Dialog already comes with built-in focus management and accessibility features.
 // It automatically traps focus inside the modal, moves focus to the modal when it opens,
 // and returns it to the previously focused element when it closes.
 
-const Transition = React.forwardRef(function Transition(props, ref) {
+const Transition = React.forwardRef(function Transition(
+	props: SlideProps,
+	ref,
+) {
 	return <Slide direction="down" ref={ref} {...props} />;
 });
 
@@ -28,16 +33,29 @@ const typographyStyle = {
 	color: 'white',
 };
 
-export function ConfirmDialog({ props }) {
+export function ConfirmDialog({
+	props,
+}: {
+	props: {
+		handleDelete: () => void;
+		title: ReactJSXElement | string;
+		setOpen: (open: boolean) => void;
+		open: boolean;
+	};
+}) {
 	const { handleDelete, title, setOpen, open } = props;
 
-	const handleClose = (event) => {
+	const handleClose = (
+		event: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>,
+	) => {
 		setOpen(false);
-		event.target.type === 'submit' && handleDelete();
+		if (event.currentTarget.type === 'submit') {
+			handleDelete();
+		}
 	};
 
 	const dialogProps = {
-		open: open,
+		open,
 		TransitionComponent: Transition,
 		onClose: handleClose,
 		PaperProps: {
@@ -102,7 +120,7 @@ export function ConfirmDialog({ props }) {
 					type="submit"
 					color="success"
 					variant="outlined"
-					fontSize="large"
+					// fontSize="large"
 					sx={buttonStyle}
 					onClick={handleClose}
 				>

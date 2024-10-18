@@ -1,3 +1,5 @@
+import { ChangeEventHandler } from 'react';
+
 export function TextInputElement({
 	label,
 	type,
@@ -5,6 +7,13 @@ export function TextInputElement({
 	placeholder,
 	onChange,
 	required,
+}: {
+	label: string;
+	type: string;
+	id: string;
+	placeholder: string;
+	onChange?: ChangeEventHandler<HTMLInputElement>;
+	required: boolean;
 }) {
 	return (
 		<>

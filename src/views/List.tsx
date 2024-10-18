@@ -1,45 +1,47 @@
 import React, { useState } from 'react';
+import { DocumentData } from 'firebase/firestore';
 import { useEnsureListPath, useUrgency } from '../hooks';
 import { getUrgency } from '../utils/urgencyUtils';
-import { List as UnorderedList, Box, Grid } from '@mui/material';
+import { List as UnorderedList, Box } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { ListItem, AddItems, TextInputElement } from '../components';
 
-// React.memo is needed to prevent unnecessary re-renders of the List component
-// when the props (data and listPath) haven't changed,
-// optimizing performance by avoiding re-computation of expensive
-// operations like filtering and sorting items.
-
-export const List = React.memo(function List({ data, listPath }) {
+export const List = React.memo(function List({
+	items,
+	listPath,
+}: {
+	items: DocumentData[];
+	listPath: string;
+}) {
+	const { urgencyObject } = useUrgency(items);
 	const [searchItem, setSearchItem] = useState('');
-	const { urgencyObject } = useUrgency(data);
 
 	// Redirect to home if no list path is null
 	if (useEnsureListPath()) return <></>;
 
-	const listName = listPath.slice(listPath.indexOf('/') + 1);
+	const listName = listPath?.slice(listPath.indexOf('/') + 1);
 
-	const sortedItems = Object.values(urgencyObject).flat();
-
-	const handleTextChange = (event) => {
+	const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setSearchItem(event.target.value);
 	};
 
-	const filteredItems = sortedItems.filter((item) =>
-		item?.name?.toLowerCase().includes(searchItem.toLowerCase()),
+	const filteredItems = items.filter((item) =>
+		item.name.toLowerCase().includes(searchItem.toLowerCase()),
 	);
 
 	return (
 		<>
-			{!data?.length ? (
+			{!items.length ? (
 				<>
 					<p>Welcome to {listName}!</p>
 					<p>Ready to add your first item? Start adding below!</p>
 
-					<AddItems items={data} />
+					<AddItems items={items} />
 				</>
 			) : (
 				<>
 					<p>{listName}</p>
+
 					<Box sx={{ flexGrow: 1 }}>
 						<Grid
 							container
@@ -47,10 +49,10 @@ export const List = React.memo(function List({ data, listPath }) {
 							columns={16}
 							justifyContent="space-between"
 						>
-							<Grid item size={{ xs: 2, sm: 4, md: 4 }}>
-								<AddItems items={data} />
+							<Grid size={{ xs: 2, sm: 4, md: 4 }}>
+								<AddItems items={items} />
 							</Grid>
-							<Grid item size={{ xs: 2, sm: 4, md: 4 }}>
+							<Grid size={{ xs: 2, sm: 4, md: 4 }}>
 								<form onSubmit={(event) => event.preventDefault()}>
 									<TextInputElement
 										id="search-item"

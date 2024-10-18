@@ -1,4 +1,14 @@
-export const RadioInputElement = ({ label, id, value, required }) => {
+export const RadioInputElement = ({
+	label,
+	id,
+	value,
+	required,
+}: {
+	label: string;
+	id: string;
+	value: number;
+	required: boolean;
+}) => {
 	return (
 		<>
 			<input
