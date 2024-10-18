@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
 import { ListItem, AddItems, TextInputElement } from '../components';
+import { darkPaperStyle, lightPaperStyle } from '../App';
 
 // React.memo is needed to prevent unnecessary re-renders of the List component
 // when the props (data and listPath) haven't changed,
