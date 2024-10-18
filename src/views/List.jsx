@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useEnsureListPath } from '../hooks';
+// import { useEnsureListPath } from '../hooks';
 // import { useEnsureListPath, useUrgency } from '../hooks';
 // import { getUrgency } from '../utils/urgencyUtils';
 // import { List as UnorderedList, Box } from '@mui/material';
@@ -16,7 +16,7 @@ export const List = React.memo(function List({ data, listPath }) {
 	const [searchItem, setSearchItem] = useState('');
 
 	// Redirect to home if no list path is nulls
-	if (useEnsureListPath()) return <></>;
+	// if (useEnsureListPath()) return <></>;
 	const listName = listPath.slice(listPath.indexOf('/') + 1);
 
 	// const sortedItems = Object.values(urgencyObject).flat();
