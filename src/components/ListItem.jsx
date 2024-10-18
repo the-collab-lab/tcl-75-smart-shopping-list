@@ -4,16 +4,16 @@ import { calculateDateNextPurchased, ONE_DAY_IN_MILLISECONDS } from '../utils';
 import { toast } from 'react-toastify';
 import { useConfirmDialog } from '../hooks/useConfirmDialog';
 import { ConfirmDialog } from './ConfirmDialog';
-import { DeleteIconWithTooltip, tooltipStyle } from './DeleteIconWithTooltip';
-import {
-	ListItem as MaterialListItem,
-	Tooltip,
-	// IconButton,
-	ListItemButton,
-	ListItemIcon,
-	ListItemText,
-	Checkbox,
-} from '@mui/material';
+// import { DeleteIconWithTooltip, tooltipStyle } from './DeleteIconWithTooltip';
+// import {
+// 	ListItem as li,
+// 	Tooltip,
+// 	IconButton,
+// 	ListItemButton,
+// 	ListItemIcon,
+// 	ListItemText,
+// 	Checkbox,
+// } from '@mui/material';
 // import {
 // 	Restore as OverdueIcon,
 // 	RestartAlt as SoonIcon,
@@ -106,14 +106,14 @@ export function ListItem({ item, listPath }) {
 		open: open,
 	};
 
-	const tooltipTitle = isPurchased
-		? 'Mark as not purchased'
-		: 'Mark as purchased';
+	// const tooltipTitle = isPurchased
+	// 	? 'Mark as not purchased'
+	// 	: 'Mark as purchased';
 
 	return (
 		<>
 			{open && <ConfirmDialog props={props} />}
-			<MaterialListItem className="ListItem">
+			<li className="ListItem">
 				{/* {UrgencyStatusIcon && (
 					<Tooltip
 						title={<p style={toolTipStyle}>{itemUrgencyStatus}</p>}
@@ -125,7 +125,8 @@ export function ListItem({ item, listPath }) {
 						</IconButton>
 					</Tooltip>
 				)} */}
-				<ListItemButton role={undefined} onClick={handleChange} dense>
+
+				{/* <ListItemButton role={undefined} onClick={handleChange} dense>
 					<ListItemIcon>
 						<Tooltip
 							title={<p style={tooltipStyle}>{tooltipTitle}</p>}
@@ -147,13 +148,25 @@ export function ListItem({ item, listPath }) {
 						primary={name}
 						primaryTypographyProps={{ fontSize: '2rem' }}
 					/>
-				</ListItemButton>
+				</ListItemButton> */}
 
-				<DeleteIconWithTooltip
+				<label htmlFor={id}>
+					<input
+						type="checkbox"
+						id={id}
+						checked={isPurchased}
+						onChange={handleChange}
+						aria-labelledby={`checkbox-label-${id}`}
+					/>
+					<span id={`checkbox-label-${id}`}>{name}</span>
+				</label>
+
+				{/* <DeleteIconWithTooltip
 					toggleDialog={toggleDialog}
 					aria-label="Delete item"
-				/>
-			</MaterialListItem>
+				/> */}
+				<button onClick={toggleDialog}>Delete Item</button>
+			</li>
 		</>
 	);
 }

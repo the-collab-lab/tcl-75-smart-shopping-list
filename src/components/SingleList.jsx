@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { deleteList } from '../api';
 import { useAuth, useConfirmDialog } from '../hooks';
-import { PushPin, PushPinOutlined } from '@mui/icons-material';
-import { Tooltip, IconButton, Button } from '@mui/material';
-import { tooltipStyle, DeleteIconWithTooltip, ConfirmDialog } from './index';
-import { buttonStyle } from '../App';
+// import { PushPin, PushPinOutlined } from '@mui/icons-material';
+// import { Tooltip, IconButton, Button } from '@mui/material';
+import { ConfirmDialog } from './index';
+// import { tooltipStyle, DeleteIconWithTooltip, ConfirmDialog } from './index';
+// import { buttonStyle } from '../App';
 import './SingleList.css';
 
 const deletionResponse = {
@@ -17,8 +18,8 @@ const deletionResponse = {
 export function SingleList({
 	item,
 	setListPath,
-	setImportantList,
-	isImportant,
+	// setImportantList,
+	// isImportant,
 }) {
 	const navigate = useNavigate();
 	const { user } = useAuth();
@@ -39,9 +40,9 @@ export function SingleList({
 		}, 200);
 	};
 
-	const handleImportantList = () => {
-		setImportantList(path);
-	};
+	// const handleImportantList = () => {
+	// 	setImportantList(path);
+	// };
 
 	const handleDelete = async () => {
 		const deletionType = listPathUserId === userId ? 'hard' : 'soft';
@@ -65,7 +66,7 @@ export function SingleList({
 		open: open,
 	};
 
-	const importantStatusLabel = isImportant ? 'Unpin list' : 'Pin list';
+	// const importantStatusLabel = isImportant ? 'Unpin list' : 'Pin list';
 
 	return (
 		<>
@@ -75,7 +76,7 @@ export function SingleList({
 				onMouseEnter={() => setIsHovered(true)}
 				onMouseLeave={() => setIsHovered(false)}
 			>
-				<Tooltip
+				{/* <Tooltip
 					title={<p style={tooltipStyle}>{importantStatusLabel}</p>}
 					placement="left"
 					arrow
@@ -91,16 +92,15 @@ export function SingleList({
 							<PushPinOutlined fontSize="large" />
 						)}
 					</IconButton>
-				</Tooltip>
+				</Tooltip> */}
 
-				<Button sx={buttonStyle} onClick={handleNavigate}>
-					{name}
-				</Button>
+				<button onClick={handleNavigate}>{name}</button>
 
-				<DeleteIconWithTooltip
+				{/* <DeleteIconWithTooltip
 					ariaLabel="Delete list"
 					toggleDialog={toggleDialog}
-				/>
+				/> */}
+				<button onClick={toggleDialog}>Delete list</button>
 			</li>
 		</>
 	);
