@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useEnsureListPath, useUrgency } from '../hooks';
 import { getUrgency } from '../utils/urgencyUtils';
-import { List as UnorderedList, Box, Grid } from '@mui/material';
+import { List as UnorderedList, Box } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { ListItem, AddItems, TextInputElement } from '../components';
 
 // React.memo is needed to prevent unnecessary re-renders of the List component
