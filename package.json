@@ -7,11 +7,16 @@
 		"npm": ">=8.19.0"
 	},
 	"dependencies": {
+		"@emotion/react": "^11.13.3",
+		"@emotion/styled": "^11.13.0",
+		"@mui/icons-material": "^6.1.1",
+		"@mui/material": "^6.1.1",
 		"@the-collab-lab/shopping-list-utils": "^2.2.0",
 		"firebase": "^10.12.5",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
-		"react-router-dom": "^6.26.0"
+		"react-router-dom": "^6.26.0",
+		"react-toastify": "^10.0.5"
 	},
 	"devDependencies": {
 		"@nabla/vite-plugin-eslint": "^2.0.4",
@@ -21,7 +26,7 @@
 		"@testing-library/user-event": "^14.5.2",
 		"@types/react": "^18.3.6",
 		"@types/react-dom": "^18.3.0",
-		"@typescript-eslint/eslint-plugin": "^8.5.0",
+		"@typescript-eslint/eslint-plugin": "^8.10.0",
 		"@vitejs/plugin-react": "^4.3.1",
 		"eslint": "^8.57.0",
 		"eslint-config-prettier": "^9.1.0",

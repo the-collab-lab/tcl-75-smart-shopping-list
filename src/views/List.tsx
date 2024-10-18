@@ -1,23 +1,25 @@
 import React, { useState } from 'react';
 import { DocumentData } from 'firebase/firestore';
-import { useNavigate } from 'react-router-dom';
+import { useEnsureListPath, useUrgency } from '../hooks';
+import { getUrgency } from '../utils/urgencyUtils';
+import { List as UnorderedList, Box } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { ListItem, AddItems, TextInputElement } from '../components';
 
-export function List({
+export const List = React.memo(function List({
 	items,
 	listPath,
 }: {
 	items: DocumentData[];
 	listPath: string;
 }) {
+	const { urgencyObject } = useUrgency(items);
 	const [searchItem, setSearchItem] = useState('');
-	const navigate = useNavigate();
 
-	const navigateHome = () => {
-		alert('List path is not found');
-		navigate('/home');
-		return;
-	};
+	// Redirect to home if no list path is null
+	if (useEnsureListPath()) return <></>;
+
+	const listName = listPath?.slice(listPath.indexOf('/') + 1);
 
 	const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setSearchItem(event.target.value);
@@ -26,7 +28,6 @@ export function List({
 	const filteredItems = items.filter((item) =>
 		item.name.toLowerCase().includes(searchItem.toLowerCase()),
 	);
-	const listName = listPath?.slice(listPath.indexOf('/') + 1);
 
 	return (
 		<>
@@ -41,27 +42,46 @@ export function List({
 				<>
 					<p>{listName}</p>
 
-					<form onSubmit={(event) => event.preventDefault()}>
-						<TextInputElement
-							id="search-item"
-							type="search"
-							placeholder="Search Item..."
-							required={true}
-							onChange={handleTextChange}
-							label="Search Item:"
-						/>
-					</form>
-					{!listPath ? (
-						navigateHome()
-					) : (
-						<ul>
-							{filteredItems.map((item) => (
-								<ListItem key={item.id} item={item} listPath={listPath} />
-							))}
-						</ul>
-					)}
+					<Box sx={{ flexGrow: 1 }}>
+						<Grid
+							container
+							spacing={8}
+							columns={16}
+							justifyContent="space-between"
+						>
+							<Grid size={{ xs: 2, sm: 4, md: 4 }}>
+								<AddItems items={items} />
+							</Grid>
+							<Grid size={{ xs: 2, sm: 4, md: 4 }}>
+								<form onSubmit={(event) => event.preventDefault()}>
+									<TextInputElement
+										id="search-item"
+										type="search"
+										placeholder="Search Item..."
+										required={true}
+										onChange={handleTextChange}
+										label="Search Item:"
+									/>
+								</form>
+							</Grid>
+						</Grid>
+					</Box>
+
+					<UnorderedList>
+						{filteredItems.map((item) => {
+							const itemUrgencyStatus = getUrgency(item.name, urgencyObject);
+							return (
+								<ListItem
+									key={item.id}
+									item={item}
+									listPath={listPath}
+									itemUrgencyStatus={itemUrgencyStatus}
+								/>
+							);
+						})}
+					</UnorderedList>
 				</>
 			)}
 		</>
 	);
-}
+});

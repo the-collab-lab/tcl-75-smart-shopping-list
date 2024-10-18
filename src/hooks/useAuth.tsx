@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { auth } from './config.js';
+import { auth } from '../api/config.js';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { addUserToDatabase } from './firebase.js';
+import { addUserToDatabase } from '../api/firebase.js';
 import { DocumentData } from 'firebase/firestore';
 
 /**

@@ -1,8 +1,10 @@
 import { useCallback } from 'react';
-import { useStateWithStorage, normalizeAndVerifyItem } from '../utils';
+import { useStateWithStorage } from '../hooks';
 import { addItem } from '../api';
-import { RadioInputElement, TextInputElement } from '../components';
+import { normalizeAndVerifyItem } from '../utils';
 import { DocumentData } from 'firebase/firestore';
+import { toast } from 'react-toastify';
+import { RadioInputElement, TextInputElement } from '../components';
 
 const daysUntilPurchaseOptions = {
 	Soon: 7,
@@ -52,7 +54,7 @@ export function AddItems({ items }: { items: DocumentData[] }) {
 				const normalizedItemName = normalizeAndVerifyItem(items, itemName);
 				addNormalizedItem(normalizedItemName, daysUntilNextPurchase, listPath);
 			} catch (error) {
-				alert(error);
+				toast.error(`Item was not added, Error: ${error}`);
 			} finally {
 				form.reset();
 			}

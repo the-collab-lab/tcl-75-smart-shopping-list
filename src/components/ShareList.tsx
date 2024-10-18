@@ -1,6 +1,7 @@
-import { shareList, useAuth } from '../api';
-import { useStateWithStorage } from '../utils';
-import { TextInputElement } from '../components';
+import { shareList } from '../api';
+import { useStateWithStorage, useAuth } from '../hooks';
+import { TextInputElement } from './index.js';
+import { toast } from 'react-toastify';
 
 export function ShareList() {
 	const [listPath] = useStateWithStorage('tcl-shopping-list-path', '/');
@@ -15,10 +16,10 @@ export function ShareList() {
 			const listShared = await shareList(listPath, userId, emailData);
 
 			if (listShared) {
-				alert('List was shared with recipient.');
+				toast.success('List was shared with recipient.');
 			}
 		} catch (error) {
-			alert(
+			toast.error(
 				error instanceof Error
 					? error.message
 					: 'An error occurred while sharing the list.',
@@ -34,7 +35,7 @@ export function ShareList() {
 		).value;
 
 		if (userEmail === emailData) {
-			alert('You cannot share the list with yourself.');
+			toast.error('You cannot share the list with yourself.');
 		} else {
 			shareCurrentList(emailData);
 		}

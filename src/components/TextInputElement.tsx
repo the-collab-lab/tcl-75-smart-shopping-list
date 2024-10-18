@@ -1,6 +1,6 @@
 import { ChangeEventHandler } from 'react';
 
-export const TextInputElement = ({
+export function TextInputElement({
 	label,
 	type,
 	id,
@@ -14,7 +14,7 @@ export const TextInputElement = ({
 	placeholder: string;
 	onChange?: ChangeEventHandler<HTMLInputElement>;
 	required: boolean;
-}) => {
+}) {
 	return (
 		<>
 			<label htmlFor={id}>{label}</label>
@@ -30,4 +30,4 @@ export const TextInputElement = ({
 			<br />
 		</>
 	);
-};
+}

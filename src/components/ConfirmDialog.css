@@ -1,0 +1,8 @@
+.ConfirmDialog-ButtonGroup {
+	display: flex;
+	justify-content: space-around;
+	gap: 0.2em;
+	margin-block-end: 0.5em;
+	margin-inline-start: 0.4em;
+	margin-inline-end: 0.4em;
+}
