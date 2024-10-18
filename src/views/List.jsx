@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { useEnsureListPath, useUrgency } from '../hooks';
-import { getUrgency } from '../utils/urgencyUtils';
+import { useEnsureListPath } from '../hooks';
+// import { useEnsureListPath, useUrgency } from '../hooks';
+// import { getUrgency } from '../utils/urgencyUtils';
 // import { List as UnorderedList, Box } from '@mui/material';
 // import Grid from '@mui/material/Grid2';
 import { ListItem, AddItems, TextInputElement } from '../components';
@@ -11,20 +12,21 @@ import { ListItem, AddItems, TextInputElement } from '../components';
 // operations like filtering and sorting items.
 
 export const List = React.memo(function List({ data, listPath }) {
-	const { urgencyObject } = useUrgency(data);
+	// const { urgencyObject } = useUrgency(data);
 	const [searchItem, setSearchItem] = useState('');
 
 	// Redirect to home if no list path is nulls
 	if (useEnsureListPath()) return <></>;
 	const listName = listPath.slice(listPath.indexOf('/') + 1);
 
-	const sortedItems = Object.values(urgencyObject).flat();
+	// const sortedItems = Object.values(urgencyObject).flat();
 
 	const handleTextChange = (event) => {
 		setSearchItem(event.target.value);
 	};
 
-	const filteredItems = sortedItems.filter((item) =>
+	const filteredItems = data.filter((item) =>
+		// const filteredItems = sortedItems.filter((item) =>
 		item?.name?.toLowerCase().includes(searchItem.toLowerCase()),
 	);
 
@@ -70,13 +72,13 @@ export const List = React.memo(function List({ data, listPath }) {
 
 					<ul>
 						{filteredItems.map((item) => {
-							const itemUrgencyStatus = getUrgency(item.name, urgencyObject);
+							// const itemUrgencyStatus = getUrgency(item.name, urgencyObject);
 							return (
 								<ListItem
 									key={item.id}
 									item={item}
 									listPath={listPath}
-									itemUrgencyStatus={itemUrgencyStatus}
+									// itemUrgencyStatus={itemUrgencyStatus}
 								/>
 							);
 						})}

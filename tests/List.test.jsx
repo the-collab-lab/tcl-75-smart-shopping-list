@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { List } from '../src/views/List';
 import { mockShoppingListData } from '../src/mocks/__fixtures__/shoppingListData';
-import { useStateWithStorage, useEnsureListPath } from '../src/hooks';
+import { useStateWithStorage } from '../src/hooks';
 import {
 	getDateLastPurchasedOrDateCreated,
 	getDaysFromDate,
@@ -12,20 +12,20 @@ import {
 vi.mock('../src/hooks', () => ({
 	useEnsureListPath: vi.fn(),
 	useStateWithStorage: vi.fn(),
-	useUrgency: vi.fn(() => ({
-		getUrgency: vi.fn((name) => {
-			if (name === 'nutella') return 'soon';
-			if (name === 'Cheese') return 'overdue';
-			return 'notSoon';
-		}),
-		urgencyObject: {
-			overdue: [{ name: 'nutella', id: '0T1ByXr8YJSOzujOlLMI' }],
-			soon: [{ name: 'Cheese', id: '1MFWOWMCzDtEHQboFZfR' }],
-			kindOfSoon: [],
-			notSoon: [{ name: 'Jam', id: 'MnUiYUmhg8iCzX1eMxW8' }],
-			inactive: [],
-		},
-	})),
+	// useUrgency: vi.fn(() => ({
+	// 	getUrgency: vi.fn((name) => {
+	// 		if (name === 'nutella') return 'soon';
+	// 		if (name === 'Cheese') return 'overdue';
+	// 		return 'notSoon';
+	// 	}),
+	// 	urgencyObject: {
+	// 		overdue: [{ name: 'nutella', id: '0T1ByXr8YJSOzujOlLMI' }],
+	// 		soon: [{ name: 'Cheese', id: '1MFWOWMCzDtEHQboFZfR' }],
+	// 		kindOfSoon: [],
+	// 		notSoon: [{ name: 'Jam', id: 'MnUiYUmhg8iCzX1eMxW8' }],
+	// 		inactive: [],
+	// 	},
+	// })),
 }));
 
 vi.mock('../src/utils', () => ({

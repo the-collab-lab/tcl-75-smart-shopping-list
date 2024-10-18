@@ -8,42 +8,42 @@ import { DeleteIconWithTooltip, tooltipStyle } from './DeleteIconWithTooltip';
 import {
 	ListItem as MaterialListItem,
 	Tooltip,
-	IconButton,
+	// IconButton,
 	ListItemButton,
 	ListItemIcon,
 	ListItemText,
 	Checkbox,
 } from '@mui/material';
-import {
-	Restore as OverdueIcon,
-	RestartAlt as SoonIcon,
-	RadioButtonUnchecked as KindOfSoonIcon,
-	RemoveCircle as NotSoonIcon,
-	RadioButtonChecked as InactiveIcon,
-} from '@mui/icons-material';
+// import {
+// 	Restore as OverdueIcon,
+// 	RestartAlt as SoonIcon,
+// 	RadioButtonUnchecked as KindOfSoonIcon,
+// 	RemoveCircle as NotSoonIcon,
+// 	RadioButtonChecked as InactiveIcon,
+// } from '@mui/icons-material';
 
 import './ListItem.css';
 
 const currentDate = new Date();
 
-const urgencyStatusIcons = {
-	overdue: OverdueIcon,
-	soon: SoonIcon,
-	kindOfSoon: KindOfSoonIcon,
-	notSoon: NotSoonIcon,
-	inactive: InactiveIcon,
-};
+// const urgencyStatusIcons = {
+// 	overdue: OverdueIcon,
+// 	soon: SoonIcon,
+// 	kindOfSoon: KindOfSoonIcon,
+// 	notSoon: NotSoonIcon,
+// 	inactive: InactiveIcon,
+// };
 
-const urgencyStatusStyle = {
-	fontSize: '2.5rem',
-	color: 'white',
-};
+// const urgencyStatusStyle = {
+// 	fontSize: '2.5rem',
+// 	color: 'white',
+// };
 
-const toolTipStyle = {
-	fontSize: '1.5rem',
-	marginBlockStart: '0',
-	marginBlockEnd: '0',
-};
+// const toolTipStyle = {
+// 	fontSize: '1.5rem',
+// 	marginBlockStart: '0',
+// 	marginBlockEnd: '0',
+// };
 
 const calculateIsPurchased = (dateLastPurchased) => {
 	if (!dateLastPurchased) {
@@ -57,7 +57,8 @@ const calculateIsPurchased = (dateLastPurchased) => {
 	return currentDate < oneDayLater;
 };
 
-export function ListItem({ item, listPath, itemUrgencyStatus }) {
+export function ListItem({ item, listPath }) {
+	// export function ListItem({ item, listPath, itemUrgencyStatus }) {
 	const { open, isOpen, toggleDialog } = useConfirmDialog();
 	const [isPurchased, setIsPurchased] = useState(() =>
 		calculateIsPurchased(item.dateLastPurchased),
@@ -96,7 +97,7 @@ export function ListItem({ item, listPath, itemUrgencyStatus }) {
 		return;
 	};
 
-	const UrgencyStatusIcon = urgencyStatusIcons[itemUrgencyStatus];
+	// const UrgencyStatusIcon = urgencyStatusIcons[itemUrgencyStatus];
 
 	const props = {
 		handleDelete: handleDeleteItem,
@@ -113,7 +114,7 @@ export function ListItem({ item, listPath, itemUrgencyStatus }) {
 		<>
 			{open && <ConfirmDialog props={props} />}
 			<MaterialListItem className="ListItem">
-				{UrgencyStatusIcon && (
+				{/* {UrgencyStatusIcon && (
 					<Tooltip
 						title={<p style={toolTipStyle}>{itemUrgencyStatus}</p>}
 						placement="left"
@@ -123,7 +124,7 @@ export function ListItem({ item, listPath, itemUrgencyStatus }) {
 							<UrgencyStatusIcon sx={urgencyStatusStyle} fontSize="large" />
 						</IconButton>
 					</Tooltip>
-				)}
+				)} */}
 				<ListItemButton role={undefined} onClick={handleChange} dense>
 					<ListItemIcon>
 						<Tooltip
