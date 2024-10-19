@@ -27,7 +27,7 @@ export function App() {
 	const { user } = useAuth();
 	const userId = user?.uid;
 	const userEmail = user?.email;
-	console.log('test');
+	console.log('test1');
 
 	/**
 	 * This custom hook takes a user ID and email and fetches
