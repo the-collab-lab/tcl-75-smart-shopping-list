@@ -2,7 +2,11 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { List } from '../src/views/List';
 import { mockShoppingListData } from '../src/mocks/__fixtures__/shoppingListData';
-import { useStateWithStorage, useEnsureListPath } from '../src/hooks';
+import {
+	useStateWithStorage,
+	useEnsureListPath,
+	useUrgency,
+} from '../src/hooks';
 import {
 	getDateLastPurchasedOrDateCreated,
 	getDaysFromDate,
@@ -12,20 +16,7 @@ import {
 vi.mock('../src/hooks', () => ({
 	useEnsureListPath: vi.fn(),
 	useStateWithStorage: vi.fn(),
-	useUrgency: vi.fn(() => ({
-		getUrgency: vi.fn((name) => {
-			if (name === 'nutella') return 'soon';
-			if (name === 'Cheese') return 'overdue';
-			return 'notSoon';
-		}),
-		urgencyObject: {
-			overdue: [{ name: 'nutella', id: '0T1ByXr8YJSOzujOlLMI' }],
-			soon: [{ name: 'Cheese', id: '1MFWOWMCzDtEHQboFZfR' }],
-			kindOfSoon: [],
-			notSoon: [{ name: 'Jam', id: 'MnUiYUmhg8iCzX1eMxW8' }],
-			inactive: [],
-		},
-	})),
+	useUrgency: vi.fn(),
 }));
 
 vi.mock('../src/utils', () => ({
@@ -36,6 +27,7 @@ vi.mock('../src/utils', () => ({
 }));
 
 beforeEach(() => {
+	vi.clearAllMocks();
 	Object.defineProperty(window, 'localStorage', {
 		value: {
 			getItem: vi.fn((key) => {
@@ -52,6 +44,21 @@ beforeEach(() => {
 
 	vi.spyOn(window, 'alert').mockImplementation(() => {});
 	useStateWithStorage.mockReturnValue(['/groceries']);
+	useEnsureListPath.mockReturnValue(false);
+	useUrgency.mockReturnValue({
+		getUrgency: vi.fn((name) => {
+			if (name === 'nutella') return 'soon';
+			if (name === 'Cheese') return 'overdue';
+			return 'notSoon';
+		}),
+		urgencyObject: {
+			overdue: [{ name: 'nutella', id: '0T1ByXr8YJSOzujOlLMI' }],
+			soon: [{ name: 'Cheese', id: '1MFWOWMCzDtEHQboFZfR' }],
+			kindOfSoon: [],
+			notSoon: [{ name: 'Jam', id: 'MnUiYUmhg8iCzX1eMxW8' }],
+			inactive: [],
+		},
+	});
 	getDateLastPurchasedOrDateCreated.mockReturnValue(new Date());
 	getDaysFromDate.mockReturnValue(10);
 	getDaysBetweenDates.mockReturnValue(5);
@@ -81,6 +88,9 @@ describe('List Component', () => {
 		);
 
 		expect(screen.getByText('Welcome to groceries!')).toBeInTheDocument();
+		expect(
+			screen.getByText('Ready to add your first item? Start adding below!'),
+		).toBeInTheDocument();
 		expect(screen.getByLabelText('Item Name:')).toBeInTheDocument();
 		expect(screen.getByLabelText('Soon')).toBeInTheDocument();
 		expect(screen.getByLabelText('Kind of soon')).toBeInTheDocument();
@@ -89,8 +99,6 @@ describe('List Component', () => {
 	});
 
 	test('triggers alert and redirects when no list path is found in localStorage', () => {
-		window.localStorage.getItem.mockReturnValueOnce(null);
-
 		useEnsureListPath.mockImplementation(() => {
 			window.alert(
 				'It seems like you landed here without first creating a list or selecting an existing one. Please select or create a new list first. Redirecting to Home.',
