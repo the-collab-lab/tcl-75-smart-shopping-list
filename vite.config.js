@@ -55,6 +55,7 @@ export default defineConfig(({ mode }) => ({
 				},
 			},
 		},
+		sourcemap: true,
 	},
 	plugins: [
 		mode === 'development' && eslint(),
