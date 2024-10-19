@@ -1,9 +1,16 @@
 import { useCallback } from 'react';
-import { normalizeItemName } from '../utils';
 import { useStateWithStorage } from '../hooks';
 import { addItem } from '../api';
+import { normalizeItemName } from '../utils';
 import { RadioInputElement, TextInputElement } from './index.js';
 import { toast } from 'react-toastify';
+import { Box, Button, FormControl, RadioGroup } from '@mui/material';
+import { buttonStyle } from './index';
+
+const radioGroupStyle = {
+	mx: 1,
+	justifyContent: 'space-between',
+};
 
 const daysUntilPurchaseOptions = {
 	Soon: 7,
@@ -59,27 +66,43 @@ export function AddItems({ items }) {
 	);
 
 	return (
-		<div>
-			<form onSubmit={handleSubmit}>
+		<Box component="section">
+			<Box
+				component="form"
+				noValidate
+				autoComplete="off"
+				onSubmit={handleSubmit}
+			>
 				<TextInputElement
 					type="text"
 					id="item-name"
-					placeholder="Enter item name"
-					label="Item Name:"
+					placeholder="Item name"
+					label="Add item:"
 					required={true}
 				/>
+				<FormControl fullWidth required>
+					<RadioGroup
+						aria-labelledby="purchase-date-radios"
+						name="purchase-date"
+						sx={radioGroupStyle}
+						row
+					>
+						{Object.entries(daysUntilPurchaseOptions).map(([key, value]) => (
+							<RadioInputElement
+								key={key}
+								label={key}
+								id={key}
+								value={value}
+								required={true}
+							/>
+						))}
+					</RadioGroup>
+				</FormControl>
 
-				{Object.entries(daysUntilPurchaseOptions).map(([key, value]) => (
-					<RadioInputElement
-						key={key}
-						label={key}
-						id={key}
-						value={value}
-						required={true}
-					/>
-				))}
-				<button type="submit">Submit</button>
-			</form>
-		</div>
+				<Button sx={buttonStyle} fullWidth variant="outlined" type="submit">
+					Submit
+				</Button>
+			</Box>
+		</Box>
 	);
 }

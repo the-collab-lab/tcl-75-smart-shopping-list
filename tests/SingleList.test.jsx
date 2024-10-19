@@ -18,6 +18,11 @@ vi.mock('../src/hooks', () => ({
 	useAuth: () => ({
 		user: { uid: mockUser.uid, email: mockUser.email },
 	}),
+	useConfirmDialog: () => ({
+		open: true,
+		isOpen: vi.fn(),
+		toggleDialog: vi.fn(),
+	}),
 }));
 
 describe('SingleList component', () => {

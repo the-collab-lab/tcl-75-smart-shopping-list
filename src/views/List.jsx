@@ -1,8 +1,23 @@
 import React, { useState } from 'react';
 import { useEnsureListPath, useUrgency } from '../hooks';
 import { getUrgency } from '../utils/urgencyUtils';
-import { List as UnorderedList, Box, Grid } from '@mui/material';
-import { ListItem, AddItems, TextInputElement } from '../components';
+import {
+	List as UnorderedList,
+	Box,
+	Grid,
+	Paper,
+	Typography,
+	Collapse,
+	Button,
+} from '@mui/material';
+import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
+import {
+	ListItem,
+	AddItems,
+	TextInputElement,
+	darkPaperStyle,
+	lightPaperStyle,
+} from '../components';
 
 // React.memo is needed to prevent unnecessary re-renders of the List component
 // when the props (data and listPath) haven't changed,
@@ -11,6 +26,7 @@ import { ListItem, AddItems, TextInputElement } from '../components';
 
 export const List = React.memo(function List({ data, listPath }) {
 	const [searchItem, setSearchItem] = useState('');
+	const [showAddItems, setShowAddItems] = useState(false);
 	const { urgencyObject } = useUrgency(data);
 
 	// Redirect to home if no list path is null
@@ -28,42 +44,73 @@ export const List = React.memo(function List({ data, listPath }) {
 		item?.name?.toLowerCase().includes(searchItem.toLowerCase()),
 	);
 
+	const handleAddItems = () => {
+		setShowAddItems((prev) => !prev);
+	};
+
 	return (
-		<>
+		<Paper elevation={2} sx={darkPaperStyle}>
 			{!data?.length ? (
 				<>
-					<p>Welcome to {listName}!</p>
-					<p>Ready to add your first item? Start adding below!</p>
+					<Typography variant="h3" my="2rem">
+						Welcome to {listName}!
+					</Typography>
+					<Typography variant="h4" my="3rem">
+						Ready to add your first item? Start adding below!
+					</Typography>
 
 					<AddItems items={data} />
 				</>
 			) : (
 				<>
-					<p>{listName}</p>
-					<Box sx={{ flexGrow: 1 }}>
+					<Box sx={{ flexGrow: 1, margin: '2.5rem 2rem' }}>
 						<Grid
 							container
-							spacing={8}
+							spacing={4}
 							columns={16}
 							justifyContent="space-between"
 						>
-							<Grid item size={{ xs: 2, sm: 4, md: 4 }}>
-								<AddItems items={data} />
+							<Grid item>
+								<Typography variant="h3">{listName}</Typography>
 							</Grid>
-							<Grid item size={{ xs: 2, sm: 4, md: 4 }}>
-								<form onSubmit={(event) => event.preventDefault()}>
-									<TextInputElement
-										id="search-item"
-										type="search"
-										placeholder="Search Item..."
-										required={true}
-										onChange={handleTextChange}
-										label="Search Item:"
-									/>
-								</form>
+							<Grid item>
+								<Button
+									data-testid="new-item-button"
+									variant="outlined"
+									onClick={handleAddItems}
+									endIcon={showAddItems ? <ArrowDropUp /> : <ArrowDropDown />}
+								>
+									<Typography variant="h4">New item</Typography>
+								</Button>
 							</Grid>
 						</Grid>
 					</Box>
+
+					{showAddItems && (
+						<Paper elevation={3} sx={lightPaperStyle}>
+							<Box>
+								<Collapse in={showAddItems}>
+									<AddItems items={data} />
+								</Collapse>
+							</Box>
+						</Paper>
+					)}
+
+					<Paper
+						elevation={3}
+						sx={{ ...lightPaperStyle, marginBlockStart: '2rem' }}
+					>
+						<Box component="form" onSubmit={(event) => event.preventDefault()}>
+							<TextInputElement
+								id="search-item"
+								type="search"
+								placeholder="Search for item..."
+								required={true}
+								onChange={handleTextChange}
+								label="Search for item:"
+							/>
+						</Box>
+					</Paper>
 
 					<UnorderedList>
 						{filteredItems.map((item) => {
@@ -80,6 +127,6 @@ export const List = React.memo(function List({ data, listPath }) {
 					</UnorderedList>
 				</>
 			)}
-		</>
+		</Paper>
 	);
 });

@@ -1,14 +1,25 @@
+import { Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createList } from '../api';
 import { toast } from 'react-toastify';
 import { useImportance } from '../hooks';
-import { ButtonGroup, Button } from '@mui/material';
-import { SingleList, TextInputElement } from '../components';
+import {
+	Paper,
+	Box,
+	Divider,
+	Button,
+	List as UnorderedList,
+} from '@mui/material';
+import {
+	SingleList,
+	TextInputElement,
+	lightPaperStyle,
+	darkPaperStyle,
+} from '../components';
 import './Home.css';
 
-export const buttonStyle = {
-	color: 'white',
-	fontSize: '1.5rem',
+const dividerStyle = {
+	borderColor: 'primary.main',
 };
 
 export function Home({ data, setListPath, userId, userEmail }) {
@@ -42,36 +53,44 @@ export function Home({ data, setListPath, userId, userEmail }) {
 	};
 
 	return (
-		<div className="Home">
-			<form id="list-form" onSubmit={handleSubmit}>
-				<TextInputElement
-					key="list-name"
-					label="Enter New List:"
-					type="text"
-					id="list-name"
-					placeholder="New List Name"
-					required={true}
-				/>
-				<Button sx={buttonStyle} variant="outlined" type="submit">
-					Add List
-				</Button>
-			</form>
+		<Paper elevation={2} sx={darkPaperStyle}>
+			<div className="Home">
+				<Paper elevation={3} sx={lightPaperStyle}>
+					<Box component="form" id="list-form" onSubmit={handleSubmit}>
+						<TextInputElement
+							key="list-name"
+							label="Start your new list here:"
+							type="text"
+							id="list-name"
+							placeholder="What's the name of your list?"
+							required={true}
+						/>
+						<Button
+							sx={buttonWithTopMarginStyle}
+							variant="outlined"
+							type="submit"
+						>
+							Add List
+						</Button>
+					</Box>
+				</Paper>
 
-			<ul>
-				<ButtonGroup size="large" orientation="vertical">
+				<UnorderedList>
 					{sortedLists.map((item, index) => {
 						return (
-							<SingleList
-								key={item.name + index}
-								item={item}
-								setListPath={setListPath}
-								setImportantList={setImportantList}
-								isImportant={isListImportant(item.path)}
-							/>
+							<Fragment key={item.name + index}>
+								<SingleList
+									item={item}
+									setListPath={setListPath}
+									setImportantList={setImportantList}
+									isImportant={isListImportant(item.path)}
+								/>
+								<Divider variant="inset" sx={dividerStyle} component="li" />
+							</Fragment>
 						);
 					})}
-				</ButtonGroup>
-			</ul>
-		</div>
+				</UnorderedList>
+			</div>
+		</Paper>
 	);
 }

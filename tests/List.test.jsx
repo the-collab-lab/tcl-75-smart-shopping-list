@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
+import { userEvent } from '@testing-library/user-event';
 import { List } from '../src/views/List';
 import { mockShoppingListData } from '../src/mocks/__fixtures__/shoppingListData';
 import { useStateWithStorage, useEnsureListPath } from '../src/hooks';
@@ -21,8 +22,8 @@ vi.mock('../src/hooks', () => ({
 		urgencyObject: {
 			overdue: [{ name: 'nutella', id: '0T1ByXr8YJSOzujOlLMI' }],
 			soon: [{ name: 'Cheese', id: '1MFWOWMCzDtEHQboFZfR' }],
-			kindOfSoon: [],
-			notSoon: [{ name: 'Jam', id: 'MnUiYUmhg8iCzX1eMxW8' }],
+			'kind of soon': [],
+			'not soon': [{ name: 'Jam', id: 'MnUiYUmhg8iCzX1eMxW8' }],
 			inactive: [],
 		},
 	})),
@@ -58,6 +59,23 @@ beforeEach(() => {
 });
 
 describe('List Component', () => {
+	test('shows AddItems component with existing items', async () => {
+		render(
+			<MemoryRouter>
+				<List data={mockShoppingListData} listPath={'/groceries'} />
+			</MemoryRouter>,
+		);
+
+		const dropDownIcon = await screen.findByTestId('new-item-button');
+		await userEvent.click(dropDownIcon);
+
+		expect(screen.getByLabelText('Add item:')).toBeInTheDocument();
+		expect(screen.getByLabelText('Soon')).toBeInTheDocument();
+		expect(screen.getByLabelText('Kind of soon')).toBeInTheDocument();
+		expect(screen.getByLabelText('Not soon')).toBeInTheDocument();
+		expect(screen.getByText('Submit')).toBeInTheDocument();
+	});
+
 	test('renders the shopping list name, search field, and all list items from the data prop', () => {
 		render(
 			<MemoryRouter>
@@ -66,7 +84,7 @@ describe('List Component', () => {
 		);
 
 		expect(screen.getByText('groceries')).toBeInTheDocument();
-		expect(screen.getByLabelText('Search Item:')).toBeInTheDocument();
+		expect(screen.getByLabelText('Search for item:')).toBeInTheDocument();
 
 		mockShoppingListData.forEach((item) => {
 			expect(screen.getByText(item.name)).toBeInTheDocument();
@@ -81,7 +99,7 @@ describe('List Component', () => {
 		);
 
 		expect(screen.getByText('Welcome to groceries!')).toBeInTheDocument();
-		expect(screen.getByLabelText('Item Name:')).toBeInTheDocument();
+		expect(screen.getByLabelText('Add item:')).toBeInTheDocument();
 		expect(screen.getByLabelText('Soon')).toBeInTheDocument();
 		expect(screen.getByLabelText('Kind of soon')).toBeInTheDocument();
 		expect(screen.getByLabelText('Not soon')).toBeInTheDocument();
@@ -107,19 +125,5 @@ describe('List Component', () => {
 		expect(window.alert).toHaveBeenCalledWith(
 			'It seems like you landed here without first creating a list or selecting an existing one. Please select or create a new list first. Redirecting to Home.',
 		);
-	});
-
-	test('shows AddItems component with existing items', () => {
-		render(
-			<MemoryRouter>
-				<List data={mockShoppingListData} listPath={'/groceries'} />
-			</MemoryRouter>,
-		);
-
-		expect(screen.getByLabelText('Item Name:')).toBeInTheDocument();
-		expect(screen.getByLabelText('Soon')).toBeInTheDocument();
-		expect(screen.getByLabelText('Kind of soon')).toBeInTheDocument();
-		expect(screen.getByLabelText('Not soon')).toBeInTheDocument();
-		expect(screen.getByText('Submit')).toBeInTheDocument();
 	});
 });

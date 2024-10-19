@@ -3,8 +3,7 @@ import { updateItem, deleteItem } from '../api';
 import { calculateDateNextPurchased, ONE_DAY_IN_MILLISECONDS } from '../utils';
 import { toast } from 'react-toastify';
 import { useConfirmDialog } from '../hooks/useConfirmDialog';
-import { ConfirmDialog } from './ConfirmDialog';
-import { DeleteIconWithTooltip, tooltipStyle } from './DeleteIconWithTooltip';
+import { DeleteIconWithTooltip, ConfirmDialog, tooltipStyle } from './index';
 import {
 	ListItem as MaterialListItem,
 	Tooltip,
@@ -29,20 +28,14 @@ const currentDate = new Date();
 const urgencyStatusIcons = {
 	overdue: OverdueIcon,
 	soon: SoonIcon,
-	kindOfSoon: KindOfSoonIcon,
-	notSoon: NotSoonIcon,
+	'kind of soon': KindOfSoonIcon,
+	'not soon': NotSoonIcon,
 	inactive: InactiveIcon,
 };
 
 const urgencyStatusStyle = {
 	fontSize: '2.5rem',
 	color: 'white',
-};
-
-const toolTipStyle = {
-	fontSize: '1.5rem',
-	marginBlockStart: '0',
-	marginBlockEnd: '0',
 };
 
 const calculateIsPurchased = (dateLastPurchased) => {
@@ -86,7 +79,6 @@ export function ListItem({ item, listPath, itemUrgencyStatus }) {
 	};
 
 	const handleDeleteItem = async () => {
-		console.log('attempting item deletion');
 		try {
 			await deleteItem(listPath, id);
 			toast.success('Item deleted');
@@ -102,7 +94,7 @@ export function ListItem({ item, listPath, itemUrgencyStatus }) {
 		handleDelete: handleDeleteItem,
 		title: `Are you sure you want to delete ${name}?`,
 		setOpen: isOpen,
-		open: open,
+		open,
 	};
 
 	const tooltipTitle = isPurchased
@@ -115,7 +107,7 @@ export function ListItem({ item, listPath, itemUrgencyStatus }) {
 			<MaterialListItem className="ListItem">
 				{UrgencyStatusIcon && (
 					<Tooltip
-						title={<p style={toolTipStyle}>{itemUrgencyStatus}</p>}
+						title={<p style={tooltipStyle}>{itemUrgencyStatus}</p>}
 						placement="left"
 						arrow
 					>
