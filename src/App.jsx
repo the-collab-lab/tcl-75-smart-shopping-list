@@ -8,24 +8,6 @@ import { useShoppingLists } from './api';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const paperStyle = {
-	color: 'white',
-	p: '1rem',
-};
-
-export const darkPaperStyle = {
-	...paperStyle,
-	paddingBlockStart: '4rem',
-	paddingBlockEnd: '4rem',
-	background: `linear-gradient(45deg, rgba(117, 124, 232, 0.2) 0%, rgba(117, 124, 232, 0.05) 100%)`, // Pale blue gradient on top
-	backdropFilter: 'blur(2px)',
-};
-
-export const lightPaperStyle = {
-	...paperStyle,
-	background: `rgba(117, 124, 232, 0.2)`,
-};
-
 export function App() {
 	/**
 	 * This custom hook takes the path of a shopping list

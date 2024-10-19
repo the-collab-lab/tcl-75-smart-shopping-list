@@ -3,7 +3,7 @@ import { updateItem, deleteItem } from '../api';
 import { calculateDateNextPurchased, ONE_DAY_IN_MILLISECONDS } from '../utils';
 import { toast } from 'react-toastify';
 import { useConfirmDialog } from '../hooks/useConfirmDialog';
-import { DeleteIconWithTooltip, tooltipStyle, ConfirmDialog } from './index';
+import { DeleteIconWithTooltip, ConfirmDialog, tooltipStyle } from './index';
 import {
 	ListItem as MaterialListItem,
 	Tooltip,

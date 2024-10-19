@@ -1,5 +1,5 @@
 import { TextField, Typography } from '@mui/material';
-import { typographyStyle } from './ConfirmDialog';
+import { typographyStyle } from '../components/index';
 
 const textFieldStyle = {
 	'& .MuiInputBase-input': {

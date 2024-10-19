@@ -5,7 +5,7 @@ import { normalizeItemName } from '../utils';
 import { RadioInputElement, TextInputElement } from './index.js';
 import { toast } from 'react-toastify';
 import { Box, Button, FormControl, RadioGroup } from '@mui/material';
-import { buttonStyle } from '../views';
+import { buttonStyle } from './index';
 
 const radioGroupStyle = {
 	mx: 1,

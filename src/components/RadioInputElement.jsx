@@ -1,5 +1,5 @@
 import { Radio, Tooltip, FormControlLabel } from '@mui/material';
-import { tooltipStyle } from './DeleteIconWithTooltip';
+import { tooltipStyle } from './MUIStyles';
 
 const radioStyle = {
 	color: 'white',

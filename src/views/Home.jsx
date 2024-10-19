@@ -10,19 +10,13 @@ import {
 	Button,
 	List as UnorderedList,
 } from '@mui/material';
-import { SingleList, TextInputElement } from '../components';
-import { lightPaperStyle, darkPaperStyle } from '../App';
+import {
+	SingleList,
+	TextInputElement,
+	lightPaperStyle,
+	darkPaperStyle,
+} from '../components';
 import './Home.css';
-
-export const buttonStyle = {
-	color: 'white',
-	fontSize: '1.5rem',
-};
-
-export const buttonWithTopMarginStyle = {
-	...buttonStyle,
-	marginTop: '0.5rem',
-};
 
 const dividerStyle = {
 	borderColor: 'primary.main',

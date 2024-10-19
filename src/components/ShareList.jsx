@@ -2,8 +2,7 @@ import { useStateWithStorage, useAuth } from '../hooks';
 import { shareList } from '../api';
 import { toast } from 'react-toastify';
 import { Box, Button } from '@mui/material';
-import { TextInputElement } from './index.js';
-import { buttonWithTopMarginStyle } from '../views/Home';
+import { TextInputElement, buttonWithTopMarginStyle } from './index.js';
 
 export function ShareList() {
 	const [listPath] = useStateWithStorage('tcl-shopping-list-path', null);
